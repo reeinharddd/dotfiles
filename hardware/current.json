@@ -1,0 +1,12 @@
+{
+  "hostname": "ThinkPad-T14-Gen-3",
+  "kernel": "7.0.0-22-generic",
+  "os": "Ubuntu 26.04 LTS",
+  "cpu": "AMD Ryzen 7 PRO 6850U with Radeon Graphics",
+  "cores": "16",
+  "ram": "13Gi",
+  "ram_used": "9.5Gi",
+  "disk": "loop0       4K loop\nloop1   199.1M loop\nloop2    13.5M loop\nloop3    73.9M loop\nloop4    66.8M loop",
+  "gpu": "04:00.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Rembrandt [Radeon 680M] (rev d1)",
+  "temp": ""
+}
