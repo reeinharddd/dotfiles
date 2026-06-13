@@ -9,6 +9,9 @@ while [[ $# -gt 0 ]]; do
   case "$1" in --fast) FAST=true; shift ;; --output) OUTPUT_FILE="$2"; shift 2 ;; *) echo "Uso: agent-context.sh [--fast] [--output file.md]"; exit 1 ;; esac
 done
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE="$(dirname "$SCRIPT_DIR")"
+
 # Cargar PATH completo del usuario
 export HOME="/home/reeinharrrd"
 export USER="reeinharrrd"
@@ -177,8 +180,8 @@ done
 
 echo
 ssec "systemInfo MCP"
-list "Path: ~/systemInfo/"
-list "Server: python3 mcp-server/run.py (stdio)"
+list "Path: $BASE/"
+list "Server: python3 $BASE/mcp-server/run.py (stdio)"
 list "Tools: system_info, list_tools, list_projects, scan"
 list "Data: hardware/current.json, software/current.json, projects/registry.json"
 list "Script: scripts/scan.sh — regenerate hardware/software data"
@@ -189,7 +192,7 @@ list "Context: scripts/agent-context.sh — this file"
 # ============================================================
 echo
 ssec "Agent Instructions & Rules"
-for f in ~/systemInfo/README.md ~/systemInfo/AGENTS.md ~/ECC/AGENTS.md ~/ECC/CONTRIBUTING.md ~/ECC/.opencode/instructions/INSTRUCTIONS.md; do
+for f in "$BASE/README.md" "$BASE/AGENTS.md" ~/ECC/AGENTS.md ~/ECC/CONTRIBUTING.md ~/ECC/.opencode/instructions/INSTRUCTIONS.md; do
   [[ -f "$f" ]] && list "$f" || true
 done
 
@@ -219,8 +222,8 @@ list "AI context: systemInfo MCP loaded at opencode start"
 # ============================================================
 echo
 ssec "Quick Reference"
-kv "Re-scan system" "~/systemInfo/scripts/scan.sh"
-kv "Regen agent context" "~/systemInfo/scripts/agent-context.sh --output ~/systemInfo/CONTEXT.md"
+kv "Re-scan system" "scripts/scan.sh"
+kv "Regen agent context" "scripts/agent-context.sh --output \$BASE/CONTEXT.md"
 kv "OpenCode start" "opencode --mcp ~/.config/opencode/opencode.json"
 kv "Run models" "ollama run qwen3:8b"
 kv "Update all" "mise upgrade && cargo install-update --all 2>/dev/null || true && pipx upgrade-all 2>/dev/null || true"

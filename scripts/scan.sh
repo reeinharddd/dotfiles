@@ -2,7 +2,8 @@
 # systemInfo Scanner - regenerates hardware/software/project info
 set -e
 
-BASE="$HOME/systemInfo"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE="$(dirname "$SCRIPT_DIR")"
 
 echo "=== Scanning Hardware ==="
 cat > "$BASE/hardware/current.json" <<'EOF'

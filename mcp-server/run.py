@@ -7,7 +7,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-SYSTEMINFO = Path(os.path.expanduser("~/systemInfo"))
+SCRIPT_DIR = Path(__file__).parent.parent.resolve()
+SYSTEMINFO = SCRIPT_DIR
 
 
 def sh(cmd: str) -> str:
@@ -74,17 +75,14 @@ def projects() -> list[dict]:
     result = []
     base = Path.home() / "projects"
     if base.exists():
-        for lang in sorted(base.iterdir()):
-            if lang.is_dir():
-                for p in sorted(lang.iterdir()):
-                    if p.is_dir():
-                        info = {"name": p.name, "path": str(p), "lang": lang.name}
-                        pkg = p / "package.json"
-                        if pkg.exists():
-                            data = json.loads(pkg.read_text())
-                            info["version"] = data.get("version", "")
-                            info["type"] = "js"
-                        result.append(info)
+        for p in sorted(base.iterdir()):
+            if p.is_dir():
+                info = {"name": p.name, "path": str(p), "lang": "project"}
+                pkg = p / "package.json"
+                if pkg.exists():
+                    data = json.loads(pkg.read_text())
+                    info["version"] = data.get("version", "")
+                result.append(info)
     return result
 
 

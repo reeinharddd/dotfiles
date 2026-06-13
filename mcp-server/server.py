@@ -4,7 +4,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-SYSTEMINFO_DIR = Path(os.path.expanduser("~/systemInfo"))
+SYSTEMINFO_DIR = Path(__file__).parent.parent.resolve()
 
 
 def read_json(path: Path) -> dict[str, Any]:
