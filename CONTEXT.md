@@ -5,7 +5,7 @@
 - **OS**: Ubuntu 26.04 LTS
 - **Kernel**: 7.0.0-22-generic
 - **Architecture**: x86_64
-- **Uptime**: 2 days, 5 minutes
+- **Uptime**: 2 days, 38 minutes
 - **Desktop**: ubuntu
 - **Session Type**: wayland
 - **Default Shell**: zsh 5.9 (configured: /usr/bin/zsh)
@@ -13,7 +13,7 @@
 ## Hardware
 - **CPU**: AMD Ryzen 7 PRO 6850U with Radeon Graphics
 - **Cores**: 16 threads
-- **RAM**: 13Gi total, 8.5Gi used, 5.4Gi avail
+- **RAM**: 13Gi total, 9.7Gi used, 4.2Gi avail
 - **GPU**: Advanced Micro Devices, Inc. [AMD/ATI] Rembrandt [Radeon 680M] (rev d1)
 - **Disk**: 468G total, 39G used (9%)
 
@@ -165,5 +165,5 @@ not running
 - **Security**: trivy fs . | semgrep --config=auto .
 
 ---
-_Generated: 2026-06-12T22:56:49Z | Mode: full_
+_Generated: 2026-06-12T23:30:20Z | Mode: full_
 _System Context for AI Agent Consumption_
