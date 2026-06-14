@@ -123,6 +123,9 @@ deploy_link "$CONFIG_DIR/vscode/prompts/global.instructions.md" "$HOME/.config/C
 deploy_link "$CONFIG_DIR/vscode/prompts/environment.instructions.md" "$HOME/.config/Code/User/prompts/environment.instructions.md"
 deploy_link "$CONFIG_DIR/vscode/prompts/tests.instructions.md" "$HOME/.config/Code/User/prompts/tests.instructions.md"
 
+# opencode AGENTS.md
+deploy_link "$CONFIG_DIR/opencode/AGENTS.md" "$HOME/.config/opencode/AGENTS.md"
+
 echo ""
 echo "==> Summary: $link_count linked, $skip_count skipped, $backup_count backed up, $fail_count failed"
 if [ "$backup_count" -gt 0 ] && ! $DRY_RUN; then
