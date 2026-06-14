@@ -1,50 +1,73 @@
-# dotfiles / systemInfo — Central Knowledge Base
+# dotfiles — Personal Config Backup
 
-System-wide hardware, software, and configuration knowledge base.
-Exposed via MCP for AI agents to consume in real-time.
-
-Canonical location: `~/projects/dotfiles`
-Legacy symlink: `~/systemInfo` → `~/projects/dotfiles`
+Personal configuration files with one-shot bootstrap and idempotent deploy.
 
 ## Structure
 
 ```
 dotfiles/
-├── hardware/
-│   └── current.json      Live hardware specs (CPU, RAM, disk, GPU)
-├── software/
-│   └── current.json      Installed tools with versions
-├── configs/              Dotfiles and app configurations
-├── projects/
-│   └── registry.json     Project registry (path, language, version)
+├── configs/                    # All personal configs (source of truth)
+│   ├── shell/                  # .zshrc
+│   ├── git/                    # .gitconfig
+│   ├── kitty/                  # ~/.config/kitty/
+│   ├── starship/               # ~/.config/starship/
+│   ├── zellij/                 # ~/.config/zellij/
+│   ├── atuin/                  # ~/.config/atuin/
+│   ├── continue/               # ~/.config/continue/
+│   ├── fontconfig/             # ~/.config/fontconfig/
+│   ├── gh/                     # ~/.config/gh/
+│   ├── mise/                   # ~/.config/mise/
+│   ├── opencode/               # ~/.config/opencode/
+│   ├── profile.d/              # ~/.profile.d/
+│   └── vscode/                 # ~/.config/Code/User/
 ├── scripts/
-│   └── scan.sh           Regenerate all data files
-├── mcp-server/
-│   └── run.py            MCP server (exposes data via stdin/stdout)
-├── SPEC.md               System Context Universal specification
-└── CONTEXT.md            Generated agent context
+│   └── deploy.sh               # Idempotent symlink deploy (backup-first)
+├── bootstrap/
+│   └── install.sh              # Clone → detect (sys-inspector) → deploy
+└── .gitignore
 ```
 
-## MCP Tools
-
-| Tool | Description |
-|------|-------------|
-| `system_info` | Full hardware + software snapshot |
-| `list_tools` | Installed dev tools (optionally by category) |
-| `list_projects` | Project registry |
-| `scan` | Regenerate all cached data files |
-
-## Usage
+## Quick Install
 
 ```bash
-# Rescan all data
-bash scripts/scan.sh
+# One-shot (clones, detects system, deploys configs)
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/reeinharddd/dotfiles/main/bootstrap/install.sh)"
 
-# Query via MCP
-echo '{"tool":"system_info","args":{}}' | python3 mcp-server/run.py
+# Or manually
+git clone ssh://git@github.com/reeinharddd/dotfiles ~/projects/dotfiles
+~/projects/dotfiles/scripts/deploy.sh
+```
 
-# Browse data
-cat hardware/current.json | python3 -m json.tool
-cat software/current.json | python3 -m json.tool
-cat projects/registry.json | python3 -m json.tool
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `./scripts/deploy.sh` | Deploy all configs (symlinks, backups existing) |
+| `./scripts/deploy.sh --dry-run` | Preview what would change |
+| `./bootstrap/install.sh` | Full bootstrap: clone + detect + deploy |
+| `./bootstrap/install.sh --no-detect` | Skip sys-inspector detection |
+| `./bootstrap/install.sh --dry-run` | Preview bootstrap |
+
+## sys-inspector (Optional)
+
+System detection is delegated to [sys-inspector](https://github.com/reeinharddd/sys-inspector) — a universal, POSIX sh toolkit that generates AI-agent-readable `skill.md` from live system state.
+
+```bash
+# Install separately for system detection
+git clone ssh://git@github.com/reeinharddd/sys-inspector ~/projects/sys-inspector
+~/projects/sys-inspector/src/inspect.sh
+```
+
+Bootstrap runs detection automatically if sys-inspector is present.
+
+## Config Management
+
+- **Source of truth**: `configs/` — edit files here
+- **Deploy**: `./scripts/deploy.sh` — creates symlinks, backs up existing files
+- **Backups**: `~/.local/share/dotfiles-backup/YYYYMMDD-HHMMSS/`
+
+## Remote
+
+```
+ssh://git@github.com/reeinharddd/dotfiles (private)
 ```
