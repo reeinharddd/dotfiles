@@ -1,0 +1,86 @@
+{
+  "models": [
+    {
+      "title": "Qwen3 8B (local chat)",
+      "provider": "ollama",
+      "model": "qwen3:8b",
+      "contextLength": 8192,
+      "completionOptions": {
+        "temperature": 0.2,
+        "maxTokens": 4096
+      }
+    },
+    {
+      "title": "Claude Sonnet (cloud)",
+      "provider": "anthropic",
+      "model": "claude-sonnet-4-5",
+      "apiKey": "",
+      "completionOptions": {
+        "temperature": 0.2,
+        "maxTokens": 4096
+      }
+    }
+  ],
+  "tabAutocompleteModel": {
+    "title": "Qwen3 8B (autocomplete)",
+    "provider": "ollama",
+    "model": "qwen3:8b",
+    "contextLength": 4096,
+    "completionOptions": {
+      "temperature": 0.1,
+      "maxTokens": 256
+    }
+  },
+  "contextProviders": [
+    {
+      "name": "codebase",
+      "params": {
+        "useLocalIndex": true
+      }
+    },
+    {
+      "name": "terminal"
+    },
+    {
+      "name": "git"
+    },
+    {
+      "name": "file"
+    },
+    {
+      "name": "folder"
+    },
+    {
+      "name": "problems"
+    },
+    {
+      "name": "search"
+    }
+  ],
+  "slashCommands": [
+    {
+      "name": "review",
+      "description": "Review the selected code for bugs, security, and quality",
+      "prompt": "Review the selected code. Identify bugs, security issues, and quality problems. Be specific."
+    },
+    {
+      "name": "test",
+      "description": "Write tests for the selected code",
+      "prompt": "Write comprehensive tests for the selected code. Include unit tests for edge cases."
+    },
+    {
+      "name": "docs",
+      "description": "Generate documentation for the selected code",
+      "prompt": "Generate clear documentation for the selected code. Include parameters, returns, and examples."
+    },
+    {
+      "name": "fix",
+      "description": "Fix issues in the selected code",
+      "prompt": "Fix bugs and issues in the selected code. Explain what was wrong."
+    }
+  ],
+  "experimental": {
+    "contextMenuPrompts": true,
+    "allowYamlConfig": true
+  }
+}

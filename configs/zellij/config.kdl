@@ -1,0 +1,68 @@
+// Zellij config — Kitty compatible, Alt keys
+simplified_ui true
+theme "default"
+pane_frames true
+mouse_mode true
+scrollback_lines 10000
+scrollback_editor "vim"
+
+keybinds {
+    normal {
+        bind "Ctrl g" { SwitchToMode "Locked"; }
+        bind "Ctrl p" { SwitchToMode "Pane"; }
+        bind "Alt n" { NewPane; }
+        bind "Alt w" { CloseFocus; }
+        bind "Alt h" { MoveFocusOrTab "Left"; }
+        bind "Alt j" { MoveFocusOrTab "Down"; }
+        bind "Alt k" { MoveFocusOrTab "Up"; }
+        bind "Alt l" { MoveFocusOrTab "Right"; }
+        bind "Alt H" { Resize "Left"; }
+        bind "Alt J" { Resize "Down"; }
+        bind "Alt K" { Resize "Up"; }
+        bind "Alt L" { Resize "Right"; }
+        bind "Alt t" { NewTab; }
+        bind "Alt q" { CloseTab; }
+        bind "Alt 1" { GoToTab 1; }
+        bind "Alt 2" { GoToTab 2; }
+        bind "Alt 3" { GoToTab 3; }
+        bind "Alt 4" { GoToTab 4; }
+        bind "Alt 5" { GoToTab 5; }
+        bind "Alt 6" { GoToTab 6; }
+        bind "Alt 7" { GoToTab 7; }
+        bind "Alt 8" { GoToTab 8; }
+        bind "Alt 9" { GoToTab 9; }
+        bind "Alt p" { GoToPreviousTab; }
+        bind "Alt Right" { GoToNextTab; }
+        bind "Alt Enter" { ToggleFocusFullscreen; }
+        // ReloadConfiguration was removed in 0.44
+    }
+    pane {
+        bind "h" "Left" { MoveFocus "Left"; }
+        bind "j" "Down" { MoveFocus "Down"; }
+        bind "k" "Up" { MoveFocus "Up"; }
+        bind "l" "Right" { MoveFocus "Right"; }
+        bind "p" { SwitchFocus; }
+    }
+    locked {
+        bind "Ctrl g" { SwitchToMode "Normal"; }
+    }
+}
+
+session_serialization false
+default_shell "/usr/bin/zsh"
+default_layout "default"
+
+layouts {
+    default {
+        pane split_direction="horizontal" {
+            pane
+            pane
+        }
+    }
+    dev {
+        pane split_direction="horizontal" {
+            pane size="60%"
+            pane size="40%"
+        }
+    }
+}

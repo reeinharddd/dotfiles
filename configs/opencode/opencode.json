@@ -1,0 +1,255 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "lsp": {
+    "python": {
+      "command": ["pyright-langserver", "--stdio"],
+      "extensions": [".py"],
+      "disabled": false
+    },
+    "typescript": {
+      "command": ["typescript-language-server", "--stdio"],
+      "extensions": [".ts", ".tsx"],
+      "disabled": false
+    },
+    "javascript": {
+      "command": ["typescript-language-server", "--stdio"],
+      "extensions": [".js", ".jsx", ".mjs", ".cjs"],
+      "disabled": false
+    },
+    "go": {
+      "command": ["gopls"],
+      "extensions": [".go"],
+      "disabled": false
+    },
+    "rust": {
+      "command": ["rust-analyzer"],
+      "extensions": [".rs"],
+      "disabled": false
+    },
+    "bash": {
+      "command": ["bash-language-server", "start"],
+      "extensions": [".sh", ".bash", ".zsh"],
+      "disabled": false
+    },
+    "yaml": {
+      "command": ["yaml-language-server", "--stdio"],
+      "extensions": [".yaml", ".yml"],
+      "disabled": false
+    },
+    "json": {
+      "command": ["vscode-json-language-server", "--stdio"],
+      "extensions": [".json"],
+      "disabled": false
+    },
+    "dockerfile": {
+      "command": ["docker-langserver", "--stdio"],
+      "extensions": ["Dockerfile"],
+      "disabled": false
+    },
+    "markdown": {
+      "command": ["marksman"],
+      "extensions": [".md"],
+      "disabled": true
+    },
+    "toml": {
+      "command": ["taplo", "lsp", "--stdio"],
+      "extensions": [".toml"],
+      "disabled": false
+    }
+  },
+  "agent": {
+    "gentle-orchestrator": {
+      "description": "Gentle AI SDD Orchestrator - coordinates sub-agents, never does work inline",
+      "mode": "primary",
+      "permission": {
+        "task": {
+          "*": "deny",
+          "sdd-apply": "allow",
+          "sdd-archive": "allow",
+          "sdd-design": "allow",
+          "sdd-explore": "allow",
+          "sdd-init": "allow",
+          "sdd-onboard": "allow",
+          "sdd-propose": "allow",
+          "sdd-spec": "allow",
+          "sdd-tasks": "allow",
+          "sdd-verify": "allow"
+        }
+      },
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "task": true,
+        "write": true
+      }
+    },
+    "sdd-apply": {
+      "description": "Implement code changes from task definitions",
+      "hidden": true,
+      "mode": "subagent",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      }
+    },
+    "sdd-archive": {
+      "description": "Archive completed change artifacts",
+      "hidden": true,
+      "mode": "subagent",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      }
+    },
+    "sdd-design": {
+      "description": "Create technical design from proposals",
+      "hidden": true,
+      "mode": "subagent",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      }
+    },
+    "sdd-explore": {
+      "description": "Investigate codebase and think through ideas",
+      "hidden": true,
+      "mode": "subagent",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      }
+    },
+    "sdd-init": {
+      "description": "Bootstrap SDD context and project configuration",
+      "hidden": true,
+      "mode": "subagent",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      }
+    },
+    "sdd-onboard": {
+      "description": "Guide user through a complete SDD cycle using their real codebase",
+      "hidden": true,
+      "mode": "subagent",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      }
+    },
+    "sdd-propose": {
+      "description": "Create change proposals from explorations",
+      "hidden": true,
+      "mode": "subagent",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      }
+    },
+    "sdd-spec": {
+      "description": "Write detailed specifications from proposals",
+      "hidden": true,
+      "mode": "subagent",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      }
+    },
+    "sdd-tasks": {
+      "description": "Break down specs and designs into implementation tasks",
+      "hidden": true,
+      "mode": "subagent",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      }
+    },
+    "sdd-verify": {
+      "description": "Validate implementation against specs",
+      "hidden": true,
+      "mode": "subagent",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      }
+    }
+  },
+  "mcp": {
+    "context7": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "engram": {
+      "command": ["engram", "mcp", "--tools=agent"],
+      "type": "local",
+      "enabled": true
+    },
+    "code-review-graph": {
+      "command": ["code-review-graph", "serve"],
+      "type": "local",
+      "enabled": true
+    },
+    "agentmemory": {
+      "command": ["agentmemory", "mcp"],
+      "type": "local",
+      "enabled": true
+    },
+    "playwright": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@playwright/mcp@latest",
+        "--browser=chrome",
+        "--viewport-size=1920x1080",
+        "--timeout-navigation=60000",
+        "--timeout-action=10000"
+      ],
+      "environment": {
+        "PLAYWRIGHT_CHROME_EXECUTABLE_PATH": "/snap/brave/current/opt/brave.com/brave/brave"
+      }
+    },
+    "chrome-devtools": {
+      "enabled": true,
+      "type": "local",
+      "command": ["npx", "-y", "chrome-devtools-mcp"],
+      "environment": {
+        "CHROME_DEBUGGING_PORT": "9222",
+        "CHROME_PATH": "/snap/brave/current/opt/brave.com/brave/brave"
+      }
+    },
+    "firecrawl": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.firecrawl.dev/fc-412aba2a43ba47daabae244cb8a72af9/v2/mcp"
+    }
+  },
+  "share": "disabled",
+  "plugin": [
+    "./plugins/caveman/plugin.js",
+    "/home/reeinharrrd/.opencode/dist/plugins"
+  ]
+}
