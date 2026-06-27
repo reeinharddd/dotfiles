@@ -1,0 +1,8 @@
+{
+  "name": "ctx-analyze-opencode-plugin",
+  "version": "0.1.0",
+  "description": "ctx-analyze plugin for opencode — captures system prompts, model switches, compaction events",
+  "type": "module",
+  "main": "plugin.ts",
+  "private": true
+}
