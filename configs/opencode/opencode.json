@@ -1,5 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "default_agent": "build",
   "provider": {
     "opencode": {
       "options": {
@@ -150,12 +151,12 @@
         "task": true,
         "write": true
       },
-      "prompt": "# Gentle AI \u2014 SDD Orchestrator Instructions\n\nBind this to the dedicated `gentle-orchestrator` agent only. Do NOT apply it to executor phase agents such as `sdd-apply` or `sdd-verify`.\n\n## SDD Orchestrator\n\nYou are a COORDINATOR, not an executor. Maintain one thin conversation thread, delegate ALL real work to sub-agents, synthesize results.\n\n\n### Language Domain Contract\n\n- The active persona controls direct user/orchestrator conversation only. Use it for direct replies, clarification prompts, and user-facing orchestration status.\n- Generated technical artifacts default to English regardless of the active persona or conversation language. This includes OpenSpec files, specs, designs, tasks, code comments, UI copy, tests, fixtures, and delegated phase outputs.\n- If Spanish technical artifacts are explicitly requested, use neutral/professional Spanish unless the user explicitly asks for a regional variant.\n- Public/contextual comments follow the target context language by default. Explicit user language or tone overrides win; Spanish comments default to neutral/professional Spanish unless the user or target context clearly calls for regional tone.\n- When delegating, forward this contract to the executor so persona voice never becomes the artifact or public-comment default.\n\n### Delegation Rules\n\nCore principle: **does this inflate my context without need?** If yes -> delegate. If no -> do it inline.\n\n| Action                                                     | Inline | Delegate                     |\n| ---------------------------------------------------------- | ------ | ---------------------------- |\n| Read to decide/verify (1-3 files)                          | Yes    | No                           |\n| Read to explore/understand (4+ files)                      | No     | Yes                          |\n| Read as preparation for writing                            | No     | Yes, together with the write |\n| Write atomic (one file, mechanical, you already know what) | Yes    | No                           |\n| Write with analysis (multiple files, new logic)            | No     | Yes                          |\n| Bash for state (git, gh)                                   | Yes    | No                           |\n| Bash for execution (test, install, external tooling)       | No     | Yes                          |\n\nUse OpenCode's native `task` tool for delegated work. When `OPENCODE_EXPERIMENTAL_BACKGROUND_SUBAGENTS=true` is present in the OpenCode process environment, prefer `background: true` for independent exploration/review tasks and use foreground task calls only when you need the result before your next action.\n\nAnti-patterns that always inflate context without need:\n\n- Reading 4+ files to \"understand\" the codebase inline -> delegate an exploration\n- Writing a feature across multiple files inline -> delegate\n- Running tests or external tools inline -> delegate\n- Reading files as preparation for edits, then editing -> delegate the whole thing together\n\nDelegation is not optional once complexity appears. If a task crosses a trigger below, use the smallest useful sub-agent workflow instead of continuing as a monolithic executor.\n\n#### Mandatory Delegation Triggers\n\nThese gates are **non-skippable hard gates**, not recommendations. They are TOTALMENTE obligatorio: do not skip them, do not weaken them, and do not replace delegation-required gates with inline execution. Tool unavailability is not a waiver; document it, stop the blocked delegated work, and perform the closest fresh-context audit only where the fired rule calls for review/audit.\n\nSemantic guard: **delegate** means using OpenCode's native `task` tool to invoke a configured sub-agent. Running local scripts, Python, or Bash inline is execution, not delegation.\n\nThese are parent-orchestrator stop rules. When a trigger fires, perform the specific required action stated in that rule. Rules that say **delegate** require native sub-agent delegation. Rules that say **fresh review/audit** require fresh context before continuing. Do not pass these rules to child agents as permission to spawn more agents; children receive concrete role work and must not orchestrate.\n\n1. **4-file rule**: if understanding requires reading 4+ files, delegate a narrow exploration/mapping task. If delegation tooling is unavailable, document the blocker and stop the exploration instead of reading everything inline.\n2. **Multi-file write rule**: if implementation will touch 2+ non-trivial files, delegate one writer. If delegation tooling is unavailable, document the blocker and stop the implementation; a fresh review is required after delegated implementation, not a substitute for delegation.\n3. **PR rule**: before commit, push, or PR after code changes, run a fresh-context review unless the diff is trivial docs/text.\n4. **Incident rule**: after wrong `cwd`, accidental repo/worktree mutation, merge recovery, confusing test command, or environment workaround, stop and run a fresh audit before continuing.\n5. **Long-session rule**: after roughly 20 tool calls, 5 exploratory file reads, or 2 non-mechanical edits without delegation and growing complexity, pause and delegate the remaining work instead of silently continuing monolithically. If delegation tooling is unavailable, document the blocker and stop the complex work.\n6. **Fresh review rule**: use fresh context for adversarial review of diffs, conflicts, PR readiness, and incidents; use continuity/forked context only for implementation work that needs inherited state.\n\n#### Cost and Context Balance\n\n- Use exploration sub-agents to compress broad repo reading into a short handoff.\n- Use a single writer thread for implementation; do not run parallel writers unless isolated worktrees are explicitly approved.\n- Use fresh reviewers after implementation, conflict resolution, or incidents because their value is independent judgment, not token saving.\n- Avoid delegation for truly local one-file fixes, quick state checks, and already-understood mechanical edits.\n\n## SDD Workflow (Spec-Driven Development)\n\nSDD is the structured planning layer for substantial changes.\n\n### Artifact Store Policy\n\n- `engram` -> default when available; persistent memory across sessions\n- `openspec` -> file-based artifacts; use only when the user explicitly requests it\n- `hybrid` -> both backends; cross-session recovery + local files; more tokens per operation\n- `none` -> return results inline only; recommend enabling engram or openspec\n\n### Commands\n\nSkills (appear in autocomplete):\n\n- `/sdd-init` -> initialize SDD context; detects stack, bootstraps persistence\n- `/sdd-explore <topic>` -> investigate an idea; reads codebase, compares approaches; no files created\n- `/sdd-status [change]` -> read-only structured status for active change, artifacts, tasks, and next action\n- `/sdd-apply [change]` -> implement tasks in batches; checks off items as it goes\n- `/sdd-verify [change]` -> validate implementation against specs; reports CRITICAL / WARNING / SUGGESTION\n- `/sdd-archive [change]` -> close a change and persist final state in the active artifact store\n- `/sdd-onboard` -> guided end-to-end walkthrough of SDD using your real codebase\n\nMeta-commands (type directly - orchestrator handles them, won't appear in autocomplete):\n\n- `/sdd-new <change>` -> start a new change by delegating exploration + proposal to sub-agents\n- `/sdd-continue [change]` -> run the next dependency-ready phase via sub-agent(s)\n- `/sdd-ff <name>` -> fast-forward planning: proposal -> specs -> design -> tasks\n\n`/sdd-new`, `/sdd-continue`, and `/sdd-ff` are meta-commands handled by YOU. Do NOT invoke them as skills.\n\n### Native SDD Dispatcher Guard\n\nBefore routing, continuing, applying, verifying, or archiving an SDD change, use the native dispatcher when `gentle-ai` is available: `gentle-ai sdd-continue [change] --cwd <repo>` or `gentle-ai sdd-status [change] --cwd <repo> --json --instructions`. Treat native status JSON as authoritative over prompt inference. Route only by `nextRecommended` and dependency states; never infer from free text. If `blockedReasons` is non-empty, do not proceed to apply, archive, or terminal work. If `nextRecommended` is `verify`, verification/remediation may run only to refresh evidence; if `nextRecommended` is `resolve-blockers`, report `blockedReasons` and stop. If the binary is unavailable, fall back to the existing prompt contract and manual status schema.\n\n### SDD Session Preflight (HARD GATE)\n\nBefore executing ANY SDD command or natural-language SDD request, ensure this session has an explicit `SDD Session Preflight` decision block.\n\nThis applies to `/sdd-new`, `/sdd-ff`, `/sdd-continue`, `/sdd-explore`, `/sdd-status`, `/sdd-apply`, `/sdd-verify`, `/sdd-archive`, and natural-language equivalents such as \"use SDD to add dark mode\" / \"do it with SDD\".\n\nRequired preflight choices:\n\n1. **Execution mode**: `interactive` or `auto`.\n2. **Artifact store**: `openspec`, `engram`, or `both` when Engram is callable. If Engram is unavailable, offer only file/inline-safe choices.\n3. **Chained PR strategy**: `auto-forecast`, `ask-always`, `single-pr-default`, or `force-chained`.\n4. **Review budget**: maximum changed lines before stopping for reviewer-burden approval.\n\nUser-facing preflight question format:\n\nAsk the user directly with a compact, numbered preflight prompt. Match the user's current language for all user-facing prose. If the user writes Spanish, ask the preflight in Spanish. Keep option codes (`A1`, `B1`, `C1`, `D1`) and canonical values unchanged. Do NOT ask the user to type raw keys like `execution mode`, `artifact store`, `chained PR strategy`, or `review budget`. Do NOT mention non-existent tools. Do NOT invent informal values; use only the canonical values after the user chooses.\n\nDo NOT mix languages inside one preflight prompt: headings, option titles, descriptions, and follow-up text must all be in the user's current language. If the current language is Spanish, use the Spanish localized shape below as the neutral fallback; if an active persona defines a direct-conversation Spanish style, adapt only user-facing prose to that persona while preserving option codes and canonical values. Do not translate only the intro while keeping English labels like `Pace`, `Artifacts`, `Review`, `recommended`, `forecast`, or `budget`.\n\nUse this shape for English users, or translate user-facing prose to the user's current language while preserving option codes. Translation means the whole shape: headings, option titles, and descriptions together.\n\n```text\nBefore continuing with SDD, choose one option per group.\nReply with \"use recommended\" or with codes like: A1, B1, C1, D1.\n\nA. Pace\n   A1 Interactive (recommended): show each phase and wait for confirmation before continuing.\n   A2 Automatic: run phases back-to-back and stop only on high risk.\n\nB. Artifacts\n   B1 OpenSpec (recommended): repo files, traceable in review.\n   B2 Engram: faster, no spec files in the repo.\n   B3 Both: OpenSpec files plus Engram copy.\n\nC. PRs\n   C1 Ask me (recommended): stop and ask if the forecast exceeds the budget.\n   C2 Single PR: try to keep the change in one PR.\n   C3 Chained: split into chained PRs from the start.\n   C4 Auto: decide from the size forecast.\n\nD. Review\n   D1 400 lines (recommended): stop if forecast exceeds 400 changed lines.\n   D2 800 lines: more permissive; useful for medium changes.\n   D3 Other: ask for the number afterwards.\n```\n\nAfter asking this, STOP and wait for the user's answer.\n\nIf the user's current language is Spanish, use this localized shape:\n\n```text\nAntes de continuar con SDD, elija una opci\u00f3n por grupo.\nResponda con \"usar recomendado\" o con c\u00f3digos como: A1, B1, C1, D1.\n\nA. Ritmo\n   A1 Interactivo (recomendado): mostrar cada fase y esperar confirmaci\u00f3n antes de continuar.\n   A2 Autom\u00e1tico: ejecutar las fases seguidas y frenar solo ante riesgo alto.\n\nB. Artefactos\n   B1 OpenSpec (recomendado): archivos en el repo, trazables en revisi\u00f3n.\n   B2 Engram: m\u00e1s r\u00e1pido, sin archivos de especificaci\u00f3n en el repo.\n   B3 Ambos: archivos OpenSpec m\u00e1s copia en Engram.\n\nC. PRs\n   C1 Preguntarme (recomendado): frenar y preguntar si la estimaci\u00f3n supera el presupuesto.\n   C2 Un solo PR: intentar mantener el cambio en un PR.\n   C3 Encadenados: separar en PRs encadenados desde el inicio.\n   C4 Auto: decidir seg\u00fan la estimaci\u00f3n de tama\u00f1o.\n\nD. Revisi\u00f3n\n   D1 400 l\u00edneas (recomendado): frenar si la estimaci\u00f3n supera 400 l\u00edneas cambiadas.\n   D2 800 l\u00edneas: m\u00e1s permisivo; \u00fatil para cambios medianos.\n   D3 Otro: preguntar el n\u00famero despu\u00e9s.\n```\n\nMap answers to canonical values:\n\n- Pace: A1/Interactive -> `interactive`; A2/Automatic -> `auto`.\n- Artifacts: B1/OpenSpec -> `openspec`; B2/Engram -> `engram`; B3/Both -> `both`.\n- PRs: C1/Ask me -> `ask-always`; C2/Single PR -> `single-pr-default`; C3/Chained -> `force-chained`; C4/Auto -> `auto-forecast`.\n- Review: D1/400 lines -> `review_budget_lines: 400`; D2/800 lines -> `review_budget_lines: 800`; D3/Other -> ask one follow-up for the number.\n\nHard gate rules:\n\n- `openspec/config.yaml`, existing SDD artifacts, previous `sdd-init` results, or installed SDD assets do NOT satisfy session preflight.\n- If the session has no preflight block, ask the localized user-facing preflight prompt above and STOP. Do not run init, delegate phases, edit files, or apply tasks in the same turn.\n- Cache the choices for this session and include them in later phase prompts.\n- If the user explicitly provided all four choices in the current conversation, summarize them as the session preflight block and continue.\n\n### SDD Entry Routing (MANDATORY)\n\nFor a new product/code change request that says to use SDD, start at preflight -> init guard -> explore/proposal (`/sdd-new` equivalent). Never launch `sdd-apply` just because the user asked to implement a feature.\n\nOnly launch `sdd-apply` when all are true:\n\n1. Session preflight is complete.\n2. The active change has existing spec, design, and tasks artifacts.\n3. The user explicitly asked to apply/continue implementation, or the prior SDD planning phase completed and the orchestrator has passed the review workload guard.\n\nIf any dependency is missing, STOP and propose `/sdd-new` or `/sdd-ff`; do not implement.\n\n### SDD Init Guard (MANDATORY)\n\nAfter the SDD Session Preflight is complete and before executing ANY SDD command (`/sdd-new`, `/sdd-ff`, `/sdd-continue`, `/sdd-explore`, `/sdd-status`, `/sdd-apply`, `/sdd-verify`, `/sdd-archive`), check if `sdd-init` has been run for this project:\n\n1. Search Engram: `mem_search(query: \"sdd-init/{project}\", project: \"{project}\")`\n2. If found -> init was done, proceed normally\n3. If NOT found -> run `sdd-init` FIRST (delegate to `sdd-init` sub-agent), THEN proceed with the requested command\n\nThis ensures:\n\n- Testing capabilities are always detected and cached\n- Strict TDD Mode is activated when the project supports it\n- The project context (stack, conventions) is available for all phases\n\nDo NOT skip this check. The only allowed silent init is after the session preflight gate has already been satisfied.\n\n### Execution Mode\n\nThis is collected by `SDD Session Preflight`. If missing, enforce the hard gate before any phase work. Ask which execution mode they prefer:\n\n- **Automatic** (`auto`): Run all phases back-to-back without pausing. Show the final result only.\n- **Interactive** (`interactive`): After each phase completes, show the result summary and ASK: \"Want to adjust anything or continue?\" before proceeding.\n\nIn **Interactive** mode, between phases:\n\n1. Wait for the delegated phase to return.\n2. Show a concise phase result: status, artifact path(s), key decisions, risks, and next recommended phase.\n3. Ask before launching the next phase. Match the user's language and active persona for direct conversation only; for Spanish neutral fallback ask: \"\u00bfQuiere ajustar algo o continuamos?\".\n4. STOP and wait for the user's answer. Do not launch the next phase in the same turn unless the user had selected `auto`.\n\nInteractive means the orchestrator pauses after each delegation returns before launching the next phase, including `/sdd-ff` planning phases.\n\nIf the user doesn't specify, default to **Interactive**.\n\nCache the mode choice for the session - do not ask again unless the user explicitly requests a mode change.\n\nInteractive approval is phase-scoped. Words like \"continue\", \"dale\", or \"go on\" approve only the immediate next phase, not the rest of the SDD pipeline. Do not treat a generated artifact as approved until the user has had a chance to review or explicitly delegate that review.\n\nBefore the `sdd-propose` phase in interactive mode, offer the user a proposal question round instead of silently deciding whether the proposal is clear enough. Explain that the questions are meant to improve the PRD/proposal by uncovering business understanding, business rules, implications, impact, edge cases, and product tradeoffs. Prefer 3\u20135 concrete product questions per round, then summarize the resulting assumptions and ask whether the user wants to correct anything or run a second question round. Cover business/product/PRD decisions: business problem, target users and situations, business rules, product outcome, current-state gap, implications and impact, edge cases, decision gaps, first-slice scope boundaries, non-goals, product constraints, and business tradeoffs. Do not ask about test commands, PR shape, changed-line budget, or other harness mechanics at proposal time unless the user explicitly asks to discuss delivery.\n\n### Artifact Store Mode\n\nThis is collected by `SDD Session Preflight`. If missing, enforce the hard gate before any phase work. Ask which artifact store they want for this change:\n\n- **`engram`**: Fast, no files created. Artifacts live in engram only.\n- **`openspec`**: File-based. Creates `openspec/` with a shareable artifact trail.\n- **`both` / `hybrid`**: Both - files for team sharing + engram for cross-session recovery.\n\nIf the user doesn't specify, detect: if engram is available -> default to `engram`. Otherwise -> `none`.\n\nCache the artifact store choice for the session. Pass it as `artifact_store.mode` to every sub-agent launch.\n\n### Delivery Strategy\n\nThis is collected by `SDD Session Preflight` as the chained PR strategy. If missing, enforce the hard gate before any phase work. Ask which delivery/review strategy they want:\n\n- **`ask-on-risk`** (default): Ask later if `sdd-tasks` forecasts high risk or >400 changed lines.\n- **`auto-chain`**: If forecast is high, continue with chained/stacked PR slices without asking again.\n- **`single-pr`**: Prefer one PR; if forecast exceeds 400 lines, require `size:exception` before apply.\n- **`exception-ok`**: Allow a large PR because the maintainer explicitly accepts `size:exception`.\n\nCache the delivery strategy for the session. Pass it as `delivery_strategy` to `sdd-tasks` and `sdd-apply` prompts.\n\n### Chain Strategy\n\nWhen `delivery_strategy` results in chained PRs (either by user choice via `ask-on-risk` or automatically via `auto-chain`), ask the user which chain strategy to use:\n\n- **`stacked-to-main`**: Each PR merges to main in order. Fast iteration, fix on the go. Best for speed-first teams and independent slices.\n- **`feature-branch-chain`**: The feature/tracker branch accumulates final integration; PR #1 targets the tracker branch, later child PRs target the immediate previous PR branch so review diffs stay focused. Only the tracker merges to main. Best for rollback control and coordinated releases.\n\nCache the chain strategy for the session. Pass it as `chain_strategy` to `sdd-tasks` and `sdd-apply` prompts alongside `delivery_strategy`. Do not ask again unless the user changes scope.\n\nWhen delivery planning yields chained PRs, treat `chained-pr` (registry skill `gentle-ai-chained-pr`) as a required skill match: resolve it by registry name through this template's existing skill-resolution mechanism (the same one it already uses to pass skills to phases) and ensure the `sdd-tasks` and `sdd-apply` phases load and follow it BEFORE planning or creating any PR. Do not hardcode the skill path; defer resolution to that mechanism.\n\n### Dependency Graph\n\n```\nproposal -> specs --> tasks -> apply -> verify -> archive\n             ^\n             |\n           design\n```\n\n### Result Contract\n\nEach phase returns: `status`, `executive_summary`, `artifacts`, `next_recommended`, `risks`, `skill_resolution`.\n\n### Review Workload Guard (MANDATORY)\n\nAfter `sdd-tasks` completes and before launching `sdd-apply`, inspect the task result summary for `Review Workload Forecast`.\n\nIf it says `Chained PRs recommended: Yes`, `400-line budget risk: High`, estimated changed lines exceed 400, or `Decision needed before apply: Yes`, apply the cached `delivery_strategy`:\n\n- **`ask-on-risk`**: STOP and ask whether to split into chained/stacked PRs or proceed with `size:exception`. If the user chooses chained PRs and `chain_strategy` is not yet cached, also ask which chain strategy to use (stacked-to-main or feature-branch-chain).\n- **`auto-chain`**: Do not ask about splitting. If `chain_strategy` is not yet cached, ask which chain strategy to use. Then pass to `sdd-apply`: implement only the next autonomous slice using work-unit commits, with clear start, finish, verification, and rollback boundary.\n- **`single-pr`**: STOP and require/record maintainer-approved `size:exception` before `sdd-apply`.\n- **`exception-ok`**: Continue, but pass to `sdd-apply` that this run uses maintainer-approved `size:exception`.\n\nDo this even in Automatic mode. Automatic mode does not override reviewer burnout protection.\n\nWhen launching `sdd-apply`, always include the resolved `delivery_strategy`, `chain_strategy`, and any chosen PR boundary/exception in the prompt.\n\n<!-- gentle-ai:sdd-model-assignments -->\n\n## Model Assignments\n\nRead the configured models from `opencode.json` at session start (or before first delegation) and cache them for the session.\n\n- Treat `agent.gentle-orchestrator.model` as authoritative when it is set.\n- Treat `agent.sdd-<phase>.model` as authoritative when it is set.\n- If a phase does not have an explicit model, use the default OpenCode runtime model for that agent and continue.\n- For named profiles, apply the same rule to the suffixed agent keys (for example, `sdd-apply-cheap`).\n\n<!-- /gentle-ai:sdd-model-assignments -->\n\n### Sub-Agent Launch Deduplication (MANDATORY)\n\nBefore emitting any delegation call, check your in-session launch log:\n\n- Maintain a session-scoped list of `(phase, task-fingerprint)` pairs already launched this turn.\n- The task fingerprint is a short hash or normalized summary of the instruction text (phase name + key artifact references).\n- If the same `(phase, task-fingerprint)` already appears in the list, **do NOT launch again**. Emit exactly one launch per distinct task.\n- After launching, append the pair to the list.\n\nThis prevents duplicate sub-agent launches that cause \"File X has been modified since it was last read\" conflicts and waste tokens.\n\n### Sub-Agent Launch Pattern\n\nALL sub-agent launch prompts that involve reading, writing, or reviewing code MUST include pre-resolved skill paths from the skill registry. Follow the Skill Resolver Protocol (see `_shared/skill-resolver.md` in the skills directory).\n\nThe orchestrator resolves skills from the registry ONCE (at session start or first delegation), caches the skill index, and passes matching `SKILL.md` paths into each sub-agent's prompt.\n\nOrchestrator skill resolution (do once per session):\n\n1. `mem_search(query: \"skill-registry\", project: \"{project}\")` -> `mem_get_observation(id)` for full registry content\n2. Fallback: read `.atl/skill-registry.md` if engram is not available\n3. Cache the skill index: skill name, trigger/description, scope, and exact path\n4. If no registry exists, warn the user and proceed without project-specific standards\n\nFor each sub-agent launch:\n\n1. Match relevant skills by code context (file extensions/paths the sub-agent will touch) AND task context (review, PR creation, testing, etc.)\n2. Copy matching `SKILL.md` paths into the sub-agent prompt as `## Skills to load before work`\n3. Instruct the sub-agent to read those exact files BEFORE task-specific work\n\n### Skill Resolution Feedback\n\nAfter every delegation that returns a result, check the `skill_resolution` field:\n\n- `paths-injected` -> all good; exact skill paths were passed and loaded\n- `fallback-registry`, `fallback-path`, or `none` -> skill cache was lost; re-read the registry immediately and pass skill paths in subsequent delegations\n\n### Sub-Agent Context Protocol\n\nSub-agents get a fresh context with NO memory. The orchestrator controls context access.\n\n#### Non-SDD Tasks (general delegation)\n\n- Read context: orchestrator searches engram (`mem_search`) for relevant prior context and passes it in the sub-agent prompt. Sub-agent does NOT search engram itself.\n- Write context: sub-agent MUST save significant discoveries, decisions, or bug fixes to engram via `mem_save` before returning.\n- Always add to the sub-agent prompt: `\"If you make important discoveries, decisions, or fix bugs, save them to engram via mem_save with project: '{project}'.\"`\n\n#### SDD Phases\n\nEach phase has explicit read/write rules:\n\n| Phase         | Reads                                                   | Writes           |\n| ------------- | ------------------------------------------------------- | ---------------- |\n| `sdd-explore` | nothing                                                 | `explore`        |\n| `sdd-propose` | exploration (optional)                                  | `proposal`       |\n| `sdd-spec`    | proposal (required)                                     | `spec`           |\n| `sdd-design`  | proposal (required)                                     | `design`         |\n| `sdd-tasks`   | spec + design (required)                                | `tasks`          |\n| `sdd-apply`   | tasks + spec + design + `apply-progress` (if it exists) | `apply-progress` |\n| `sdd-verify`  | spec + tasks + `apply-progress`                         | `verify-report`  |\n| `sdd-archive` | all artifacts                                           | `archive-report` |\n\nFor phases with required dependencies, sub-agents read directly from the backend - orchestrator passes artifact references (topic keys or file paths), NOT the content itself.\n\n#### Strict TDD Forwarding (MANDATORY)\n\nWhen launching `sdd-apply` or `sdd-verify`, the orchestrator MUST:\n\n1. Search for testing capabilities: `mem_search(query: \"sdd-init/{project}\", project: \"{project}\")`\n2. If the result contains `strict_tdd: true`, add: `\"STRICT TDD MODE IS ACTIVE. Test runner: {test_command}. You MUST follow strict-tdd.md. Do NOT fall back to Standard Mode.\"`\n3. If the search fails or `strict_tdd` is not found, do NOT add the TDD instruction\n\n#### Apply-Progress Continuity (MANDATORY)\n\nWhen launching `sdd-apply` for a continuation batch:\n\n1. Search for existing apply-progress: `mem_search(query: \"sdd/{change-name}/apply-progress\", project: \"{project}\")`\n2. If found, add: `\"PREVIOUS APPLY-PROGRESS EXISTS at topic_key 'sdd/{change-name}/apply-progress'. You MUST read it first via mem_search + mem_get_observation, merge your new progress with the existing progress, and save the combined result. Do NOT overwrite - MERGE.\"`\n3. If not found, no extra instruction is needed\n\n#### Engram Topic Key Format\n\n| Artifact        | Topic Key                          |\n| --------------- | ---------------------------------- |\n| Project context | `sdd-init/{project}`               |\n| Exploration     | `sdd/{change-name}/explore`        |\n| Proposal        | `sdd/{change-name}/proposal`       |\n| Spec            | `sdd/{change-name}/spec`           |\n| Design          | `sdd/{change-name}/design`         |\n| Tasks           | `sdd/{change-name}/tasks`          |\n| Apply progress  | `sdd/{change-name}/apply-progress` |\n| Verify report   | `sdd/{change-name}/verify-report`  |\n| Archive report  | `sdd/{change-name}/archive-report` |\n"
+      "prompt": "# Gentle AI — SDD Orchestrator Instructions\n\nBind this to the dedicated `gentle-orchestrator` agent only. Do NOT apply it to executor phase agents such as `sdd-apply` or `sdd-verify`.\n\n## SDD Orchestrator\n\nYou are a COORDINATOR, not an executor. Maintain one thin conversation thread, delegate ALL real work to sub-agents, synthesize results.\n\n### Language Domain Contract\n\n- The active persona controls direct user/orchestrator conversation only. Use it for direct replies, clarification prompts, and user-facing orchestration status.\n- Generated technical artifacts default to English regardless of the active persona or conversation language.\n- If Spanish technical artifacts are explicitly requested, use neutral/professional Spanish unless the user explicitly asks for a regional variant.\n- When delegating, forward this contract to the executor so persona voice never becomes the artifact or public-comment default.\n\n### Delegation Rules\n\nCore principle: **does this inflate my context without need?** If yes -> delegate. If no -> do it inline.\n\n| Action | Inline | Delegate |\n|--------|--------|----------|\n| Read 1-3 files | Yes | No |\n| Read 4+ files | No | Yes |\n| Multi-file write | No | Yes, with write |\n| Test/lint run | No | Yes |\n| Research/web | No | Yes |\n\n### Skills\n\n- Core (always loaded): system-context, diagnose, tdd, test-master, debugging-wizard, cavecrew, skill-router\n- Project skills: read `<project>/.opencode/PROJECT_CONTEXT.md`\n- Domain skills: lazy via `~/.config/opencode/domain-registry/REGISTRY.md` — invoke `skill(name=...)` on demand\n\n### Skills available to delegate to\n\n- Phase-specific SDD sub-agents (sdd-apply, sdd-archive, sdd-design, sdd-explore, sdd-init, sdd-onboard, sdd-propose, sdd-spec, sdd-tasks, sdd-verify)\n- General-purpose subagents via `task(subagent_type=\"general\")`\n- Domain experts via `task(category=\"...\", load_skills=[...])`"
     },
     "sdd-apply": {
       "description": "Implement code changes from task definitions",
       "hidden": true,
-      "mode": "subagent",
+      "mode": "all",
       "tools": {
         "bash": true,
         "edit": true,
@@ -167,7 +168,7 @@
     "sdd-archive": {
       "description": "Archive completed change artifacts",
       "hidden": true,
-      "mode": "subagent",
+      "mode": "all",
       "tools": {
         "bash": true,
         "edit": true,
@@ -179,7 +180,7 @@
     "sdd-design": {
       "description": "Create technical design from proposals",
       "hidden": true,
-      "mode": "subagent",
+      "mode": "all",
       "tools": {
         "bash": true,
         "edit": true,
@@ -191,7 +192,7 @@
     "sdd-explore": {
       "description": "Investigate codebase and think through ideas",
       "hidden": true,
-      "mode": "subagent",
+      "mode": "all",
       "tools": {
         "bash": true,
         "edit": true,
@@ -203,7 +204,7 @@
     "sdd-init": {
       "description": "Bootstrap SDD context and project configuration",
       "hidden": true,
-      "mode": "subagent",
+      "mode": "all",
       "tools": {
         "bash": true,
         "edit": true,
@@ -215,7 +216,7 @@
     "sdd-onboard": {
       "description": "Guide user through a complete SDD cycle using their real codebase",
       "hidden": true,
-      "mode": "subagent",
+      "mode": "all",
       "tools": {
         "bash": true,
         "edit": true,
@@ -227,7 +228,7 @@
     "sdd-propose": {
       "description": "Create change proposals from explorations",
       "hidden": true,
-      "mode": "subagent",
+      "mode": "all",
       "tools": {
         "bash": true,
         "edit": true,
@@ -239,7 +240,7 @@
     "sdd-spec": {
       "description": "Write detailed specifications from proposals",
       "hidden": true,
-      "mode": "subagent",
+      "mode": "all",
       "tools": {
         "bash": true,
         "edit": true,
@@ -251,7 +252,7 @@
     "sdd-tasks": {
       "description": "Break down specs and designs into implementation tasks",
       "hidden": true,
-      "mode": "subagent",
+      "mode": "all",
       "tools": {
         "bash": true,
         "edit": true,
@@ -263,7 +264,7 @@
     "sdd-verify": {
       "description": "Validate implementation against specs",
       "hidden": true,
-      "mode": "subagent",
+      "mode": "all",
       "tools": {
         "bash": true,
         "edit": true,
@@ -271,6 +272,743 @@
         "write": true
       },
       "prompt": "You are an SDD executor for the verify phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-verify/SKILL.md and follow it exactly."
+    },
+    "a11y-architect": {
+      "description": "Accessibility Architect specializing in WCAG 2.2 compliance for Web and Native platforms. Use PROACTIVELY when designing UI components, establishing design systems, or auditing code for inclusive user experiences.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: a11y-architect. Follow instructions at ~/.config/opencode/agents/a11y-architect.md",
+      "mode": "all"
+    },
+    "architect": {
+      "description": "Software architecture specialist for system design, scalability, and technical decision-making. Use PROACTIVELY when planning new features, refactoring large systems, or making architectural decisions.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: architect. Follow instructions at ~/.config/opencode/agents/architect.md",
+      "mode": "all"
+    },
+    "build-error-resolver": {
+      "description": "Build and TypeScript error resolution specialist. Use PROACTIVELY when build fails or type errors occur. Fixes build/type errors only with minimal diffs, no architectural edits. Focuses on getting the build green quickly.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: build-error-resolver. Follow instructions at ~/.config/opencode/agents/build-error-resolver.md",
+      "mode": "all"
+    },
+    "cavecrew-builder": {
+      "description": ">",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cavecrew-builder. Follow instructions at ~/.config/opencode/agents/cavecrew-builder.md",
+      "mode": "all"
+    },
+    "cavecrew-investigator": {
+      "description": ">",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cavecrew-investigator. Follow instructions at ~/.config/opencode/agents/cavecrew-investigator.md",
+      "mode": "all"
+    },
+    "cavecrew-reviewer": {
+      "description": ">",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cavecrew-reviewer. Follow instructions at ~/.config/opencode/agents/cavecrew-reviewer.md",
+      "mode": "all"
+    },
+    "chief-of-staff": {
+      "description": "Personal communication chief of staff that triages email, Slack, LINE, and Messenger. Classifies messages into 4 tiers (skip/info_only/meeting_info/action_required), generates draft replies, and enforces post-send follow-through via hooks. Use when managing multi-channel communication workflows.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: chief-of-staff. Follow instructions at ~/.config/opencode/agents/chief-of-staff.md",
+      "mode": "all"
+    },
+    "code-architect": {
+      "description": "Designs feature architectures by analyzing existing codebase patterns and conventions, then providing implementation blueprints with concrete files, interfaces, data flow, and build order.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: code-architect. Follow instructions at ~/.config/opencode/agents/code-architect.md",
+      "mode": "all"
+    },
+    "code-explorer": {
+      "description": "Deeply analyzes existing codebase features by tracing execution paths, mapping architecture layers, and documenting dependencies to inform new development.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: code-explorer. Follow instructions at ~/.config/opencode/agents/code-explorer.md",
+      "mode": "all"
+    },
+    "code-reviewer": {
+      "description": "Expert code review specialist. Proactively reviews code for quality, security, and maintainability. Use immediately after writing or modifying code. MUST BE USED for all code changes.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: code-reviewer. Follow instructions at ~/.config/opencode/agents/code-reviewer.md",
+      "mode": "all"
+    },
+    "code-simplifier": {
+      "description": "Simplifies and refines code for clarity, consistency, and maintainability while preserving behavior. Focus on recently modified code unless instructed otherwise.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: code-simplifier. Follow instructions at ~/.config/opencode/agents/code-simplifier.md",
+      "mode": "all"
+    },
+    "comment-analyzer": {
+      "description": "Analyze code comments for accuracy, completeness, maintainability, and comment rot risk.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: comment-analyzer. Follow instructions at ~/.config/opencode/agents/comment-analyzer.md",
+      "mode": "all"
+    },
+    "conversation-analyzer": {
+      "description": "Use this agent when analyzing conversation transcripts to find behaviors worth preventing with hooks. Triggered by /hookify without arguments.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: conversation-analyzer. Follow instructions at ~/.config/opencode/agents/conversation-analyzer.md",
+      "mode": "all"
+    },
+    "cpp-build-resolver": {
+      "description": "C++ build, CMake, and compilation error resolution specialist. Fixes build errors, linker issues, and template errors with minimal changes. Use when C++ builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cpp-build-resolver. Follow instructions at ~/.config/opencode/agents/cpp-build-resolver.md",
+      "mode": "all"
+    },
+    "cpp-reviewer": {
+      "description": "Expert C++ code reviewer specializing in memory safety, modern C++ idioms, concurrency, and performance. Use for all C++ code changes. MUST BE USED for C++ projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cpp-reviewer. Follow instructions at ~/.config/opencode/agents/cpp-reviewer.md",
+      "mode": "all"
+    },
+    "csharp-reviewer": {
+      "description": "Expert C# code reviewer specializing in .NET conventions, async patterns, security, nullable reference types, and performance. Use for all C# code changes. MUST BE USED for C# projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: csharp-reviewer. Follow instructions at ~/.config/opencode/agents/csharp-reviewer.md",
+      "mode": "all"
+    },
+    "dart-build-resolver": {
+      "description": "Dart/Flutter build, analysis, and dependency error resolution specialist. Fixes `dart analyze` errors, Flutter compilation failures, pub dependency conflicts, and build_runner issues with minimal, surgical changes. Use when Dart/Flutter builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: dart-build-resolver. Follow instructions at ~/.config/opencode/agents/dart-build-resolver.md",
+      "mode": "all"
+    },
+    "database-reviewer": {
+      "description": "PostgreSQL database specialist for query optimization, schema design, security, and performance. Use PROACTIVELY when writing SQL, creating migrations, designing schemas, or troubleshooting database performance. Incorporates Supabase best practices.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: database-reviewer. Follow instructions at ~/.config/opencode/agents/database-reviewer.md",
+      "mode": "all"
+    },
+    "django-build-resolver": {
+      "description": "Django/Python build, migration, and dependency error resolution specialist. Fixes pip/Poetry errors, migration conflicts, import errors, Django configuration issues, and collectstatic failures with minimal changes. Use when Django setup or startup fails.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: django-build-resolver. Follow instructions at ~/.config/opencode/agents/django-build-resolver.md",
+      "mode": "all"
+    },
+    "django-reviewer": {
+      "description": "Expert Django code reviewer specializing in ORM correctness, DRF patterns, migration safety, security misconfigurations, and production-grade Django practices. Use for all Django code changes. MUST BE USED for Django projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: django-reviewer. Follow instructions at ~/.config/opencode/agents/django-reviewer.md",
+      "mode": "all"
+    },
+    "doc-updater": {
+      "description": "Documentation and codemap specialist. Use PROACTIVELY for updating codemaps and documentation. Runs /update-codemaps and /update-docs, generates docs/CODEMAPS/*, updates READMEs and guides.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: doc-updater. Follow instructions at ~/.config/opencode/agents/doc-updater.md",
+      "mode": "all"
+    },
+    "docs-lookup": {
+      "description": "When the user asks how to use a library, framework, or API or needs up-to-date code examples, use Context7 MCP to fetch current documentation and return answers with examples. Invoke for docs/API/setup questions.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: docs-lookup. Follow instructions at ~/.config/opencode/agents/docs-lookup.md",
+      "mode": "all"
+    },
+    "e2e-runner": {
+      "description": "End-to-end testing specialist using Vercel Agent Browser (preferred) with Playwright fallback. Use PROACTIVELY for generating, maintaining, and running E2E tests. Manages test journeys, quarantines flaky tests, uploads artifacts (screenshots, videos, traces), and ensures critical user flows work.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: e2e-runner. Follow instructions at ~/.config/opencode/agents/e2e-runner.md",
+      "mode": "all"
+    },
+    "fastapi-reviewer": {
+      "description": "Reviews FastAPI applications for async correctness, dependency injection, Pydantic schemas, security, OpenAPI quality, testing, and production readiness.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: fastapi-reviewer. Follow instructions at ~/.config/opencode/agents/fastapi-reviewer.md",
+      "mode": "all"
+    },
+    "flutter-reviewer": {
+      "description": "Flutter and Dart code reviewer. Reviews Flutter code for widget best practices, state management patterns, Dart idioms, performance pitfalls, accessibility, and clean architecture violations. Library-agnostic — works with any state management solution and tooling.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: flutter-reviewer. Follow instructions at ~/.config/opencode/agents/flutter-reviewer.md",
+      "mode": "all"
+    },
+    "fsharp-reviewer": {
+      "description": "Expert F# code reviewer specializing in functional idioms, type safety, pattern matching, computation expressions, and performance. Use for all F# code changes. MUST BE USED for F# projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: fsharp-reviewer. Follow instructions at ~/.config/opencode/agents/fsharp-reviewer.md",
+      "mode": "all"
+    },
+    "gan-evaluator": {
+      "description": "\"GAN Harness — Evaluator agent. Tests the live running application via Playwright, scores against rubric, and provides actionable feedback to the Generator.\"",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: gan-evaluator. Follow instructions at ~/.config/opencode/agents/gan-evaluator.md",
+      "mode": "all"
+    },
+    "gan-generator": {
+      "description": "\"GAN Harness — Generator agent. Implements features according to the spec, reads evaluator feedback, and iterates until quality threshold is met.\"",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: gan-generator. Follow instructions at ~/.config/opencode/agents/gan-generator.md",
+      "mode": "all"
+    },
+    "gan-planner": {
+      "description": "\"GAN Harness — Planner agent. Expands a one-line prompt into a full product specification with features, sprints, evaluation criteria, and design direction.\"",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: gan-planner. Follow instructions at ~/.config/opencode/agents/gan-planner.md",
+      "mode": "all"
+    },
+    "go-build-resolver": {
+      "description": "Go build, vet, and compilation error resolution specialist. Fixes build errors, go vet issues, and linter warnings with minimal changes. Use when Go builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: go-build-resolver. Follow instructions at ~/.config/opencode/agents/go-build-resolver.md",
+      "mode": "all"
+    },
+    "go-reviewer": {
+      "description": "Expert Go code reviewer specializing in idiomatic Go, concurrency patterns, error handling, and performance. Use for all Go code changes. MUST BE USED for Go projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: go-reviewer. Follow instructions at ~/.config/opencode/agents/go-reviewer.md",
+      "mode": "all"
+    },
+    "harmonyos-app-resolver": {
+      "description": "HarmonyOS application development expert specializing in ArkTS and ArkUI. Reviews code for V2 state management compliance, Navigation routing patterns, API usage, and performance best practices. Use for HarmonyOS/OpenHarmony projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: harmonyos-app-resolver. Follow instructions at ~/.config/opencode/agents/harmonyos-app-resolver.md",
+      "mode": "all"
+    },
+    "harness-optimizer": {
+      "description": "Analyze and improve the local agent harness configuration for reliability, cost, and throughput.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: harness-optimizer. Follow instructions at ~/.config/opencode/agents/harness-optimizer.md",
+      "mode": "all"
+    },
+    "healthcare-reviewer": {
+      "description": "Reviews healthcare application code for clinical safety, CDSS accuracy, PHI compliance, and medical data integrity. Specialized for EMR/EHR, clinical decision support, and health information systems.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: healthcare-reviewer. Follow instructions at ~/.config/opencode/agents/healthcare-reviewer.md",
+      "mode": "all"
+    },
+    "homelab-architect": {
+      "description": "Designs home and small-lab network plans from hardware inventory, goals, and operator experience level, with safe staged changes and rollback guidance.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: homelab-architect. Follow instructions at ~/.config/opencode/agents/homelab-architect.md",
+      "mode": "all"
+    },
+    "java-build-resolver": {
+      "description": "Java/Maven/Gradle build, compilation, and dependency error resolution specialist. Automatically detects Spring Boot or Quarkus and applies framework-specific fixes. Fixes build errors, Java compiler errors, and Maven/Gradle issues with minimal changes. Use when Java builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: java-build-resolver. Follow instructions at ~/.config/opencode/agents/java-build-resolver.md",
+      "mode": "all"
+    },
+    "java-reviewer": {
+      "description": "Expert Java code reviewer for Spring Boot and Quarkus projects. Automatically detects the framework and applies the appropriate review rules. Covers layered architecture, JPA/Panache, MongoDB, security, and concurrency. MUST BE USED for all Java code changes.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: java-reviewer. Follow instructions at ~/.config/opencode/agents/java-reviewer.md",
+      "mode": "all"
+    },
+    "kotlin-build-resolver": {
+      "description": "Kotlin/Gradle build, compilation, and dependency error resolution specialist. Fixes build errors, Kotlin compiler errors, and Gradle issues with minimal changes. Use when Kotlin builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: kotlin-build-resolver. Follow instructions at ~/.config/opencode/agents/kotlin-build-resolver.md",
+      "mode": "all"
+    },
+    "kotlin-reviewer": {
+      "description": "Kotlin and Android/KMP code reviewer. Reviews Kotlin code for idiomatic patterns, coroutine safety, Compose best practices, clean architecture violations, and common Android pitfalls.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: kotlin-reviewer. Follow instructions at ~/.config/opencode/agents/kotlin-reviewer.md",
+      "mode": "all"
+    },
+    "loop-operator": {
+      "description": "Operate autonomous agent loops, monitor progress, and intervene safely when loops stall.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: loop-operator. Follow instructions at ~/.config/opencode/agents/loop-operator.md",
+      "mode": "all"
+    },
+    "marketing-agent": {
+      "description": "Marketing strategist and copywriter for campaign planning, audience research, positioning, copy creation, and content review. Covers landing pages, email sequences, social posts, ad copy, short-form video scripts, and content calendars. Use when the user wants to plan or execute a product launch or marketing campaign.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: marketing-agent. Follow instructions at ~/.config/opencode/agents/marketing-agent.md",
+      "mode": "all"
+    },
+    "mle-reviewer": {
+      "description": "Production machine-learning engineering reviewer for data contracts, feature pipelines, training reproducibility, offline/online evaluation, model serving, monitoring, and rollback. Use when ML, MLOps, model training, inference, feature store, or evaluation code changes.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: mle-reviewer. Follow instructions at ~/.config/opencode/agents/mle-reviewer.md",
+      "mode": "all"
+    },
+    "network-architect": {
+      "description": "Designs enterprise or multi-site network architecture from requirements, using existing network skills for focused routing, validation, automation, and troubleshooting detail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: network-architect. Follow instructions at ~/.config/opencode/agents/network-architect.md",
+      "mode": "all"
+    },
+    "network-config-reviewer": {
+      "description": "Reviews router and switch configurations for security, correctness, stale references, risky change-window commands, and missing operational guardrails.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: network-config-reviewer. Follow instructions at ~/.config/opencode/agents/network-config-reviewer.md",
+      "mode": "all"
+    },
+    "network-troubleshooter": {
+      "description": "Diagnoses network connectivity, routing, DNS, interface, and policy symptoms with a read-only OSI-layer workflow and evidence-backed root cause summary.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: network-troubleshooter. Follow instructions at ~/.config/opencode/agents/network-troubleshooter.md",
+      "mode": "all"
+    },
+    "opensource-forker": {
+      "description": "Fork any project for open-sourcing. Copies files, strips secrets and credentials (20+ patterns), replaces internal references with placeholders, generates .env.example, and cleans git history. First stage of the opensource-pipeline skill.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: opensource-forker. Follow instructions at ~/.config/opencode/agents/opensource-forker.md",
+      "mode": "all"
+    },
+    "opensource-packager": {
+      "description": "Generate complete open-source packaging for a sanitized project. Produces CLAUDE.md, setup.sh, README.md, LICENSE, CONTRIBUTING.md, and GitHub issue templates. Makes any repo immediately usable with Claude Code. Third stage of the opensource-pipeline skill.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: opensource-packager. Follow instructions at ~/.config/opencode/agents/opensource-packager.md",
+      "mode": "all"
+    },
+    "opensource-sanitizer": {
+      "description": "Verify an open-source fork is fully sanitized before release. Scans for leaked secrets, PII, internal references, and dangerous files using 20+ regex patterns. Generates a PASS/FAIL/PASS-WITH-WARNINGS report. Second stage of the opensource-pipeline skill. Use PROACTIVELY before any public release.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: opensource-sanitizer. Follow instructions at ~/.config/opencode/agents/opensource-sanitizer.md",
+      "mode": "all"
+    },
+    "performance-optimizer": {
+      "description": "Performance analysis and optimization specialist. Use PROACTIVELY for identifying bottlenecks, optimizing slow code, reducing bundle sizes, and improving runtime performance. Profiling, memory leaks, render optimization, and algorithmic improvements.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: performance-optimizer. Follow instructions at ~/.config/opencode/agents/performance-optimizer.md",
+      "mode": "all"
+    },
+    "php-reviewer": {
+      "description": "Expert PHP code reviewer specializing in PSR-12 compliance, PHP type system, Eloquent ORM patterns, security, and performance. Use for all PHP code changes. MUST BE USED for PHP projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: php-reviewer. Follow instructions at ~/.config/opencode/agents/php-reviewer.md",
+      "mode": "all"
+    },
+    "planner": {
+      "description": "Expert planning specialist for complex features and refactoring. Use PROACTIVELY when users request feature implementation, architectural changes, or complex refactoring. Automatically activated for planning tasks.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: planner. Follow instructions at ~/.config/opencode/agents/planner.md",
+      "mode": "all"
+    },
+    "pr-test-analyzer": {
+      "description": "Review pull request test coverage quality and completeness, with emphasis on behavioral coverage and real bug prevention.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: pr-test-analyzer. Follow instructions at ~/.config/opencode/agents/pr-test-analyzer.md",
+      "mode": "all"
+    },
+    "python-reviewer": {
+      "description": "Expert Python code reviewer specializing in PEP 8 compliance, Pythonic idioms, type hints, security, and performance. Use for all Python code changes. MUST BE USED for Python projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: python-reviewer. Follow instructions at ~/.config/opencode/agents/python-reviewer.md",
+      "mode": "all"
+    },
+    "pytorch-build-resolver": {
+      "description": "PyTorch runtime, CUDA, and training error resolution specialist. Fixes tensor shape mismatches, device errors, gradient issues, DataLoader problems, and mixed precision failures with minimal changes. Use when PyTorch training or inference crashes.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: pytorch-build-resolver. Follow instructions at ~/.config/opencode/agents/pytorch-build-resolver.md",
+      "mode": "all"
+    },
+    "react-build-resolver": {
+      "description": "Diagnose and fix React build failures across Vite, webpack, Next.js, CRA, Parcel, esbuild, and Bun. Handles JSX/TSX compile errors, hydration mismatches, server/client component boundary failures, missing types, and bundler-specific configuration issues with minimal, surgical changes. MUST BE USED when a React build fails.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: react-build-resolver. Follow instructions at ~/.config/opencode/agents/react-build-resolver.md",
+      "mode": "all"
+    },
+    "react-reviewer": {
+      "description": "Expert React/JSX code reviewer specializing in hook correctness, render performance, server/client component boundaries, accessibility, and React-specific security. Use for any change touching .tsx/.jsx files or React component logic. MUST BE USED for React projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: react-reviewer. Follow instructions at ~/.config/opencode/agents/react-reviewer.md",
+      "mode": "all"
+    },
+    "refactor-cleaner": {
+      "description": "Dead code cleanup and consolidation specialist. Use PROACTIVELY for removing unused code, duplicates, and refactoring. Runs analysis tools (knip, depcheck, ts-prune) to identify dead code and safely removes it.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: refactor-cleaner. Follow instructions at ~/.config/opencode/agents/refactor-cleaner.md",
+      "mode": "all"
+    },
+    "rust-build-resolver": {
+      "description": "Rust build, compilation, and dependency error resolution specialist. Fixes cargo build errors, borrow checker issues, and Cargo.toml problems with minimal changes. Use when Rust builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: rust-build-resolver. Follow instructions at ~/.config/opencode/agents/rust-build-resolver.md",
+      "mode": "all"
+    },
+    "rust-reviewer": {
+      "description": "Expert Rust code reviewer specializing in ownership, lifetimes, error handling, unsafe usage, and idiomatic patterns. Use for all Rust code changes. MUST BE USED for Rust projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: rust-reviewer. Follow instructions at ~/.config/opencode/agents/rust-reviewer.md",
+      "mode": "all"
+    },
+    "security-reviewer": {
+      "description": "Security vulnerability detection and remediation specialist. Use PROACTIVELY after writing code that handles user input, authentication, API endpoints, or sensitive data. Flags secrets, SSRF, injection, unsafe crypto, and OWASP Top 10 vulnerabilities.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: security-reviewer. Follow instructions at ~/.config/opencode/agents/security-reviewer.md",
+      "mode": "all"
+    },
+    "seo-specialist": {
+      "description": "SEO specialist for technical SEO audits, on-page optimization, structured data, Core Web Vitals, and content/keyword mapping. Use for site audits, meta tag reviews, schema markup, sitemap and robots issues, and SEO remediation plans.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: seo-specialist. Follow instructions at ~/.config/opencode/agents/seo-specialist.md",
+      "mode": "all"
+    },
+    "silent-failure-hunter": {
+      "description": "Review code for silent failures, swallowed errors, bad fallbacks, and missing error propagation.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: silent-failure-hunter. Follow instructions at ~/.config/opencode/agents/silent-failure-hunter.md",
+      "mode": "all"
+    },
+    "swift-build-resolver": {
+      "description": "Swift/Xcode build, compilation, and dependency error resolution specialist. Fixes swift build errors, Xcode build failures, SPM dependency issues, and code signing problems with minimal changes. Use when Swift builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: swift-build-resolver. Follow instructions at ~/.config/opencode/agents/swift-build-resolver.md",
+      "mode": "all"
+    },
+    "swift-reviewer": {
+      "description": "Expert Swift code reviewer specializing in protocol-oriented design, value semantics, ARC memory management, Swift Concurrency, and idiomatic patterns. Use for all Swift code changes. MUST BE USED for Swift projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: swift-reviewer. Follow instructions at ~/.config/opencode/agents/swift-reviewer.md",
+      "mode": "all"
+    },
+    "tdd-guide": {
+      "description": "Test-Driven Development specialist enforcing write-tests-first methodology. Use PROACTIVELY when writing new features, fixing bugs, or refactoring code. Ensures 80%+ test coverage.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: tdd-guide. Follow instructions at ~/.config/opencode/agents/tdd-guide.md",
+      "mode": "all"
+    },
+    "type-design-analyzer": {
+      "description": "Analyze type design for encapsulation, invariant expression, usefulness, and enforcement.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: type-design-analyzer. Follow instructions at ~/.config/opencode/agents/type-design-analyzer.md",
+      "mode": "all"
+    },
+    "typescript-reviewer": {
+      "description": "Expert TypeScript/JavaScript code reviewer specializing in type safety, async correctness, Node/web security, and idiomatic patterns. Use for all TypeScript and JavaScript code changes. MUST BE USED for TypeScript/JavaScript projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: typescript-reviewer. Follow instructions at ~/.config/opencode/agents/typescript-reviewer.md",
+      "mode": "all"
     }
   },
   "mcp": {
@@ -288,24 +1026,28 @@
       "type": "local",
       "enabled": true
     },
-    "code-review-graph": {
-      "command": [
-        "code-review-graph",
-        "serve"
-      ],
+    "filesystem": {
+      "enabled": true,
       "type": "local",
-      "enabled": true
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/reeinharrrd/projects",
+        "/home/reeinharrrd/.config"
+      ]
     },
-    "agentmemory": {
-      "command": [
-        "agentmemory",
-        "mcp"
-      ],
+    "sequential-thinking": {
+      "enabled": false,
       "type": "local",
-      "enabled": true
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
     },
     "playwright": {
-      "enabled": true,
+      "enabled": false,
       "type": "local",
       "command": [
         "npx",
@@ -320,21 +1062,12 @@
         "PLAYWRIGHT_CHROME_EXECUTABLE_PATH": "/snap/brave/current/opt/brave.com/brave/brave"
       }
     },
-    "chrome-devtools": {
-      "enabled": true,
+    "codebase-memory-mcp": {
+      "enabled": false,
       "type": "local",
       "command": [
-        "npx",
-        "-y",
-        "chrome-devtools-mcp"
-      ],
-      "environment": {
-        "CHROME_DEBUGGING_PORT": "9222",
-        "CHROME_PATH": "/snap/brave/current/opt/brave.com/brave/brave"
-      },
-      "env": {
-        "CHROME_DEBUGGING_PORT": "9222"
-      }
+        "/home/reeinharrrd/.local/bin/codebase-memory-mcp"
+      ]
     },
     "firecrawl": {
       "enabled": true,
@@ -342,40 +1075,131 @@
       "url": "https://mcp.firecrawl.dev/fc-412aba2a43ba47daabae244cb8a72af9/v2/mcp"
     },
     "notion": {
-      "enabled": true,
+      "enabled": false,
       "type": "remote",
       "url": "https://mcp.notion.com/mcp"
     },
     "github": {
-      "enabled": true,
+      "enabled": false,
       "type": "local",
-      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
       "environment": {
         "GITHUB_TOKEN": "{env:GITHUB_TOKEN}"
       }
     },
-    "sequential-thinking": {
-      "enabled": true,
-      "type": "local",
-      "command": ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"]
-    },
-    "filesystem": {
-      "enabled": true,
-      "type": "local",
-      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/home/reeinharrrd/projects", "/home/reeinharrrd/.config"]
-    },
     "docker": {
-      "enabled": true,
+      "enabled": false,
       "type": "local",
-      "command": ["npx", "-y", "mcp-server-docker"],
+      "command": [
+        "npx",
+        "-y",
+        "mcp-server-docker"
+      ],
       "environment": {
         "ALLOWED_CONTAINERS": "*"
       }
     },
-    "web-search": {
-      "enabled": true,
+    "snapmcp": {
+      "enabled": false,
       "type": "local",
-      "command": ["npx", "-y", "@ericthered926/duckduckgo-mcp-server"]
+      "command": [
+        "node",
+        "/home/reeinharrrd/.local/share/mise/installs/node/24.16.0/lib/node_modules/snapmcp/dist/index.js"
+      ],
+      "environment": {
+        "SNAPMCP_ALLOWED_PATHS": "/home/reeinharrrd/.config/opencode/captures;/tmp/opencode"
+      }
+    },
+    "memory-bank": {
+      "enabled": false,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-memory",
+        "--file",
+        "/home/reeinharrrd/.config/opencode/memory-bank/memory.json"
+      ]
+    }
+  },
+  "formatter": true,
+  "tool_output": {
+    "max_lines": 1000,
+    "max_bytes": 25600
+  },
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "tail_turns": 3,
+    "reserved": 15000
+  },
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      ".git/**",
+      "dist/**",
+      "captures/**",
+      "memory-bank/**"
+    ]
+  },
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "git push *": "ask",
+      "git commit *": "ask",
+      "rm -rf": "deny",
+      "rm -rf *": "deny"
+    }
+  },
+  "references": {
+    "gstack": {
+      "path": "~/tools/gstack",
+      "description": "GStack skill suite: browser QA, design system, benchmarks, ship/deploy workflows"
+    },
+    "superpowers": {
+      "path": "~/tools/superpowers",
+      "description": "Superpowers: brainstorming, TDD, debugging, plan execution patterns",
+      "hidden": true
+    },
+    "caveman": {
+      "path": "~/tools/caveman",
+      "hidden": true
+    },
+    "gentle-ai": {
+      "path": "~/tools/gentle-ai",
+      "hidden": true
+    },
+    "ecc": {
+      "path": "~/tools/ECC",
+      "hidden": true
+    },
+    "claude-skills": {
+      "path": "~/tools/claude-skills",
+      "hidden": true
+    },
+    "taste-skill": {
+      "path": "~/tools/taste-skill",
+      "hidden": true
+    },
+    "last30days": {
+      "path": "~/tools/last30days-skill",
+      "hidden": true
+    },
+    "community-skills": {
+      "path": "~/tools/skills",
+      "hidden": true
+    },
+    "power-pack": {
+      "path": "~/tools/opencode-power-pack",
+      "hidden": true
+    },
+    "new-project": {
+      "path": "~/tools/new-project",
+      "hidden": true
     }
   },
   "share": "disabled"

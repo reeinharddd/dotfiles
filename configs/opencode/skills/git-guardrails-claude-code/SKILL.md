@@ -1,0 +1,1 @@
+/home/reeinharrrd/tools/skills/skills/misc/git-guardrails-claude-code//SKILL.md

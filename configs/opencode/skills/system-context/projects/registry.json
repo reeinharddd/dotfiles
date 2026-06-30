@@ -1,0 +1,199 @@
+[
+  {
+    "name": "DeWebPro",
+    "path": "/home/reeinharrrd/projects/archive/DeWebPro",
+    "lang": "archive"
+  },
+  {
+    "name": "Econnect",
+    "path": "/home/reeinharrrd/projects/archive/Econnect",
+    "lang": "archive",
+    "version": "0.0.0"
+  },
+  {
+    "name": "KeepAnEye",
+    "path": "/home/reeinharrrd/projects/archive/KeepAnEye",
+    "lang": "archive",
+    "version": ""
+  },
+  {
+    "name": "KeepAnEye---Movil",
+    "path": "/home/reeinharrrd/projects/archive/KeepAnEye---Movil",
+    "lang": "archive",
+    "version": "1.0.0"
+  },
+  {
+    "name": "KeepAnEyeC-",
+    "path": "/home/reeinharrrd/projects/archive/KeepAnEyeC-",
+    "lang": "archive"
+  },
+  {
+    "name": "PeriodicTable",
+    "path": "/home/reeinharrrd/projects/archive/PeriodicTable",
+    "lang": "archive"
+  },
+  {
+    "name": "SGPC",
+    "path": "/home/reeinharrrd/projects/archive/SGPC",
+    "lang": "archive"
+  },
+  {
+    "name": "backend",
+    "path": "/home/reeinharrrd/projects/archive/backend",
+    "lang": "archive",
+    "version": "1.0.0"
+  },
+  {
+    "name": "bks",
+    "path": "/home/reeinharrrd/projects/archive/bks",
+    "lang": "archive"
+  },
+  {
+    "name": "brain",
+    "path": "/home/reeinharrrd/projects/archive/brain",
+    "lang": "archive"
+  },
+  {
+    "name": "impulsa-monorepo",
+    "path": "/home/reeinharrrd/projects/archive/impulsa-monorepo",
+    "lang": "archive",
+    "version": "1.0.0"
+  },
+  {
+    "name": "mnemos",
+    "path": "/home/reeinharrrd/projects/archive/mnemos",
+    "lang": "archive",
+    "version": ""
+  },
+  {
+    "name": "opencode-config",
+    "path": "/home/reeinharrrd/projects/archive/opencode-config",
+    "lang": "archive",
+    "version": ""
+  },
+  {
+    "name": "projects-backup-2026-02-21",
+    "path": "/home/reeinharrrd/projects/archive/projects-backup-2026-02-21",
+    "lang": "archive"
+  },
+  {
+    "name": "proyecto8b2",
+    "path": "/home/reeinharrrd/projects/archive/proyecto8b2",
+    "lang": "archive"
+  },
+  {
+    "name": "union-backend",
+    "path": "/home/reeinharrrd/projects/archive/union-backend",
+    "lang": "archive",
+    "version": "1.0.0"
+  },
+  {
+    "name": "union-frontend",
+    "path": "/home/reeinharrrd/projects/archive/union-frontend",
+    "lang": "archive",
+    "version": "0.0.0"
+  },
+  {
+    "name": "wedo",
+    "path": "/home/reeinharrrd/projects/archive/wedo",
+    "lang": "archive"
+  },
+  {
+    "name": "career-ops",
+    "path": "/home/reeinharrrd/projects/external/career-ops",
+    "lang": "external",
+    "version": "1.13.0"
+  },
+  {
+    "name": ".opencode",
+    "path": "/home/reeinharrrd/projects/personal/.opencode",
+    "lang": "personal",
+    "version": ""
+  },
+  {
+    "name": "atlas",
+    "path": "/home/reeinharrrd/projects/personal/atlas",
+    "lang": "personal",
+    "version": "0.2.0"
+  },
+  {
+    "name": "ctx-analyze",
+    "path": "/home/reeinharrrd/projects/personal/ctx-analyze",
+    "lang": "personal"
+  },
+  {
+    "name": "dotfiles",
+    "path": "/home/reeinharrrd/projects/personal/dotfiles",
+    "lang": "personal"
+  },
+  {
+    "name": "job-search",
+    "path": "/home/reeinharrrd/projects/personal/job-search",
+    "lang": "personal",
+    "version": ""
+  },
+  {
+    "name": "landing",
+    "path": "/home/reeinharrrd/projects/personal/landing",
+    "lang": "personal",
+    "version": "0.0.1"
+  },
+  {
+    "name": "maestro",
+    "path": "/home/reeinharrrd/projects/personal/maestro",
+    "lang": "personal"
+  },
+  {
+    "name": "reeinharddd",
+    "path": "/home/reeinharrrd/projects/personal/reeinharddd",
+    "lang": "personal"
+  },
+  {
+    "name": "snapmcp",
+    "path": "/home/reeinharrrd/projects/personal/snapmcp",
+    "lang": "personal",
+    "version": "2.2.3"
+  },
+  {
+    "name": "sys-inspector",
+    "path": "/home/reeinharrrd/projects/personal/sys-inspector",
+    "lang": "personal"
+  },
+  {
+    "name": "ORBE",
+    "path": "/home/reeinharrrd/projects/ppk/ORBE",
+    "lang": "ppk"
+  },
+  {
+    "name": "PPK-SOCsAPI",
+    "path": "/home/reeinharrrd/projects/ppk/PPK-SOCsAPI",
+    "lang": "ppk"
+  },
+  {
+    "name": "PPK-SOCsWeb",
+    "path": "/home/reeinharrrd/projects/ppk/PPK-SOCsWeb",
+    "lang": "ppk",
+    "version": "0.0.0"
+  },
+  {
+    "name": "SO.FI",
+    "path": "/home/reeinharrrd/projects/ppk/SO.FI",
+    "lang": "ppk"
+  },
+  {
+    "name": "orbe-backend",
+    "path": "/home/reeinharrrd/projects/ppk/orbe-backend",
+    "lang": "ppk"
+  },
+  {
+    "name": "orbe-frontend",
+    "path": "/home/reeinharrrd/projects/ppk/orbe-frontend",
+    "lang": "ppk",
+    "version": "0.0.0"
+  },
+  {
+    "name": "orbe-main",
+    "path": "/home/reeinharrrd/projects/ppk/orbe-main",
+    "lang": "ppk"
+  }
+]

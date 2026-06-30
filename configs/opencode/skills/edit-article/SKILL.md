@@ -1,0 +1,1 @@
+/home/reeinharrrd/tools/skills/skills/personal/edit-article//SKILL.md

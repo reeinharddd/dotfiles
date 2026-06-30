@@ -1,0 +1,296 @@
+#!/usr/bin/env python3
+"""oc-analyze: Inspect opencode session messages, tokens, and content."""
+
+import sqlite3, json, os, sys, textwrap
+from datetime import datetime, timezone, timedelta
+
+DB = os.path.expanduser("~/.local/share/opencode/opencode.db")
+
+def fmt_ts(ms):
+    if not ms: return "-"
+    return datetime.fromtimestamp(ms/1000, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+
+def trunc(s, n=120):
+    if not s: return ""
+    return s[:n] + ("..." if len(s) > n else "")
+
+def fmt(n):
+    if n is None: return "0"
+    n = int(n)
+    if n >= 1_000_000: return f"{n/1_000_000:.1f}M"
+    if n >= 1_000: return f"{n/1_000:.1f}K"
+    return str(n)
+
+def get_conn():
+    return sqlite3.connect(DB)
+
+def proj_name(p):
+    """Return project display name from (name, worktree) tuple."""
+    n, w = (p or (None, None))
+    if n: return str(n)
+    if w: return str(w).rsplit("/", 1)[-1] or str(w)
+    return "global"
+
+def list_sessions(limit=30, project=None):
+    conn = get_conn()
+    q = """SELECT s.id, s.title, s.tokens_input, s.tokens_output, s.tokens_cache_read,
+                  s.tokens_cache_write, s.tokens_reasoning, s.cost, s.time_created,
+                  s.model, s.agent, s.project_id, p.name, p.worktree
+           FROM session s LEFT JOIN project p ON s.project_id = p.id AND p.id != 'global'
+           WHERE s.tokens_input > 0"""
+    params = []
+    if project:
+        q += " AND (p.worktree LIKE ? OR p.name LIKE ?)"
+        params.extend([f"%{project}%", f"%{project}%"])
+    q += " ORDER BY s.time_created DESC LIMIT ?"
+    params.append(limit)
+    cursor = conn.execute(q, params)
+    rows = cursor.fetchall()
+    conn.close()
+
+    print(f"{'SESSION':<28s} {'TITLE':<40s} {'IN':>10s} {'OUT':>8s} {'CACHE_R':>10s} {'COST':>8s} {'PROJECT':<22s}")
+    print("-" * 135)
+    for r in rows:
+        sid = str(r[0])[:26]
+        title = trunc(str(r[1]) if r[1] else "", 38)
+        ti = fmt(r[2]); to = fmt(r[3]); tc = fmt(r[4])
+        cost = f"${float(r[7]):.4f}" if r[7] else "$0"
+        pname = r[12] if r[12] else None
+        pwt = r[13] if r[13] else None
+        proj = proj_name((pname, pwt))
+        if r[11] == "global" or not r[11]:
+            proj = "(no project)"
+        proj = trunc(proj, 20)
+        print(f"{sid:<28s} {title:<40s} {ti:>10s} {to:>8s} {tc:>10s} {cost:>8s} {proj:<22s}")
+
+def show_session(session_id_or_prefix):
+    conn = get_conn()
+    # Resolve session
+    cur = conn.execute("SELECT id FROM session WHERE id LIKE ? OR id LIKE ?", 
+        (f"{session_id_or_prefix}%", f"ses_{session_id_or_prefix}%"))
+    row = cur.fetchone()
+    if not row:
+        print(f"No session matching '{session_id_or_prefix}'")
+        conn.close()
+        return
+    sid = row[0]
+    
+    # Session info
+    cur = conn.execute("""SELECT title, tokens_input, tokens_output, tokens_cache_read, 
+        tokens_cache_write, tokens_reasoning, cost, time_created, model, agent, project_id
+        FROM session WHERE id=?""", (sid,))
+    s = cur.fetchone()
+    print(f"=== Session {sid} ===")
+    print(f"  Title:     {s[0] or '(untitled)'}")
+    print(f"  Created:   {fmt_ts(s[7])}")
+    print(f"  Model:     {s[8] or '-'}")
+    print(f"  Agent:     {s[9] or '-'}")
+    print(f"  Tokens:    IN {fmt(s[1])} | OUT {fmt(s[2])} | CACHE_R {fmt(s[3])} | CACHE_W {fmt(s[4])} | REASON {fmt(s[5])}")
+    print(f"  Cost:      ${float(s[6]):.4f}" if s[6] else "  Cost:      $0")
+    print()
+
+    # Messages with parts
+    cur = conn.execute("""SELECT m.id, m.data FROM message m 
+                          WHERE m.session_id = ? ORDER BY m.time_created""", (sid,))
+    messages = cur.fetchall()
+
+    total_in = 0; total_out = 0; total_cache_r = 0
+    role_counts = {}
+    
+    for (mid, data_str) in messages:
+        meta = json.loads(data_str) if data_str else {}
+        role = meta.get("role", "?")
+        tokens = meta.get("tokens", {})
+        ts = meta.get("time", {}).get("created")
+        
+        inp = tokens.get("input", 0) or 0
+        out = tokens.get("output", 0) or 0
+        cr = tokens.get("cache", {}).get("read", 0) or 0
+        total_in += inp; total_out += out; total_cache_r += cr
+        role_counts[role] = role_counts.get(role, 0) + 1
+
+        # Get parts
+        cur2 = conn.execute("SELECT data FROM part WHERE message_id=? ORDER BY time_created", (mid,))
+        parts = cur2.fetchall()
+        
+        texts = []
+        for (pdata,) in parts:
+            part = json.loads(pdata) if pdata else {}
+            if part.get("type") == "text":
+                t = part.get("text", "")
+                if t: texts.append(t)
+            elif part.get("type") == "tool-use":
+                tu = part.get("toolUse", {})
+                texts.append(f"[TOOL_USE: {tu.get('name','?')}({trunc(json.dumps(tu.get('input',{})), 60)})]")
+            elif part.get("type") == "tool-result":
+                tr = part.get("toolResult", {})
+                tdata = json.dumps(tr.get("content", ""))
+                texts.append(f"[TOOL_RESULT: {trunc(tdata, 80)}]")
+            elif part.get("type") == "step-start":
+                texts.append("[STEP]")
+
+        text = " | ".join(texts) if texts else "(no content)"
+        finish = meta.get("finish", "")
+        fin_str = f" [{finish}]" if finish else ""
+        
+        print(f"  [{role:>9}] {fmt(inp):>8s} in {fmt(out):>6s} out {fmt(cr):>8s} cr{fin_str}  {fmt_ts(ts)}")
+        for line in textwrap.wrap(trunc(text, 300), width=90):
+            print(f"           {line}")
+        print()
+    
+    print(f"  --- Totals: IN {fmt(total_in)} | OUT {fmt(total_out)} | CACHE_R {fmt(total_cache_r)} ---")
+    print(f"  Roles: {json.dumps(role_counts)}")
+    conn.close()
+
+def show_project_breakdown():
+    conn = get_conn()
+    cur = conn.execute("""SELECT p.name, p.worktree, COUNT(s.id), SUM(s.tokens_input), SUM(s.tokens_output),
+        SUM(s.tokens_cache_read), SUM(s.tokens_cache_write), SUM(s.cost)
+        FROM project p JOIN session s ON s.project_id = p.id AND s.project_id != 'global'
+        GROUP BY p.id ORDER BY SUM(s.tokens_input) DESC""")
+    rows = cur.fetchall()
+    
+    print(f"{'PROJECT':<24s} {'SESSIONS':>9s} {'IN':>12s} {'OUT':>10s} {'CACHE_R':>12s} {'COST':>10s}")
+    print("-" * 85)
+    total_s = 0; total_in = 0; total_out = 0; total_cr = 0; total_cost = 0
+    for r in rows:
+        pname = r[0] if r[0] else r[1].rsplit("/", 1)[-1] if r[1] else "?"
+        name = trunc(pname, 22)
+        cnt = int(r[2]); total_s += cnt
+        ti = int(r[3] or 0); total_in += ti
+        to = int(r[4] or 0); total_out += to
+        tc = int(r[5] or 0); total_cr += tc
+        cost = float(r[7] or 0); total_cost += cost
+        cost_s = f"${cost:.2f}" if cost else "$0"
+        print(f"{name:<24s} {cnt:>9,} {fmt(ti):>12s} {fmt(to):>10s} {fmt(tc):>12s} {cost_s:>10s}")
+    
+    # Sessions without project
+    cur = conn.execute("""SELECT COUNT(*), SUM(tokens_input), SUM(tokens_output), SUM(tokens_cache_read), SUM(cost)
+        FROM session WHERE (project_id IS NULL OR project_id = 'global') AND tokens_input > 0""")
+    r = cur.fetchone()
+    if r and r[0]:
+        cnt = int(r[0]); total_s += cnt
+        ti = int(r[1] or 0); total_in += ti
+        to = int(r[2] or 0); total_out += to
+        tc = int(r[3] or 0); total_cr += tc
+        cost = float(r[4] or 0); total_cost += cost
+        print(f"{'[no project]':<24s} {cnt:>9,} {fmt(ti):>12s} {fmt(to):>10s} {fmt(tc):>12s} ${cost:.2f}" if cost else f"{'[no project]':<24s} {cnt:>9,} {fmt(ti):>12s} {fmt(to):>10s} {fmt(tc):>12s} $0")
+    
+    print("-" * 85)
+    print(f"{'TOTAL':<24s} {total_s:>9,} {fmt(total_in):>12s} {fmt(total_out):>10s} {fmt(total_cr):>12s} ${total_cost:.2f}" if total_cost else f"{'TOTAL':<24s} {total_s:>9,} {fmt(total_in):>12s} {fmt(total_out):>10s} {fmt(total_cr):>12s} $0")
+    conn.close()
+
+def show_daily_trends(days=30):
+    conn = get_conn()
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).timestamp() * 1000
+    cur = conn.execute("""SELECT date(time_created/1000, 'unixepoch') as day,
+        COUNT(*), SUM(tokens_input), SUM(tokens_output), SUM(tokens_cache_read), SUM(cost)
+        FROM session WHERE time_created > ? AND tokens_input > 0
+        GROUP BY day ORDER BY day""", (int(cutoff),))
+    rows = cur.fetchall()
+    
+    print(f"{'DAY':<14s} {'SESSIONS':>9s} {'IN':>12s} {'OUT':>10s} {'CACHE_R':>12s} {'COST':>10s}")
+    print("-" * 75)
+    for r in rows:
+        print(f"{r[0]:<14s} {int(r[1]):>9,} {fmt(r[2]):>12s} {fmt(r[3]):>10s} {fmt(r[4]):>12s} ${float(r[5]):.2f}" if r[5] else f"{r[0]:<14s} {int(r[1]):>9,} {fmt(r[2]):>12s} {fmt(r[3]):>10s} {fmt(r[4]):>12s} $0")
+    conn.close()
+
+def show_agent_breakdown():
+    conn = get_conn()
+    cur = conn.execute("""SELECT agent, COUNT(*), SUM(tokens_input), SUM(tokens_output), SUM(tokens_cache_read), SUM(cost)
+        FROM session WHERE tokens_input > 0
+        GROUP BY agent ORDER BY SUM(tokens_input) DESC""")
+    rows = cur.fetchall()
+    print(f"{'AGENT':<20s} {'SESSIONS':>9s} {'IN':>12s} {'OUT':>10s} {'CACHE_R':>12s} {'COST':>10s}")
+    print("-" * 80)
+    for r in rows:
+        ag = r[0] or "?"
+        print(f"{ag:<20s} {int(r[1]):>9,} {fmt(r[2]):>12s} {fmt(r[3]):>10s} {fmt(r[4]):>12s} ${float(r[5]):.2f}" if r[5] else f"{ag:<20s} {int(r[1]):>9,} {fmt(r[2]):>12s} {fmt(r[3]):>10s} {fmt(r[4]):>12s} $0")
+    conn.close()
+
+def export_session_json(session_id_or_prefix, outfile=None):
+    """Export full session as JSON with all messages, parts, and tokens."""
+    conn = get_conn()
+    cur = conn.execute("SELECT id FROM session WHERE id LIKE ?", (f"{session_id_or_prefix}%",))
+    row = cur.fetchone()
+    if not row:
+        print(f"No session matching '{session_id_or_prefix}'")
+        conn.close()
+        return
+    sid = row[0]
+    
+    cur = conn.execute("SELECT * FROM session WHERE id=?", (sid,))
+    srow = cur.fetchone()
+    cols = [d[0] for d in cur.description]
+    session_data = dict(zip(cols, srow))
+    del session_data['summary_diffs']
+    
+    messages = []
+    cur = conn.execute("SELECT id, data FROM message WHERE session_id=? ORDER BY time_created", (sid,))
+    for (mid, mdata_str) in cur.fetchall():
+        mdata = json.loads(mdata_str) if mdata_str else {}
+        parts = []
+        cur2 = conn.execute("SELECT data FROM part WHERE message_id=? ORDER BY time_created", (mid,))
+        for (pdata_str,) in cur2.fetchall():
+            if pdata_str:
+                parts.append(json.loads(pdata_str))
+        messages.append({
+            "id": mid,
+            "meta": mdata,
+            "parts": parts
+        })
+    
+    output = {
+        "session": session_data,
+        "messages": messages
+    }
+    conn.close()
+    
+    if outfile:
+        with open(outfile, 'w') as f:
+            json.dump(output, f, indent=2, default=str)
+        print(f"Exported to {outfile}")
+    else:
+        print(json.dumps(output, indent=2, default=str))
+
+def usage():
+    print("""oc-analyze - opencode session analyzer
+
+Commands:
+  list [N]                  List last N sessions (default 30)
+  show <session_id_prefix>  Show session detail with messages
+  projects                  Token/cost breakdown by project
+  agents                    Token/cost breakdown by agent type
+  daily [N]                 Daily trends for last N days (default 30)
+  export <id> [file.json]   Export session as JSON
+""")
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        usage()
+        sys.exit(1)
+    
+    cmd = sys.argv[1]
+    if cmd == "list":
+        n = int(sys.argv[2]) if len(sys.argv) > 2 else 30
+        list_sessions(limit=n)
+    elif cmd == "show":
+        if len(sys.argv) < 3:
+            print("Need session ID prefix")
+            sys.exit(1)
+        show_session(sys.argv[2])
+    elif cmd == "projects":
+        show_project_breakdown()
+    elif cmd == "agents":
+        show_agent_breakdown()
+    elif cmd == "daily":
+        n = int(sys.argv[2]) if len(sys.argv) > 2 else 30
+        show_daily_trends(n)
+    elif cmd == "export":
+        if len(sys.argv) < 3:
+            print("Need session ID prefix")
+            sys.exit(1)
+        out = sys.argv[3] if len(sys.argv) > 3 else None
+        export_session_json(sys.argv[2], out)
+    else:
+        usage()

@@ -1,0 +1,1 @@
+/home/reeinharrrd/tools/skills/skills/misc/setup-pre-commit//SKILL.md

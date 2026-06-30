@@ -1,0 +1,166 @@
+#!/usr/bin/env bash
+# project-bootstrap: Detecta stack del proyecto y genera PROJECT_CONTEXT.md
+# Uso: project-bootstrap [path]
+# Si no se pasa path, usa cwd
+
+set -euo pipefail
+
+PROJECT_ROOT="${1:-$PWD}"
+TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+OUTPUT="$PROJECT_ROOT/.opencode/PROJECT_CONTEXT.md"
+
+# Crear .opencode si no existe
+mkdir -p "$PROJECT_ROOT/.opencode"
+
+# Detectar stack
+STACK=()
+LANG="unknown"
+FRAMEWORK="none"
+
+[ -f "$PROJECT_ROOT/Cargo.toml" ] && STACK+=("rust") && LANG="rust"
+[ -f "$PROJECT_ROOT/go.mod" ] && STACK+=("go") && LANG="go"
+[ -f "$PROJECT_ROOT/pyproject.toml" ] || [ -f "$PROJECT_ROOT/setup.py" ] || [ -f "$PROJECT_ROOT/requirements.txt" ] && STACK+=("python") && LANG="python"
+[ -f "$PROJECT_ROOT/package.json" ] && STACK+=("node") && LANG="typescript"
+
+# Frameworks secundarios
+[ -f "$PROJECT_ROOT/manage.py" ] && FRAMEWORK="django"
+[ -f "$PROJECT_ROOT/next.config.js" ] || [ -f "$PROJECT_ROOT/next.config.ts" ] || [ -f "$PROJECT_ROOT/next.config.mjs" ] && FRAMEWORK="nextjs"
+[ -f "$PROJECT_ROOT/nest-cli.json" ] && FRAMEWORK="nestjs"
+[ -f "$PROJECT_ROOT/angular.json" ] && FRAMEWORK="angular"
+[ -f "$PROJECT_ROOT/pubspec.yaml" ] && FRAMEWORK="flutter"
+[ -f "$PROJECT_ROOT/Cargo.toml" ] && grep -q '\[target.*android' "$PROJECT_ROOT/Cargo.toml" 2>/dev/null && FRAMEWORK="rust-mobile"
+
+# Detectar infraestructura
+HAS_DOCKER=$([ -f "$PROJECT_ROOT/Dockerfile" ] || [ -f "$PROJECT_ROOT/docker-compose.yml" ] && echo "yes" || echo "no")
+HAS_K8S=$([ -d "$PROJECT_ROOT/k8s" ] || [ -d "$PROJECT_ROOT/kubernetes" ] && echo "yes" || echo "no")
+HAS_TF=$([ -d "$PROJECT_ROOT/terraform" ] || ls "$PROJECT_ROOT"/*.tf 2>/dev/null > /dev/null && echo "yes" || echo "no")
+HAS_GH_ACTIONS=$([ -d "$PROJECT_ROOT/.github/workflows" ] && echo "yes" || echo "no")
+
+# Mapear stack → skills específicas
+declare -a PROJECT_SKILLS=()
+[ "$LANG" = "python" ] && PROJECT_SKILLS+=("python-pro")
+[[ "$FRAMEWORK" == "django" ]] && PROJECT_SKILLS+=("django-expert")
+[[ "$FRAMEWORK" == "fastapi" || " ${STACK[@]} " =~ " fastapi " ]] && PROJECT_SKILLS+=("fastapi-expert")
+[ "$LANG" = "typescript" ] || [ "$LANG" = "javascript" ] && PROJECT_SKILLS+=("typescript-pro")
+[ "$LANG" = "go" ] && PROJECT_SKILLS+=("golang-pro" "go-testing")
+[ "$LANG" = "rust" ] && PROJECT_SKILLS+=("rust-engineer")
+[[ "$FRAMEWORK" == "react" ]] && PROJECT_SKILLS+=("react-expert")
+[[ "$FRAMEWORK" == "nextjs" ]] && PROJECT_SKILLS+=("nextjs-developer")
+[[ "$FRAMEWORK" == "vue" ]] && PROJECT_SKILLS+=("vue-expert")
+[[ "$FRAMEWORK" == "angular" ]] && PROJECT_SKILLS+=("angular-architect")
+[[ "$FRAMEWORK" == "nestjs" ]] && PROJECT_SKILLS+=("nestjs-expert")
+[[ "$FRAMEWORK" == "flutter" ]] && PROJECT_SKILLS+=("flutter-expert")
+[ "$HAS_DOCKER" = "yes" ] && PROJECT_SKILLS+=("devops-engineer")
+[ "$HAS_K8S" = "yes" ] && PROJECT_SKILLS+=("kubernetes-specialist")
+[ "$HAS_TF" = "yes" ] && PROJECT_SKILLS+=("terraform-engineer")
+[ "$HAS_GH_ACTIONS" = "yes" ] && PROJECT_SKILLS+=("devops-engineer")
+
+# MCPs relevantes
+declare -a PROJECT_MCPS=("filesystem" "engram")
+[ -d "$PROJECT_ROOT/.git" ] && PROJECT_MCPS+=("github")
+# Codebase memory solo si hay suficiente código fuente (50+ archivos)
+PROJECT_FILE_COUNT=$(find "$PROJECT_ROOT" -maxdepth 3 -type f \( -name "*.ts" -o -name "*.js" -o -name "*.py" -o -name "*.go" -o -name "*.rs" \) 2>/dev/null | wc -l)
+[ "$PROJECT_FILE_COUNT" -gt 50 ] && PROJECT_MCPS+=("codebase-memory-mcp")
+# Browsers para QA / web dev
+[[ "$FRAMEWORK" =~ ^(angular|react|nextjs|vue|nestjs)$ ]] && PROJECT_MCPS+=("playwright")
+# Container/orchestration
+[ "$HAS_DOCKER" = "yes" ] && PROJECT_MCPS+=("docker")
+[ "$HAS_K8S" = "yes" ] && PROJECT_MCPS+=("docker")
+# Code review / graph analysis (ya evaluado arriba)
+
+# Generar output
+cat > "$OUTPUT" <<EOF
+# Project Context — $(basename "$PROJECT_ROOT")
+> **Generated**: $TIMESTAMP
+> **Regenerate**: \`project-bootstrap\` or \`/project-bootstrap\`
+
+## Detected Stack
+
+- **Primary Language**: $LANG
+- **Framework**: $FRAMEWORK
+- **Tooling**: ${STACK[*]}
+- **Docker**: $HAS_DOCKER | **K8s**: $HAS_K8S | **Terraform**: $HAS_TF | **CI/CD**: $HAS_GH_ACTIONS
+
+## Project Skills (lazy-loaded on demand)
+
+\`\`\`
+$(printf '%s\n' "${PROJECT_SKILLS[@]}" | sort -u | sed 's/^/- /')
+\`\`\`
+
+> Si necesitas una skill fuera de esta lista, consulta \`~/.config/opencode/skills/\`
+> y cárgala con \`skill(name="<name>")\` cuando aplique.
+
+## Project MCPs
+
+\`\`\`
+$(printf '%s\n' "${PROJECT_MCPS[@]}" | sort -u | sed 's/^/- /')
+\`\`\`
+
+## Project-Specific Rules
+
+<!-- Edita esta sección con reglas específicas del proyecto -->
+
+## Working Notes
+
+<!-- Notas sobre estado del proyecto, deuda técnica, decisiones -->
+
+EOF
+
+echo "✅ PROJECT_CONTEXT.md generado en: $OUTPUT"
+echo ""
+echo "Stack detectado: $LANG / $FRAMEWORK"
+echo "Skills: ${#PROJECT_SKILLS[@]}"
+echo "MCPs: ${#PROJECT_MCPS[@]}"
+
+# Habilitar MCPs en opencode.json según detección
+OPENCODE_CONFIG="$HOME/.config/opencode/opencode.json"
+if [ -f "$OPENCODE_CONFIG" ]; then
+  echo ""
+  echo "Habilitando MCPs en opencode.json..."
+  for mcp in "${PROJECT_MCPS[@]}"; do
+    if grep -q "\"$mcp\":" "$OPENCODE_CONFIG"; then
+      # Cambiar enabled: false → true
+      if grep -A6 "\"$mcp\":" "$OPENCODE_CONFIG" | grep -q '"enabled": false'; then
+        sed -i "0,/\"$mcp\": {/{s//\"$mcp\": {\n      \"_enabled_by_project_bootstrap\": true,/}" "$OPENCODE_CONFIG"
+        # Cambiar enabled: false a enabled: true solo en la primera ocurrencia dentro del bloque mcp
+        node -e "
+const fs = require('fs');
+const cfg = JSON.parse(fs.readFileSync('$OPENCODE_CONFIG','utf-8'));
+if (cfg.mcp && cfg.mcp['$mcp']) {
+  cfg.mcp['$mcp'].enabled = true;
+  fs.writeFileSync('$OPENCODE_CONFIG', JSON.stringify(cfg, null, 2) + '\n');
+}
+"
+        echo "  ✅ $mcp habilitado"
+      fi
+    fi
+  done
+fi
+
+# Discovery: detectar capabilities adicionales no registradas
+SCANNER="$HOME/.config/opencode/scripts/capability-scanner.sh"
+if [ -x "$SCANNER" ]; then
+  echo ""
+  echo "Ejecutando capability scanner..."
+  EXTRA=$("$SCANNER" "$PROJECT_ROOT" 2>/dev/null)
+  if [ -n "$EXTRA" ]; then
+    EXTRA_SKILLS=$(echo "$EXTRA" | node -e "
+let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{
+  try{const j=JSON.parse(d);
+    j.discovered_skills.forEach(s=>console.log(s.name+' - '+s.desc));}catch(e){}
+});" 2>/dev/null)
+    EXTRA_MCPS=$(echo "$EXTRA" | node -e "
+let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{
+  try{const j=JSON.parse(d);
+    j.discovered_mcps.forEach(m=>console.log(m.name));}catch(e){}
+});" 2>/dev/null)
+    
+    if [ -n "$EXTRA_SKILLS" ] || [ -n "$EXTRA_MCPS" ]; then
+      echo "  Capacidades extras detectadas (no registradas):"
+      [ -n "$EXTRA_SKILLS" ] && echo "$EXTRA_SKILLS" | sed 's/^/    skill: /'
+      [ -n "$EXTRA_MCPS" ] && echo "$EXTRA_MCPS" | sed 's/^/    mcp: /'
+      echo ""
+      echo "Para usarlas: skill(name=\"<name>\") o habilita en opencode.json"
+    fi
+  fi
+fi
