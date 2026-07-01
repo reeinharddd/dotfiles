@@ -1,0 +1,1207 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "build",
+  "provider": {
+    "opencode": {
+      "options": {
+        "timeout": false,
+        "chunkTimeout": 120000
+      }
+    }
+  },
+  "lsp": {
+    "python": {
+      "command": [
+        "pyright-langserver",
+        "--stdio"
+      ],
+      "extensions": [
+        ".py"
+      ],
+      "disabled": false
+    },
+    "typescript": {
+      "command": [
+        "typescript-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".ts",
+        ".tsx"
+      ],
+      "disabled": false
+    },
+    "javascript": {
+      "command": [
+        "typescript-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".cjs"
+      ],
+      "disabled": false
+    },
+    "go": {
+      "command": [
+        "gopls"
+      ],
+      "extensions": [
+        ".go"
+      ],
+      "disabled": false
+    },
+    "rust": {
+      "command": [
+        "rust-analyzer"
+      ],
+      "extensions": [
+        ".rs"
+      ],
+      "disabled": false
+    },
+    "bash": {
+      "command": [
+        "bash-language-server",
+        "start"
+      ],
+      "extensions": [
+        ".sh",
+        ".bash",
+        ".zsh"
+      ],
+      "disabled": false
+    },
+    "yaml": {
+      "command": [
+        "yaml-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".yaml",
+        ".yml"
+      ],
+      "disabled": false
+    },
+    "json": {
+      "command": [
+        "vscode-json-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".json"
+      ],
+      "disabled": false
+    },
+    "dockerfile": {
+      "command": [
+        "docker-langserver",
+        "--stdio"
+      ],
+      "extensions": [
+        "Dockerfile"
+      ],
+      "disabled": false
+    },
+    "markdown": {
+      "command": [
+        "marksman"
+      ],
+      "extensions": [
+        ".md"
+      ],
+      "disabled": true
+    },
+    "toml": {
+      "command": [
+        "taplo",
+        "lsp",
+        "--stdio"
+      ],
+      "extensions": [
+        ".toml"
+      ],
+      "disabled": false
+    }
+  },
+  "agent": {
+    "gentle-orchestrator": {
+      "description": "Gentle AI SDD Orchestrator - coordinates sub-agents, never does work inline",
+      "permission": {
+        "task": {
+          "*": "deny",
+          "sdd-apply": "allow",
+          "sdd-archive": "allow",
+          "sdd-design": "allow",
+          "sdd-explore": "allow",
+          "sdd-init": "allow",
+          "sdd-onboard": "allow",
+          "sdd-propose": "allow",
+          "sdd-spec": "allow",
+          "sdd-tasks": "allow",
+          "sdd-verify": "allow"
+        }
+      },
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "task": true,
+        "write": true
+      },
+      "prompt": "# Gentle AI — SDD Orchestrator Instructions\n\nBind this to the dedicated `gentle-orchestrator` agent only. Do NOT apply it to executor phase agents such as `sdd-apply` or `sdd-verify`.\n\n## SDD Orchestrator\n\nYou are a COORDINATOR, not an executor. Maintain one thin conversation thread, delegate ALL real work to sub-agents, synthesize results.\n\n### Language Domain Contract\n\n- The active persona controls direct user/orchestrator conversation only. Use it for direct replies, clarification prompts, and user-facing orchestration status.\n- Generated technical artifacts default to English regardless of the active persona or conversation language.\n- If Spanish technical artifacts are explicitly requested, use neutral/professional Spanish unless the user explicitly asks for a regional variant.\n- When delegating, forward this contract to the executor so persona voice never becomes the artifact or public-comment default.\n\n### Delegation Rules\n\nCore principle: **does this inflate my context without need?** If yes -> delegate. If no -> do it inline.\n\n| Action | Inline | Delegate |\n|--------|--------|----------|\n| Read 1-3 files | Yes | No |\n| Read 4+ files | No | Yes |\n| Multi-file write | No | Yes, with write |\n| Test/lint run | No | Yes |\n| Research/web | No | Yes |\n\n### Skills\n\n- Core (always loaded): system-context, diagnose, tdd, test-master, debugging-wizard, cavecrew, skill-router\n- Project skills: read `<project>/.opencode/PROJECT_CONTEXT.md`\n- Domain skills: lazy via `~/.config/opencode/domain-registry/REGISTRY.md` — invoke `skill(name=...)` on demand\n\n### Skills available to delegate to\n\n- Phase-specific SDD sub-agents (sdd-apply, sdd-archive, sdd-design, sdd-explore, sdd-init, sdd-onboard, sdd-propose, sdd-spec, sdd-tasks, sdd-verify)\n- General-purpose subagents via `task(subagent_type=\"general\")`\n- Domain experts via `task(category=\"...\", load_skills=[...])`"
+    },
+    "sdd-apply": {
+      "description": "Implement code changes from task definitions",
+      "hidden": true,
+      "mode": "all",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      },
+      "prompt": "You are an SDD executor for the apply phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-apply/SKILL.md and follow it exactly."
+    },
+    "sdd-archive": {
+      "description": "Archive completed change artifacts",
+      "hidden": true,
+      "mode": "all",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      },
+      "prompt": "You are an SDD executor for the archive phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-archive/SKILL.md and follow it exactly."
+    },
+    "sdd-design": {
+      "description": "Create technical design from proposals",
+      "hidden": true,
+      "mode": "all",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      },
+      "prompt": "You are an SDD executor for the design phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-design/SKILL.md and follow it exactly."
+    },
+    "sdd-explore": {
+      "description": "Investigate codebase and think through ideas",
+      "hidden": true,
+      "mode": "all",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      },
+      "prompt": "You are an SDD executor for the explore phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-explore/SKILL.md and follow it exactly."
+    },
+    "sdd-init": {
+      "description": "Bootstrap SDD context and project configuration",
+      "hidden": true,
+      "mode": "all",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      },
+      "prompt": "You are an SDD executor for the init phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-init/SKILL.md and follow it exactly."
+    },
+    "sdd-onboard": {
+      "description": "Guide user through a complete SDD cycle using their real codebase",
+      "hidden": true,
+      "mode": "all",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      },
+      "prompt": "You are an SDD executor for the onboard phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-onboard/SKILL.md and follow it exactly."
+    },
+    "sdd-propose": {
+      "description": "Create change proposals from explorations",
+      "hidden": true,
+      "mode": "all",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      },
+      "prompt": "You are an SDD executor for the propose phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-propose/SKILL.md and follow it exactly."
+    },
+    "sdd-spec": {
+      "description": "Write detailed specifications from proposals",
+      "hidden": true,
+      "mode": "all",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      },
+      "prompt": "You are an SDD executor for the spec phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-spec/SKILL.md and follow it exactly."
+    },
+    "sdd-tasks": {
+      "description": "Break down specs and designs into implementation tasks",
+      "hidden": true,
+      "mode": "all",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      },
+      "prompt": "You are an SDD executor for the tasks phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-tasks/SKILL.md and follow it exactly."
+    },
+    "sdd-verify": {
+      "description": "Validate implementation against specs",
+      "hidden": true,
+      "mode": "all",
+      "tools": {
+        "bash": true,
+        "edit": true,
+        "read": true,
+        "write": true
+      },
+      "prompt": "You are an SDD executor for the verify phase, not the orchestrator. Do this phase's work yourself. Do NOT delegate, Do NOT call task, and Do NOT launch sub-agents. Read your skill file at ~/.config/opencode/skills/sdd-verify/SKILL.md and follow it exactly."
+    },
+    "a11y-architect": {
+      "description": "Accessibility Architect specializing in WCAG 2.2 compliance for Web and Native platforms. Use PROACTIVELY when designing UI components, establishing design systems, or auditing code for inclusive user experiences.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: a11y-architect. Follow instructions at ~/.config/opencode/agents/a11y-architect.md",
+      "mode": "all"
+    },
+    "architect": {
+      "description": "Software architecture specialist for system design, scalability, and technical decision-making. Use PROACTIVELY when planning new features, refactoring large systems, or making architectural decisions.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: architect. Follow instructions at ~/.config/opencode/agents/architect.md",
+      "mode": "all"
+    },
+    "build-error-resolver": {
+      "description": "Build and TypeScript error resolution specialist. Use PROACTIVELY when build fails or type errors occur. Fixes build/type errors only with minimal diffs, no architectural edits. Focuses on getting the build green quickly.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: build-error-resolver. Follow instructions at ~/.config/opencode/agents/build-error-resolver.md",
+      "mode": "all"
+    },
+    "cavecrew-builder": {
+      "description": ">",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cavecrew-builder. Follow instructions at ~/.config/opencode/agents/cavecrew-builder.md",
+      "mode": "all"
+    },
+    "cavecrew-investigator": {
+      "description": ">",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cavecrew-investigator. Follow instructions at ~/.config/opencode/agents/cavecrew-investigator.md",
+      "mode": "all"
+    },
+    "cavecrew-reviewer": {
+      "description": ">",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cavecrew-reviewer. Follow instructions at ~/.config/opencode/agents/cavecrew-reviewer.md",
+      "mode": "all"
+    },
+    "chief-of-staff": {
+      "description": "Personal communication chief of staff that triages email, Slack, LINE, and Messenger. Classifies messages into 4 tiers (skip/info_only/meeting_info/action_required), generates draft replies, and enforces post-send follow-through via hooks. Use when managing multi-channel communication workflows.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: chief-of-staff. Follow instructions at ~/.config/opencode/agents/chief-of-staff.md",
+      "mode": "all"
+    },
+    "code-architect": {
+      "description": "Designs feature architectures by analyzing existing codebase patterns and conventions, then providing implementation blueprints with concrete files, interfaces, data flow, and build order.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: code-architect. Follow instructions at ~/.config/opencode/agents/code-architect.md",
+      "mode": "all"
+    },
+    "code-explorer": {
+      "description": "Deeply analyzes existing codebase features by tracing execution paths, mapping architecture layers, and documenting dependencies to inform new development.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: code-explorer. Follow instructions at ~/.config/opencode/agents/code-explorer.md",
+      "mode": "all"
+    },
+    "code-reviewer": {
+      "description": "Expert code review specialist. Proactively reviews code for quality, security, and maintainability. Use immediately after writing or modifying code. MUST BE USED for all code changes.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: code-reviewer. Follow instructions at ~/.config/opencode/agents/code-reviewer.md",
+      "mode": "all"
+    },
+    "code-simplifier": {
+      "description": "Simplifies and refines code for clarity, consistency, and maintainability while preserving behavior. Focus on recently modified code unless instructed otherwise.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: code-simplifier. Follow instructions at ~/.config/opencode/agents/code-simplifier.md",
+      "mode": "all"
+    },
+    "comment-analyzer": {
+      "description": "Analyze code comments for accuracy, completeness, maintainability, and comment rot risk.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: comment-analyzer. Follow instructions at ~/.config/opencode/agents/comment-analyzer.md",
+      "mode": "all"
+    },
+    "conversation-analyzer": {
+      "description": "Use this agent when analyzing conversation transcripts to find behaviors worth preventing with hooks. Triggered by /hookify without arguments.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: conversation-analyzer. Follow instructions at ~/.config/opencode/agents/conversation-analyzer.md",
+      "mode": "all"
+    },
+    "cpp-build-resolver": {
+      "description": "C++ build, CMake, and compilation error resolution specialist. Fixes build errors, linker issues, and template errors with minimal changes. Use when C++ builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cpp-build-resolver. Follow instructions at ~/.config/opencode/agents/cpp-build-resolver.md",
+      "mode": "all"
+    },
+    "cpp-reviewer": {
+      "description": "Expert C++ code reviewer specializing in memory safety, modern C++ idioms, concurrency, and performance. Use for all C++ code changes. MUST BE USED for C++ projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cpp-reviewer. Follow instructions at ~/.config/opencode/agents/cpp-reviewer.md",
+      "mode": "all"
+    },
+    "csharp-reviewer": {
+      "description": "Expert C# code reviewer specializing in .NET conventions, async patterns, security, nullable reference types, and performance. Use for all C# code changes. MUST BE USED for C# projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: csharp-reviewer. Follow instructions at ~/.config/opencode/agents/csharp-reviewer.md",
+      "mode": "all"
+    },
+    "dart-build-resolver": {
+      "description": "Dart/Flutter build, analysis, and dependency error resolution specialist. Fixes `dart analyze` errors, Flutter compilation failures, pub dependency conflicts, and build_runner issues with minimal, surgical changes. Use when Dart/Flutter builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: dart-build-resolver. Follow instructions at ~/.config/opencode/agents/dart-build-resolver.md",
+      "mode": "all"
+    },
+    "database-reviewer": {
+      "description": "PostgreSQL database specialist for query optimization, schema design, security, and performance. Use PROACTIVELY when writing SQL, creating migrations, designing schemas, or troubleshooting database performance. Incorporates Supabase best practices.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: database-reviewer. Follow instructions at ~/.config/opencode/agents/database-reviewer.md",
+      "mode": "all"
+    },
+    "django-build-resolver": {
+      "description": "Django/Python build, migration, and dependency error resolution specialist. Fixes pip/Poetry errors, migration conflicts, import errors, Django configuration issues, and collectstatic failures with minimal changes. Use when Django setup or startup fails.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: django-build-resolver. Follow instructions at ~/.config/opencode/agents/django-build-resolver.md",
+      "mode": "all"
+    },
+    "django-reviewer": {
+      "description": "Expert Django code reviewer specializing in ORM correctness, DRF patterns, migration safety, security misconfigurations, and production-grade Django practices. Use for all Django code changes. MUST BE USED for Django projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: django-reviewer. Follow instructions at ~/.config/opencode/agents/django-reviewer.md",
+      "mode": "all"
+    },
+    "doc-updater": {
+      "description": "Documentation and codemap specialist. Use PROACTIVELY for updating codemaps and documentation. Runs /update-codemaps and /update-docs, generates docs/CODEMAPS/*, updates READMEs and guides.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: doc-updater. Follow instructions at ~/.config/opencode/agents/doc-updater.md",
+      "mode": "all"
+    },
+    "docs-lookup": {
+      "description": "When the user asks how to use a library, framework, or API or needs up-to-date code examples, use Context7 MCP to fetch current documentation and return answers with examples. Invoke for docs/API/setup questions.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: docs-lookup. Follow instructions at ~/.config/opencode/agents/docs-lookup.md",
+      "mode": "all"
+    },
+    "e2e-runner": {
+      "description": "End-to-end testing specialist using Vercel Agent Browser (preferred) with Playwright fallback. Use PROACTIVELY for generating, maintaining, and running E2E tests. Manages test journeys, quarantines flaky tests, uploads artifacts (screenshots, videos, traces), and ensures critical user flows work.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: e2e-runner. Follow instructions at ~/.config/opencode/agents/e2e-runner.md",
+      "mode": "all"
+    },
+    "fastapi-reviewer": {
+      "description": "Reviews FastAPI applications for async correctness, dependency injection, Pydantic schemas, security, OpenAPI quality, testing, and production readiness.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: fastapi-reviewer. Follow instructions at ~/.config/opencode/agents/fastapi-reviewer.md",
+      "mode": "all"
+    },
+    "flutter-reviewer": {
+      "description": "Flutter and Dart code reviewer. Reviews Flutter code for widget best practices, state management patterns, Dart idioms, performance pitfalls, accessibility, and clean architecture violations. Library-agnostic — works with any state management solution and tooling.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: flutter-reviewer. Follow instructions at ~/.config/opencode/agents/flutter-reviewer.md",
+      "mode": "all"
+    },
+    "fsharp-reviewer": {
+      "description": "Expert F# code reviewer specializing in functional idioms, type safety, pattern matching, computation expressions, and performance. Use for all F# code changes. MUST BE USED for F# projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: fsharp-reviewer. Follow instructions at ~/.config/opencode/agents/fsharp-reviewer.md",
+      "mode": "all"
+    },
+    "gan-evaluator": {
+      "description": "\"GAN Harness — Evaluator agent. Tests the live running application via Playwright, scores against rubric, and provides actionable feedback to the Generator.\"",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: gan-evaluator. Follow instructions at ~/.config/opencode/agents/gan-evaluator.md",
+      "mode": "all"
+    },
+    "gan-generator": {
+      "description": "\"GAN Harness — Generator agent. Implements features according to the spec, reads evaluator feedback, and iterates until quality threshold is met.\"",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: gan-generator. Follow instructions at ~/.config/opencode/agents/gan-generator.md",
+      "mode": "all"
+    },
+    "gan-planner": {
+      "description": "\"GAN Harness — Planner agent. Expands a one-line prompt into a full product specification with features, sprints, evaluation criteria, and design direction.\"",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: gan-planner. Follow instructions at ~/.config/opencode/agents/gan-planner.md",
+      "mode": "all"
+    },
+    "go-build-resolver": {
+      "description": "Go build, vet, and compilation error resolution specialist. Fixes build errors, go vet issues, and linter warnings with minimal changes. Use when Go builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: go-build-resolver. Follow instructions at ~/.config/opencode/agents/go-build-resolver.md",
+      "mode": "all"
+    },
+    "go-reviewer": {
+      "description": "Expert Go code reviewer specializing in idiomatic Go, concurrency patterns, error handling, and performance. Use for all Go code changes. MUST BE USED for Go projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: go-reviewer. Follow instructions at ~/.config/opencode/agents/go-reviewer.md",
+      "mode": "all"
+    },
+    "harmonyos-app-resolver": {
+      "description": "HarmonyOS application development expert specializing in ArkTS and ArkUI. Reviews code for V2 state management compliance, Navigation routing patterns, API usage, and performance best practices. Use for HarmonyOS/OpenHarmony projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: harmonyos-app-resolver. Follow instructions at ~/.config/opencode/agents/harmonyos-app-resolver.md",
+      "mode": "all"
+    },
+    "harness-optimizer": {
+      "description": "Analyze and improve the local agent harness configuration for reliability, cost, and throughput.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: harness-optimizer. Follow instructions at ~/.config/opencode/agents/harness-optimizer.md",
+      "mode": "all"
+    },
+    "healthcare-reviewer": {
+      "description": "Reviews healthcare application code for clinical safety, CDSS accuracy, PHI compliance, and medical data integrity. Specialized for EMR/EHR, clinical decision support, and health information systems.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: healthcare-reviewer. Follow instructions at ~/.config/opencode/agents/healthcare-reviewer.md",
+      "mode": "all"
+    },
+    "homelab-architect": {
+      "description": "Designs home and small-lab network plans from hardware inventory, goals, and operator experience level, with safe staged changes and rollback guidance.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: homelab-architect. Follow instructions at ~/.config/opencode/agents/homelab-architect.md",
+      "mode": "all"
+    },
+    "java-build-resolver": {
+      "description": "Java/Maven/Gradle build, compilation, and dependency error resolution specialist. Automatically detects Spring Boot or Quarkus and applies framework-specific fixes. Fixes build errors, Java compiler errors, and Maven/Gradle issues with minimal changes. Use when Java builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: java-build-resolver. Follow instructions at ~/.config/opencode/agents/java-build-resolver.md",
+      "mode": "all"
+    },
+    "java-reviewer": {
+      "description": "Expert Java code reviewer for Spring Boot and Quarkus projects. Automatically detects the framework and applies the appropriate review rules. Covers layered architecture, JPA/Panache, MongoDB, security, and concurrency. MUST BE USED for all Java code changes.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: java-reviewer. Follow instructions at ~/.config/opencode/agents/java-reviewer.md",
+      "mode": "all"
+    },
+    "kotlin-build-resolver": {
+      "description": "Kotlin/Gradle build, compilation, and dependency error resolution specialist. Fixes build errors, Kotlin compiler errors, and Gradle issues with minimal changes. Use when Kotlin builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: kotlin-build-resolver. Follow instructions at ~/.config/opencode/agents/kotlin-build-resolver.md",
+      "mode": "all"
+    },
+    "kotlin-reviewer": {
+      "description": "Kotlin and Android/KMP code reviewer. Reviews Kotlin code for idiomatic patterns, coroutine safety, Compose best practices, clean architecture violations, and common Android pitfalls.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: kotlin-reviewer. Follow instructions at ~/.config/opencode/agents/kotlin-reviewer.md",
+      "mode": "all"
+    },
+    "loop-operator": {
+      "description": "Operate autonomous agent loops, monitor progress, and intervene safely when loops stall.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: loop-operator. Follow instructions at ~/.config/opencode/agents/loop-operator.md",
+      "mode": "all"
+    },
+    "marketing-agent": {
+      "description": "Marketing strategist and copywriter for campaign planning, audience research, positioning, copy creation, and content review. Covers landing pages, email sequences, social posts, ad copy, short-form video scripts, and content calendars. Use when the user wants to plan or execute a product launch or marketing campaign.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: marketing-agent. Follow instructions at ~/.config/opencode/agents/marketing-agent.md",
+      "mode": "all"
+    },
+    "mle-reviewer": {
+      "description": "Production machine-learning engineering reviewer for data contracts, feature pipelines, training reproducibility, offline/online evaluation, model serving, monitoring, and rollback. Use when ML, MLOps, model training, inference, feature store, or evaluation code changes.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: mle-reviewer. Follow instructions at ~/.config/opencode/agents/mle-reviewer.md",
+      "mode": "all"
+    },
+    "network-architect": {
+      "description": "Designs enterprise or multi-site network architecture from requirements, using existing network skills for focused routing, validation, automation, and troubleshooting detail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: network-architect. Follow instructions at ~/.config/opencode/agents/network-architect.md",
+      "mode": "all"
+    },
+    "network-config-reviewer": {
+      "description": "Reviews router and switch configurations for security, correctness, stale references, risky change-window commands, and missing operational guardrails.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: network-config-reviewer. Follow instructions at ~/.config/opencode/agents/network-config-reviewer.md",
+      "mode": "all"
+    },
+    "network-troubleshooter": {
+      "description": "Diagnoses network connectivity, routing, DNS, interface, and policy symptoms with a read-only OSI-layer workflow and evidence-backed root cause summary.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: network-troubleshooter. Follow instructions at ~/.config/opencode/agents/network-troubleshooter.md",
+      "mode": "all"
+    },
+    "opensource-forker": {
+      "description": "Fork any project for open-sourcing. Copies files, strips secrets and credentials (20+ patterns), replaces internal references with placeholders, generates .env.example, and cleans git history. First stage of the opensource-pipeline skill.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: opensource-forker. Follow instructions at ~/.config/opencode/agents/opensource-forker.md",
+      "mode": "all"
+    },
+    "opensource-packager": {
+      "description": "Generate complete open-source packaging for a sanitized project. Produces CLAUDE.md, setup.sh, README.md, LICENSE, CONTRIBUTING.md, and GitHub issue templates. Makes any repo immediately usable with Claude Code. Third stage of the opensource-pipeline skill.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: opensource-packager. Follow instructions at ~/.config/opencode/agents/opensource-packager.md",
+      "mode": "all"
+    },
+    "opensource-sanitizer": {
+      "description": "Verify an open-source fork is fully sanitized before release. Scans for leaked secrets, PII, internal references, and dangerous files using 20+ regex patterns. Generates a PASS/FAIL/PASS-WITH-WARNINGS report. Second stage of the opensource-pipeline skill. Use PROACTIVELY before any public release.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: opensource-sanitizer. Follow instructions at ~/.config/opencode/agents/opensource-sanitizer.md",
+      "mode": "all"
+    },
+    "performance-optimizer": {
+      "description": "Performance analysis and optimization specialist. Use PROACTIVELY for identifying bottlenecks, optimizing slow code, reducing bundle sizes, and improving runtime performance. Profiling, memory leaks, render optimization, and algorithmic improvements.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: performance-optimizer. Follow instructions at ~/.config/opencode/agents/performance-optimizer.md",
+      "mode": "all"
+    },
+    "php-reviewer": {
+      "description": "Expert PHP code reviewer specializing in PSR-12 compliance, PHP type system, Eloquent ORM patterns, security, and performance. Use for all PHP code changes. MUST BE USED for PHP projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: php-reviewer. Follow instructions at ~/.config/opencode/agents/php-reviewer.md",
+      "mode": "all"
+    },
+    "planner": {
+      "description": "Expert planning specialist for complex features and refactoring. Use PROACTIVELY when users request feature implementation, architectural changes, or complex refactoring. Automatically activated for planning tasks.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: planner. Follow instructions at ~/.config/opencode/agents/planner.md",
+      "mode": "all"
+    },
+    "pr-test-analyzer": {
+      "description": "Review pull request test coverage quality and completeness, with emphasis on behavioral coverage and real bug prevention.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: pr-test-analyzer. Follow instructions at ~/.config/opencode/agents/pr-test-analyzer.md",
+      "mode": "all"
+    },
+    "python-reviewer": {
+      "description": "Expert Python code reviewer specializing in PEP 8 compliance, Pythonic idioms, type hints, security, and performance. Use for all Python code changes. MUST BE USED for Python projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: python-reviewer. Follow instructions at ~/.config/opencode/agents/python-reviewer.md",
+      "mode": "all"
+    },
+    "pytorch-build-resolver": {
+      "description": "PyTorch runtime, CUDA, and training error resolution specialist. Fixes tensor shape mismatches, device errors, gradient issues, DataLoader problems, and mixed precision failures with minimal changes. Use when PyTorch training or inference crashes.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: pytorch-build-resolver. Follow instructions at ~/.config/opencode/agents/pytorch-build-resolver.md",
+      "mode": "all"
+    },
+    "react-build-resolver": {
+      "description": "Diagnose and fix React build failures across Vite, webpack, Next.js, CRA, Parcel, esbuild, and Bun. Handles JSX/TSX compile errors, hydration mismatches, server/client component boundary failures, missing types, and bundler-specific configuration issues with minimal, surgical changes. MUST BE USED when a React build fails.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: react-build-resolver. Follow instructions at ~/.config/opencode/agents/react-build-resolver.md",
+      "mode": "all"
+    },
+    "react-reviewer": {
+      "description": "Expert React/JSX code reviewer specializing in hook correctness, render performance, server/client component boundaries, accessibility, and React-specific security. Use for any change touching .tsx/.jsx files or React component logic. MUST BE USED for React projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: react-reviewer. Follow instructions at ~/.config/opencode/agents/react-reviewer.md",
+      "mode": "all"
+    },
+    "refactor-cleaner": {
+      "description": "Dead code cleanup and consolidation specialist. Use PROACTIVELY for removing unused code, duplicates, and refactoring. Runs analysis tools (knip, depcheck, ts-prune) to identify dead code and safely removes it.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: refactor-cleaner. Follow instructions at ~/.config/opencode/agents/refactor-cleaner.md",
+      "mode": "all"
+    },
+    "rust-build-resolver": {
+      "description": "Rust build, compilation, and dependency error resolution specialist. Fixes cargo build errors, borrow checker issues, and Cargo.toml problems with minimal changes. Use when Rust builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: rust-build-resolver. Follow instructions at ~/.config/opencode/agents/rust-build-resolver.md",
+      "mode": "all"
+    },
+    "rust-reviewer": {
+      "description": "Expert Rust code reviewer specializing in ownership, lifetimes, error handling, unsafe usage, and idiomatic patterns. Use for all Rust code changes. MUST BE USED for Rust projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: rust-reviewer. Follow instructions at ~/.config/opencode/agents/rust-reviewer.md",
+      "mode": "all"
+    },
+    "security-reviewer": {
+      "description": "Security vulnerability detection and remediation specialist. Use PROACTIVELY after writing code that handles user input, authentication, API endpoints, or sensitive data. Flags secrets, SSRF, injection, unsafe crypto, and OWASP Top 10 vulnerabilities.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: security-reviewer. Follow instructions at ~/.config/opencode/agents/security-reviewer.md",
+      "mode": "all"
+    },
+    "seo-specialist": {
+      "description": "SEO specialist for technical SEO audits, on-page optimization, structured data, Core Web Vitals, and content/keyword mapping. Use for site audits, meta tag reviews, schema markup, sitemap and robots issues, and SEO remediation plans.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: seo-specialist. Follow instructions at ~/.config/opencode/agents/seo-specialist.md",
+      "mode": "all"
+    },
+    "silent-failure-hunter": {
+      "description": "Review code for silent failures, swallowed errors, bad fallbacks, and missing error propagation.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: silent-failure-hunter. Follow instructions at ~/.config/opencode/agents/silent-failure-hunter.md",
+      "mode": "all"
+    },
+    "swift-build-resolver": {
+      "description": "Swift/Xcode build, compilation, and dependency error resolution specialist. Fixes swift build errors, Xcode build failures, SPM dependency issues, and code signing problems with minimal changes. Use when Swift builds fail.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: swift-build-resolver. Follow instructions at ~/.config/opencode/agents/swift-build-resolver.md",
+      "mode": "all"
+    },
+    "swift-reviewer": {
+      "description": "Expert Swift code reviewer specializing in protocol-oriented design, value semantics, ARC memory management, Swift Concurrency, and idiomatic patterns. Use for all Swift code changes. MUST BE USED for Swift projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: swift-reviewer. Follow instructions at ~/.config/opencode/agents/swift-reviewer.md",
+      "mode": "all"
+    },
+    "tdd-guide": {
+      "description": "Test-Driven Development specialist enforcing write-tests-first methodology. Use PROACTIVELY when writing new features, fixing bugs, or refactoring code. Ensures 80%+ test coverage.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: tdd-guide. Follow instructions at ~/.config/opencode/agents/tdd-guide.md",
+      "mode": "all"
+    },
+    "type-design-analyzer": {
+      "description": "Analyze type design for encapsulation, invariant expression, usefulness, and enforcement.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: type-design-analyzer. Follow instructions at ~/.config/opencode/agents/type-design-analyzer.md",
+      "mode": "all"
+    },
+    "typescript-reviewer": {
+      "description": "Expert TypeScript/JavaScript code reviewer specializing in type safety, async correctness, Node/web security, and idiomatic patterns. Use for all TypeScript and JavaScript code changes. MUST BE USED for TypeScript/JavaScript projects.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: typescript-reviewer. Follow instructions at ~/.config/opencode/agents/typescript-reviewer.md",
+      "mode": "all"
+    }
+  },
+  "mcp": {
+    "context7": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "engram": {
+      "command": [
+        "engram",
+        "mcp",
+        "--tools=agent"
+      ],
+      "type": "local",
+      "enabled": true
+    },
+    "filesystem": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/reeinharrrd/projects",
+        "/home/reeinharrrd/.config"
+      ]
+    },
+    "sequential-thinking": {
+      "enabled": false,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "playwright": {
+      "enabled": false,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@playwright/mcp@latest",
+        "--browser=chrome",
+        "--viewport-size=1920x1080",
+        "--timeout-navigation=60000",
+        "--timeout-action=10000"
+      ],
+      "environment": {
+        "PLAYWRIGHT_CHROME_EXECUTABLE_PATH": "/snap/brave/current/opt/brave.com/brave/brave"
+      }
+    },
+    "codebase-memory-mcp": {
+      "enabled": false,
+      "type": "local",
+      "command": [
+        "/home/reeinharrrd/.local/bin/codebase-memory-mcp"
+      ]
+    },
+    "firecrawl": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.firecrawl.dev/fc-412aba2a43ba47daabae244cb8a72af9/v2/mcp"
+    },
+    "notion": {
+      "enabled": false,
+      "type": "remote",
+      "url": "https://mcp.notion.com/mcp"
+    },
+    "github": {
+      "_enabled_by_project_bootstrap": true,
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "environment": {
+        "GITHUB_TOKEN": "{env:GITHUB_TOKEN}"
+      }
+    },
+    "docker": {
+      "enabled": false,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "mcp-server-docker"
+      ],
+      "environment": {
+        "ALLOWED_CONTAINERS": "*"
+      }
+    },
+    "snapmcp": {
+      "enabled": false,
+      "type": "local",
+      "command": [
+        "node",
+        "/home/reeinharrrd/.local/share/mise/installs/node/24.16.0/lib/node_modules/snapmcp/dist/index.js"
+      ],
+      "environment": {
+        "SNAPMCP_ALLOWED_PATHS": "/home/reeinharrrd/.config/opencode/captures;/tmp/opencode"
+      }
+    },
+    "memory-bank": {
+      "enabled": false,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-memory",
+        "--file",
+        "/home/reeinharrrd/.config/opencode/memory-bank/memory.json"
+      ]
+    }
+  },
+  "formatter": true,
+  "tool_output": {
+    "max_lines": 1000,
+    "max_bytes": 25600
+  },
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "tail_turns": 3,
+    "reserved": 15000
+  },
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      ".git/**",
+      "dist/**",
+      "captures/**",
+      "memory-bank/**"
+    ]
+  },
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "git push *": "ask",
+      "git commit *": "ask",
+      "rm -rf": "deny",
+      "rm -rf *": "deny"
+    }
+  },
+  "references": {
+    "gstack": {
+      "path": "~/tools/gstack",
+      "description": "GStack skill suite: browser QA, design system, benchmarks, ship/deploy workflows"
+    },
+    "superpowers": {
+      "path": "~/tools/superpowers",
+      "description": "Superpowers: brainstorming, TDD, debugging, plan execution patterns",
+      "hidden": true
+    },
+    "caveman": {
+      "path": "~/tools/caveman",
+      "hidden": true
+    },
+    "gentle-ai": {
+      "path": "~/tools/gentle-ai",
+      "hidden": true
+    },
+    "ecc": {
+      "path": "~/tools/ECC",
+      "hidden": true
+    },
+    "claude-skills": {
+      "path": "~/tools/claude-skills",
+      "hidden": true
+    },
+    "taste-skill": {
+      "path": "~/tools/taste-skill",
+      "hidden": true
+    },
+    "last30days": {
+      "path": "~/tools/last30days-skill",
+      "hidden": true
+    },
+    "community-skills": {
+      "path": "~/tools/skills",
+      "hidden": true
+    },
+    "power-pack": {
+      "path": "~/tools/opencode-power-pack",
+      "hidden": true
+    },
+    "new-project": {
+      "path": "~/tools/new-project",
+      "hidden": true
+    }
+  },
+  "share": "disabled"
+}
