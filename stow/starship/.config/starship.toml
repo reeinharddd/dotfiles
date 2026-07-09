@@ -1,0 +1,102 @@
+# Starship prompt — Nightlion V1 palette
+# https://starship.rs/config/
+
+format = """\
+$os\
+$directory\
+$git_branch\
+$git_status\
+$fill\
+$nodejs\
+$python\
+$rust\
+$golang\
+$bun\
+$docker_context\
+$cmd_duration\
+$line_break\
+$character\
+"""
+
+add_newline = true
+command_timeout = 3600000
+palette = "nightlion"
+
+[palettes.nightlion]
+# Basado en Kitty Nightlion V1 + Catppuccin Mocha estructural
+rosewater = "#FF5555"
+flamingo = "#FF55FF"
+pink = "#FF55FF"
+mauve = "#BB00BB"
+red = "#BB0000"
+maroon = "#BB0000"
+peach = "#FFFF55"
+yellow = "#F3F167"
+green = "#5FDE8F"
+teal = "#00DADF"
+sky = "#5555FF"
+sapphire = "#55FFFF"
+blue = "#276BD8"
+lavender = "#5555FF"
+text = "#BBBBBB"
+subtext1 = "#999999"
+subtext0 = "#888888"
+overlay2 = "#666666"
+overlay1 = "#555555"
+overlay0 = "#444444"
+surface2 = "#333333"
+surface1 = "#222222"
+surface0 = "#111111"
+base = "#000000"
+mantle = "#000000"
+crust = "#000000"
+
+[character]
+success_symbol = "[❯](fg:green)"
+error_symbol = "[❯](fg:red)"
+
+[directory]
+format = "[$path]($style)[$read_only]($read_only_style) "
+truncation_length = 2
+style = "fg:blue"
+truncation_symbol = "…/"
+truncate_to_repo = true
+
+[git_branch]
+format = "-> [$symbol$branch]($style) "
+style = "bold fg:mauve"
+symbol = " "
+
+[git_status]
+format = '[$all_status$ahead_behind ]($style)'
+style = "fg:text bg:surface2"
+
+[nodejs]
+symbol = ""
+format = 'via [⬢ $version](fg:green) '
+
+[rust]
+symbol = ""
+format = 'via [🦀 $version](fg:red) '
+
+[golang]
+symbol = ""
+format = 'via [⌘ $version](fg:teal) '
+
+[python]
+format = 'via [🐍 $version](fg:peach) '
+
+[bun]
+format = 'via [🍞 $version](fg:text) '
+
+[docker_context]
+disabled = false
+format = 'via [🐳 $context](fg:blue) '
+
+[cmd_duration]
+format = " took [$duration]($style) "
+style = "bold fg:yellow"
+min_time = 1000
+
+[time]
+disabled = true

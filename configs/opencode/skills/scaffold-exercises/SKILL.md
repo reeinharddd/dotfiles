@@ -1,1 +1,0 @@
-/home/reeinharrrd/tools/skills/skills/misc/scaffold-exercises//SKILL.md

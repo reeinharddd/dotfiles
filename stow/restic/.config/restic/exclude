@@ -1,0 +1,63 @@
+# Restic exclude file
+# Syntax: https://restic.readthedocs.io/en/latest/040_backup.html
+
+# OS junk
+**/.DS_Store
+**/Thumbs.db
+**/Desktop.ini
+
+# Editor junk
+**/*~
+**/*.swp
+**/*.swo
+**/.vscode/
+**/.idea/
+
+# Node
+**/node_modules/
+**/dist/
+**/build/
+**/.next/
+**/.cache/
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/.venv/
+**/venv/
+
+# Rust
+**/target/
+
+# Go
+**/vendor/
+
+# VCS
+**/.git/
+
+# Downloads
+**/Downloads/
+
+# Trash
+**/.local/share/Trash/
+
+# Browser
+**/.cache/
+**/.mozilla/
+**/.config/BraveSoftware/
+
+# Multimedia (large)
+**/*.mp4
+**/*.mkv
+**/*.avi
+**/*.mov
+**/*.flac
+**/*.wav
+**/*.iso
+
+# Misc
+**/node_modules/
+**/.npm/
+**/.next/
+**/.nuxt/

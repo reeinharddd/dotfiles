@@ -1,1 +1,0 @@
-/home/reeinharrrd/tools/skills/skills/engineering/setup-matt-pocock-skills//SKILL.md

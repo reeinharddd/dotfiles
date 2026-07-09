@@ -1,0 +1,64 @@
+# ┌──────────────────────────────────────────────────────────────────┐
+# │ Mako — Catppuccin theme notification daemon                            │
+# │ https://github.com/emersion/mako                                     │
+# └──────────────────────────────────────────────────────────────────┘
+
+default-timeout=5000
+border-size=2
+border-color=#cba6f7
+background-color=#1e1e2e
+text-color=#cdd6f4
+border-radius=12
+font=JetBrainsMono Nerd Font Mono 11
+anchor=top-right
+default-output=HDMI-A-1
+max-visible=5
+layer=overlay
+sort=-time
+markup=1
+actions=1
+format=%a
+history-time=1h
+max-icon-size=32
+icon-path=/usr/share/icons/Papirus/24x24/status:/usr/share/icons/Papirus/24x24/actions:/usr/share/icons/Papirus/24x24/places
+
+[app-name=Brave]
+default-timeout=8000
+
+[app-name=Spotify]
+default-timeout=10000
+background-color=#1DB954
+text-color=#ffffff
+border-color=#1DB954
+
+[app-name=code]
+default-timeout=3000
+urgency=low
+background-color=#1e1e2e
+text-color=#74c7ec
+
+[urgency=low]
+background-color=#313244
+text-color=#cdd6f4
+border-color=#585b70
+
+[urgency=normal]
+background-color=#1e1e2e
+text-color=#cdd6f4
+border-color=#cba6f7
+
+[urgency=critical]
+default-timeout=0
+background-color=#f38ba8
+text-color=#1e1e2e
+border-color=#f38ba8
+
+[category=email]
+default-timeout=15000
+
+[category=im]
+default-timeout=8000
+
+[category=reminder]
+default-timeout=0
+urgency=normal

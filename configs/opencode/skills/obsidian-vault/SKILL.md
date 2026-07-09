@@ -1,1 +1,0 @@
-/home/reeinharrrd/tools/skills/skills/personal/obsidian-vault//SKILL.md

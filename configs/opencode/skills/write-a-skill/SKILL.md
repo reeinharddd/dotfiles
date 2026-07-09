@@ -1,1 +1,0 @@
-/home/reeinharrrd/tools/skills/skills/productivity/write-a-skill//SKILL.md

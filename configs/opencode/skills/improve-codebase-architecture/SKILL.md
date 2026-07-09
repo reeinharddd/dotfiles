@@ -1,1 +1,0 @@
-/home/reeinharrrd/tools/skills/skills/engineering/improve-codebase-architecture/SKILL.md

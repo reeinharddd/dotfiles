@@ -1,0 +1,7 @@
+# ntfy topic — Para recibir notificaciones en tu telefono
+# 1. Instala la app ntfy en tu telefono
+# 2. Suscribete a un topic: https://ntfy.sh/tu-topic
+# 3. Reemplaza el contenido de este archivo con tu topic
+# Ejemplo: echo "mi-topic-personal" > ~/.config/ntfy/topic
+# Sin configurar, las notificaciones solo llegan al desktop (notify-send)
+PENDIENTE

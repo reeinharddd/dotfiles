@@ -1,0 +1,35 @@
+" === Tridactyl config — modal editing en Firefox ===
+" Documentacion: https://github.com/tridactyl/tridactyl
+
+" --- Hint characters
+set hintchars qwertyuiop
+set hintnames normal
+
+" --- Search engines
+searchengine duckduckgo https://duckduckgo.com/?q={}
+
+" --- Theme
+set theme default
+
+" --- Bindings customizados
+bind j scrollLineDown
+bind k scrollLineUp
+bind gg scrollToTop
+bind G scrollToBottom
+bind ZZ tabclose
+bind ,t tabopen
+bind ,b buffer
+bind ,h hint -c [href*]
+
+" --- Navegacion
+bind gh home
+bind gH tabopen home
+
+" --- Yank URL
+bind yY document.title + ' - ' + document.URL | yank
+
+" --- Smooth scroll
+set smoothscroll true
+
+" --- Follow hints with newline
+" set mode_hint_after ???

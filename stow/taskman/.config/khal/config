@@ -1,0 +1,29 @@
+# khal config — Calendar CLI
+# See: https://khal.readthedocs.io/
+
+[general]
+default_calendar = personal
+highlight_event_days = True
+print_local_tz = True
+
+[locale]
+timeformat = %H:%M
+dateformat = %Y-%m-%d
+longdateformat = %A, %d.%m.%Y
+datetimeformat = %Y-%m-%d %H:%M
+longdatetimeformat = %A, %d.%m.%Y %H:%M
+firstweekday = 1
+local_timezone = America/Tijuana
+default_timezone = America/Tijuana
+
+[default]
+timedelta = 1d
+
+[calendars]
+  [[personal]]
+  color = 5
+  path = ~/.local/share/khal/calendars/personal/
+
+  [[work]]
+  color = 2
+  path = ~/.local/share/khal/calendars/work/

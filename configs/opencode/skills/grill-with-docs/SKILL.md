@@ -1,1 +1,0 @@
-/home/reeinharrrd/tools/skills/skills/engineering/grill-with-docs/SKILL.md

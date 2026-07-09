@@ -1,0 +1,10 @@
+default_group: default
+groups:
+  default:
+    parallel: 2
+client:
+  default_alias_command: "ls"
+  read_local_logs: true
+daemon:
+  default_parallel_tasks: 2
+  shared_pueue_directory: null

@@ -1,0 +1,134 @@
+# ┌──────────────────────────────────────────────────────────────────┐
+# │ Yazi config — terminal file manager                                │
+# │ https://github.com/sxyazi/yazi                                     │
+# └──────────────────────────────────────────────────────────────────┘
+
+# Plugin manager
+[plugin]
+prepend_previewers = [
+  { name = "*.svg",       run = "magicka svg" },
+  { name = "*.pdf",       run = "magicka pdf" },
+  { name = "*.epub",      run = "magicka epub" },
+  { name = "*.jpg",       run = "magicka jpg" },
+  { name = "*.png",       run = "magicka png" },
+  { name = "*.gif",       run = "magicka gif" },
+  { name = "*.webp",      run = "magicka webp" },
+  { name = "*.mp3",       run = "magicka mp3" },
+  { name = "*.flac",      run = "magicka flac" },
+  { name = "*.mp4",       run = "magicka mp4" },
+  { name = "*.mkv",       run = "magicka mkv" },
+]
+
+# Preview settings
+[preview]
+max_width = 1200
+max_height = 900
+tab_size = 4
+image_filter = "Box"
+image_quality = 75
+sixel_fraction = 0.2
+ueberzug_scale = 1.0
+
+# Manager
+[manager]
+ratio = [4, 3]
+sort_by = "modified"
+sort_reverse = false
+linemode = "size"
+show_hidden = false
+show_symlink = true
+scrolloff = 5
+mouse_events = ["click", "scroll", "drag"]
+title_format = "Yazi: {cwd}"
+querier = "kitten"
+
+# Open everything in user's preferred
+[open]
+all = [
+  { name = "code",       run = "code %s" },
+  { name = "ghostty",    run = "ghostty -e $EDITOR %s" },
+]
+
+# Image preview
+[[open.filter]]
+name = "image"
+mime = "image/*"
+run = "open %s"
+
+# Video
+[[open.filter]]
+name = "video"
+mime = "video/*"
+run = "mpv %s"
+
+# PDF
+[[open.filter]]
+name = "pdf"
+mime = "application/pdf"
+run = "ghostty -e zathura %s"
+
+# Archives — extract
+[[open.filter]]
+name = "archive"
+mime = "application/{zip,rar,7z*,tar,xz,gz,bz2,zstd}"
+run = "ouch d %s"
+
+# Code files
+[[open.filter]]
+name = "code"
+mime = "text/*"
+run = "$EDITOR %s"
+
+# Code
+[opener]
+edit = [
+  { exec = "$EDITOR",        block = true, for = "unix" },
+  { exec = "code",            block = true, for = "macos" },
+  { exec = "code",            block = true, for = "windows" },
+]
+open = [
+  { exec = "xdg-open",        block = false, for = "linux" },
+  { exec = "open",            block = false, for = "macos" },
+  { exec = "cmd /C start",    block = false, for = "windows" },
+]
+reveal = [
+  { exec = "xdg-open",        block = false, for = "linux" },
+  { exec = "open -R",         block = false, for = "macos" },
+  { exec = "explorer",        block = false, for = "windows" },
+]
+extract = [
+  { exec = "ouch x",          block = true, for = "linux" },
+]
+hover = [
+  { exec = "dragon-drop",     block = false, for = "linux" },
+]
+
+# Tasks
+[tasks]
+# Extract archives with progress
+[[tasks.extract]]
+name = "extract"
+unix = "ouch x $0 && echo 'Done: $0' || echo 'Failed: $0'"
+
+[[tasks.compress]]
+name = "compress"
+unix = "ouch c $0.zip $0 && echo 'Done: $0.zip'"
+
+# Input
+[input]
+cd_from_outside = "ctrl+alt+l"
+cd_back_to_outside = "ctrl+alt+h"
+cd_half_up = "ctrl+alt+k"
+cd_half_down = "ctrl+alt+j"
+
+# Confirm
+[confirm]
+trash = false
+delete = false
+
+# yazi-specific
+[which]
+magicka = "magicka"
+chafa = "chafa"
+zathura = "zathura"
+mpv = "mpv"

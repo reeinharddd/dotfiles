@@ -1,0 +1,156 @@
+# ┌──────────────────────────────────────────────────────────────────┐
+# │ Lazygit config — Git TUI                                          │
+# │ https://github.com/jesseduffield/lazygit                           │
+# └──────────────────────────────────────────────────────────────────┘
+
+gui:
+  theme:
+    activeBorderColor:
+      - "#cba6f7"
+      - bold
+    inactiveBorderColor:
+      - "#585b70"
+    selectedLineRangeColor:
+      - "#45475a"
+    defaultFg: "#cdd6f4"
+    findingCommitHashColor:
+      - "#f9e2af"
+    findingCommitHashEmphasisColor:
+      - "#f9e2af"
+      - bold
+    uncommittedChangesColor:
+      - "#f38ba8"
+    branchColor:
+      - "#89b4fa"
+    remoteBranchColor:
+      - "#74c7ec"
+    tagColor:
+      - "#fab387"
+    selectedRangeBgColor:
+      - "#45475a"
+    diffContextColor: "#7f849c"
+    diffContextAddColor: "#a6e3a1"
+    diffContextRemoveColor: "#f38ba8"
+    diffOldColor: "#45475a"
+    diffOldAddColor: "#a6e3a1"
+    diffOldRemoveColor: "#f38ba8"
+    diffNewColor: "#313244"
+    diffNewAddColor: "#a6e3a1"
+    diffNewRemoveColor: "#f38ba8"
+    cherryPickedCommitColor:
+      - "#fab387"
+    markedBaseCommitColor:
+      - "#f9e2af"
+    fileHistoryCurrentCommitColor:
+      - "#89b4fa"
+    fileHistoryMarkerColor:
+      - "#cba6f7"
+    stashColor:
+      - "#fab387"
+  showFileTree: true
+  showRandomTip: false
+  showCommandLog: true
+  showBottomLine: true
+  showPanelJumps: true
+  scrollbackSize: 1000
+  sidePanelWidth: 0.3333
+  expandFocusedSidePanel: true
+  mainPanelSplitMode: "horizontal"
+  wrapLinesInStagingView: true
+  showLineNumInStagingView: true
+  diffContextSize: 3
+git:
+  paging:
+    colorArg: always
+    pager: delta --paging never
+  skipNoStagedChangesWarning: true
+  autoFetch: true
+  branchLogCmd: "git log --graph --color=always --abbrev-commit --pretty=format:'%C(yellow)%h%Creset -%C(red)%d%Creset %s %C(green)(%cr) %C(bold blue)<%an>%Creset'"
+  allBranchesLogCmd: "git log --all --graph --color=always --abbrev-commit --pretty=format:'%C(yellow)%h%Creset -%C(red)%d%Creset %s %C(green)(%cr) %C(bold blue)<%an>%Creset'"
+  reflogCmd: "git log --graph --color=always --abbrev-commit --pretty=format:'%C(yellow)%h%Creset -%C(red)%d%Creset %s %C(green)(%cr) %C(bold blue)<%an>%Creset'"
+  skipHookPrefix: "WIP: "
+  showHooks: false
+os:
+  editCommand: "nvim"
+  editCommandAtFile: ""
+  openCommand: "code"
+  openCommandAtFile: ""
+  openLinkCommand: "xdg-open"
+  copyToClipboardCmd: "wl-copy"
+  pasteFromClipboardCmd: "wl-paste"
+confirmOnQuit: false
+update:
+  method: "never"
+  days: 14
+promptToReturnFromSubprocess: true
+recentRepos: []
+keybinding:
+  universal:
+    quit: "q"
+    quit-alt1: "<esc>"
+    return: "<esc>"
+    toggleMenu: "<f1>"
+    prevMenu: "<tab>"
+    nextMenu: "<shift+tab>"
+    refresh: "r"
+  navigation:
+    up: "k"
+    down: "j"
+    pageUp: "<pgup>"
+    pageDown: "<pgdn>"
+    home: "g"
+    end: "<c-d>"
+    scrollRight: "L"
+    scrollLeft: "H"
+    prevBlock: "w"
+    nextBlock: "W"
+  files:
+    select: "<space>"
+    rangeSelect: "v"
+    stage: "s"
+    stageAll: "a"
+    unstageAll: "<s-a>"
+    viewStagingOptions: "<f>"
+    viewStagingOptions-alt1: "<s-f>"
+    toggleStagedPanel: "x"
+    toggleTreeView: "."
+    openFile: "o"
+    goToFile: "<c-g>"
+    nextFile: "]"
+    prevFile: "["
+  commits:
+    squash: "S"
+    reword: "r"
+    rename: "R"
+    drop: "D"
+    mark: "m"
+    goToMark: "'"
+    amendTo: "<c-a>"
+    pickCommit: "p"
+    revertCommit: "v"
+    cherryPickCopy: "C"
+    cherryPickCopyRange: "<c-c>"
+    pasteCommits: "P"
+    tagCommit: "t"
+  branches:
+    create: "n"
+    checkout: "c"
+    forceCheckout: "<c-f>"
+    merge: "M"
+    rebase: "R"
+    fastForward: "F"
+    createTag: "T"
+  remoteBranches:
+    checkout: "c"
+  tags:
+    pushTag: "P"
+    deleteTag: "d"
+  stashes:
+    apply: "a"
+    pop: "p"
+    drop: "d"
+  worktrees:
+    viewWorktrees: "w"
+    switch: "s"
+  filesAfterDiff:
+    copyToClipboard: "y"

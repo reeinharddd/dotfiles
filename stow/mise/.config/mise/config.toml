@@ -1,0 +1,42 @@
+# mise config — gestor universal de runtimes y tools
+# https://mise.jdx.dev
+
+[tools]
+# Runtimes
+node = "lts"
+python = "latest"
+go = "latest"
+bun = "latest"
+
+# Modern CLI tools
+bat = "latest"
+delta = "latest"
+duf = "latest"
+dust = "latest"
+eza = "latest"
+fd = "latest"
+fzf = "latest"
+gh = "latest"
+just = "latest"
+ripgrep = "latest"
+starship = "latest"
+lazygit = "latest"
+jq = "latest"
+yq = "latest"
+herdr = "latest"
+direnv = "latest"
+
+# 2026 upgrade: shell history
+atuin = "latest"
+
+# 2026 upgrade: process queue
+"aqua:Nukesor/pueue/pueue" = "latest"
+
+# 2026 upgrade: HTTP client
+"aqua:ducaale/xh" = "latest"
+
+[settings]
+always_keep_download = false
+
+# Better alternatives (2026 cleanup)
+"cargo:tomlq-rs/tomlq" = "latest"  # TOML processor

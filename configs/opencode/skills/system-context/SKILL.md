@@ -1,1 +1,0 @@
-/home/reeinharrrd/projects/personal/dotfiles/configs/opencode/skills/system-context/SKILL.md

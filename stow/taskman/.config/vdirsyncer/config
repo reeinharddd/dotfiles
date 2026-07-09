@@ -1,0 +1,21 @@
+# vdirsyncer config — CalDAV sync (Google Calendar, Nextcloud, etc.)
+# Descomentar y configurar con tu servidor CalDAV
+# Ver: https://vdirsyncer.pimutils.org/
+
+# Ejemplo con Google Calendar:
+# [pair personal_calendar]
+# a = "personal_local"
+# b = "personal_remote"
+# collections = ["from a", "from b"]
+# 
+# [storage personal_local]
+# type = "filesystem"
+# path = "~/.local/share/khal/calendars/personal/"
+# fileext = ".ics"
+# 
+# [storage personal_remote]
+# type = "caldav"
+# url = "https://apidata.googleusercontent.com/caldav/v2/..."
+# # Auth via OAuth o app password
+# username = "tu-email@gmail.com"
+# password = "tu-app-password"

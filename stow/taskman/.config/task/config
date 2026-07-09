@@ -1,0 +1,63 @@
+# Taskwarrior config — Sistema Personal de Tareas
+# https://taskwarrior.org/docs/configuration/
+
+# Data location
+data.location=~/.local/share/task
+
+# Default project when creating tasks
+default.project=inbox
+
+# Weekly review day (Monday = 1, Sunday = 7)
+weekstart=1
+
+# Urgency settings for better task sorting
+urgency.user.0%=5
+urgency.due.coefficient=12
+urgency.annotations.count.coefficient=3
+urgency.active.coefficient=4
+urgency.scheduled.coefficient=5
+urgency.blocking.coefficient=8
+urgency.age.coefficient=2
+urgency.waiting.coefficient=-3
+
+# Reporting
+report.daily.description=Daily task list
+report.daily.columns=id,project,tags,priority,due,description
+report.daily.labels=ID,Proj,Tags,P,Due,Description
+report.daily.sort=urgency-
+
+report.week.description=Weekly overview
+report.week.columns=id,project,tags,priority,due,description
+report.week.labels=ID,Proj,Tags,P,Due,Description
+report.week.filter=status:pending or status:waiting
+report.week.sort=urgency-
+
+# Calendar view
+calendar.details=full
+calendar.legend=no
+calendar.offset=weekly
+calendar.holidays=self
+
+# Color theme — minimal, clean
+color.active=color196
+color.blocked=color202
+color.blocking=color226
+color.completed=color240
+color.deleted=color240
+color.due=color196
+color.due.today=color196
+color.heading=color075
+color.history.add=color046
+color.history.delete=color196
+color.overdue=color196
+color.scheduled=color226
+color.tagged=color075
+color.until=color240
+
+# Reports
+weekly.report=week
+daily.report=daily
+
+# Bug and feature tracking
+bug.project=work
+feature.project=personal

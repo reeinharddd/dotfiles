@@ -1,0 +1,216 @@
+# ┌──────────────────────────────────────────────────────────────────┐
+# │ Broot config — terminal file tree manager                            │
+# │ https://github.com/Canop/broot                                     │
+# └──────────────────────────────────────────────────────────────────┘
+
+# Verb: edit in nvim
+[[verbs]]
+name = "edit"
+invocation = "nvim {file}"
+key = "F1"
+shortcut = "e"
+description = "Edit in nvim"
+
+# Verb: open in code
+[[verbs]]
+name = "code"
+invocation = "code {file}"
+key = "F2"
+shortcut = "c"
+description = "Open in VSCode"
+
+# Verb: copy path to clipboard
+[[verbs]]
+name = "clippath"
+invocation = "wl-copy {file}"
+key = "ctrl+y"
+shortcut = "y"
+description = "Copy path to clipboard"
+
+# Verb: copy file content
+[[verbs]]
+name = "clipcontent"
+invocation = "cat {file} | wl-copy"
+key = "ctrl+shift+y"
+shortcut = "Y"
+description = "Copy file content to clipboard"
+
+# Verb: mkdir
+[[verbs]]
+name = "mkdir"
+invocation = "mkdir -p {parent}/{new_dir}"
+key = "F7"
+shortcut = "m"
+description = "Create new directory"
+leave_broot = false
+
+# Verb: touch file
+[[verbs]]
+name = "touch"
+invocation = "touch {file}"
+key = "F5"
+shortcut = "t"
+description = "Create new file"
+leave_broot = false
+
+# Verb: git status
+[[verbs]]
+name = "git_status"
+invocation = "git -C {dir} status"
+key = "F3"
+shortcut = "g"
+description = "Git status"
+leave_broot = false
+
+# Verb: git diff
+[[verbs]]
+name = "git_diff"
+invocation = "git -C {dir} diff"
+key = "F4"
+shortcut = "d"
+description = "Git diff"
+leave_broot = false
+
+# Verb: lazygit
+[[verbs]]
+name = "lazygit"
+invocation = "lazygit {dir}"
+key = "F6"
+shortcut = "l"
+description = "Open lazygit"
+leave_broot = true
+
+# Verb: yazi
+[[verbs]]
+name = "yazi"
+invocation = "yazi {dir}"
+key = "F8"
+shortcut = "y"
+description = "Open yazi"
+leave_broot = true
+
+# Verb: extract archive
+[[verbs]]
+name = "extract"
+invocation = "ouch x {file}"
+key = "F9"
+shortcut = "x"
+description = "Extract archive"
+leave_broot = false
+
+# Verb: compress
+[[verbs]]
+name = "compress"
+invocation = "ouch c {file}.zip {file}"
+key = "ctrl+F9"
+shortcut = "X"
+description = "Compress to zip"
+leave_broot = false
+
+# Verb: trash
+[[verbs]]
+name = "trash"
+invocation = "gio trash {file}"
+key = "ctrl+delete"
+description = "Move to trash"
+leave_broot = false
+
+# Verb: show disk usage
+[[verbs]]
+name = "size"
+invocation = "dust {dir}"
+key = "F11"
+description = "Disk usage of dir"
+leave_broot = false
+
+# Verb: permissions
+[[verbs]]
+name = "chmodx"
+invocation = "chmod +x {file}"
+key = "F12"
+description = "Make executable"
+leave_broot = false
+
+# Color theme — Catppuccin Mocha
+[[colors]]
+default_status = "grey(50)"
+default_code = "none"
+default_dragged = "none"
+status_working_node = "red"
+status_error = "yellow"
+file_error = "red"
+selected_line = "none"
+permissions = "grey(30)"
+dates = "grey(30)"
+size = "grey(30)"
+tree = "yellow"
+file = "none"
+dir = "blue"
+exe = "green"
+link = "cyan"
+pruned = "grey(30)"
+file_modified = "red"
+parent = "blue"
+current = "yellow"
+line_number = "grey(20)"
+help = "grey(50)"
+scrollbar_track = "grey(15)"
+scrollbar_thumb = "grey(40)"
+scrollbar_thumb_hovered = "grey(50)"
+scrollbar_arrow = "grey(50)"
+flag_value = "cyan"
+flag_active = "green"
+flag_error = "red"
+regex_search = "yellow"
+regex_error = "red"
+input_prompt = "yellow"
+input_field = "none"
+input_field_invalid = "red"
+input_placeholder = "grey(30)"
+input_caret = "yellow"
+selected_word = "red"
+escaped_char = "red"
+overlay_foreground = "red"
+overlay_background = "none"
+mark = "yellow"
+search = "yellow"
+search_focus = "magenta"
+search_cursor = "red"
+search_match = "yellow"
+unfocused = "grey(15)"
+spinner = "red"
+keyword = "magenta"
+shell_keyword = "red"
+shell_function = "red"
+shell_operator = "red"
+shell_value = "red"
+var_assign = "magenta"
+var_value = "magenta"
+tab_text = "grey(50)"
+tab_text_focus = "yellow"
+tab_text_alert = "red"
+tab_bg = "none"
+tab_bg_focus = "none"
+tab_border = "grey(15)"
+tab_border_focus = "none"
+stderr = "red"
+stash = "magenta"
+branch = "yellow"
+added = "green"
+removed = "red"
+unchanged = "none"
+hex_address = "magenta"
+hex_size = "magenta"
+hex_ascii_printable = "none"
+hex_ascii_other = "grey(15)"
+hex_non_printable = "grey(30)"
+hex_zero = "grey(30)"
+hex_one = "blue"
+hex_two = "green"
+hex_three = "red"
+hex_four = "magenta"
+hex_five = "yellow"
+hex_six = "cyan"
+hex_seven = "white"
+hex_eight = "grey(15)"
+hex_nine = "grey(30)"

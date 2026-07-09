@@ -34,8 +34,8 @@ dotfiles/
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/reeinharddd/dotfiles/main/bootstrap/install.sh)"
 
 # Or manually
-git clone ssh://git@github.com/reeinharddd/dotfiles ~/projects/dotfiles
-~/projects/dotfiles/scripts/deploy.sh
+git clone ssh://git@github.com/reeinharddd/dotfiles ~/projects/personal/dotfiles
+~/projects/personal/dotfiles/scripts/deploy.sh
 ```
 
 ## Commands
@@ -54,8 +54,8 @@ System detection is delegated to [sys-inspector](https://github.com/reeinharddd/
 
 ```bash
 # Install separately for system detection
-git clone ssh://git@github.com/reeinharddd/sys-inspector ~/projects/sys-inspector
-~/projects/sys-inspector/src/inspect.sh
+git clone ssh://git@github.com/reeinharddd/sys-inspector ~/projects/personal/sys-inspector
+~/projects/personal/sys-inspector/src/inspect.sh
 ```
 
 Bootstrap runs detection automatically if sys-inspector is present.

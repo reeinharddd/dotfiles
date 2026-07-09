@@ -1,31 +1,13 @@
-# ~/.zshrc — Modern Zsh config (Starship + Atuin + Zellij)
-# No Powerlevel10k, no OMZ bloat — solo lo esencial
+# ~/.zshrc — Modern Zsh config (Starship + Atuin + Ghostty)
+# No OMZ, no bloat — standalone plugins, modern tooling
 
-# -------------------------------------------------------------------
-# Oh My Zsh (mínimo)
-# -------------------------------------------------------------------
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME=""  # Starship maneja el prompt
-
-plugins=(
-  git
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-  fzf
-  zoxide
-  docker
-  gh
-  mise
-)
-
-source $ZSH/oh-my-zsh.sh
 
 # -------------------------------------------------------------------
 # Editors & Browsers
 # -------------------------------------------------------------------
-export EDITOR="code --wait"
-export VISUAL="code --wait"
-export BROWSER="brave-browser"
+export EDITOR="nvim"
+export VISUAL="nvim"
+export BROWSER="/snap/bin/brave"
 
 # -------------------------------------------------------------------
 # PATH
@@ -36,6 +18,7 @@ typeset -U PATH path
 path=(
   "$HOME/.cargo/bin"
   "$HOME/.local/bin"
+  "$HOME/.local/share/broot/launcher/bash"
   "$BUN_INSTALL/bin"
   "$GOPATH/bin"
   $path
@@ -47,6 +30,9 @@ path=(
 eval "$(mise activate zsh)"
 source "$HOME/.cargo/env"
 
+# direnv — env vars por directorio (via mise)
+eval "$(direnv hook zsh)" 2>/dev/null
+
 # -------------------------------------------------------------------
 # Modern CLI aliases — default a herramientas modernas
 # -------------------------------------------------------------------
@@ -54,10 +40,9 @@ alias ls="eza --icons --group-directories-first"
 alias ll="eza -la --icons --git --group-directories-first"
 alias l="eza -l --icons --git --group-directories-first"
 alias lt="eza --icons --tree --group-directories-first"
-alias cat="batcat --paging=never"
+alias cat="bat --paging=never"
 alias grep="rg"
-alias find="fdfind"
-alias fd="fdfind"
+alias find="fd"
 alias cd="z"
 alias du="dust"
 alias top="btop"
@@ -86,11 +71,23 @@ alias gco="git checkout"
 alias gb="git branch"
 alias gj="jj"  # jujutsu
 
+# Modern tools 2026
+alias hf="hyperfine"
+alias tokei="tokei"
+alias hexyl="hexyl"
+alias wx="watchexec"
+alias http="xh"
+alias sd="sd"
+alias tar="ouch"
+alias br="broot"           # broot launcher
+alias tv="tv"              # television
+alias ch="cliphist"        # cliphist
+alias fz="fuzzel"          # fuzzel launcher
+alias p="pueue"            # process queue
+
 # Navegación
 alias dev="cd ~/projects"
-alias dotfiles="cd ~/projects/dotfiles"
-alias ctx="~/projects/dotfiles/scripts/agent-context.sh --fast"
-alias ctx-full='zsh -c "source ~/.zshrc; bash ~/projects/dotfiles/scripts/agent-context.sh" > ~/projects/dotfiles/CONTEXT.md'
+alias dotfiles="cd ~/projects/personal/dotfiles"
 
 # -------------------------------------------------------------------
 # fzf
@@ -104,7 +101,7 @@ export FZF_CTRL_T_OPTS="--preview 'batcat --color=always --line-range :500 {}'"
 export FZF_ALT_C_OPTS="--preview 'eza --icons --tree {} | head -50'"
 
 # -------------------------------------------------------------------
-# History (atuin lo maneja, pero config base)
+# History
 # -------------------------------------------------------------------
 HISTSIZE=100000
 SAVEHIST=100000
@@ -137,26 +134,44 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 # -------------------------------------------------------------------
-# Starship prompt (reemplaza Powerlevel10k)
+# Completions: docker, gh, carapace
+# -------------------------------------------------------------------
+source <(docker completion zsh) 2>/dev/null
+source <(gh completion -s zsh) 2>/dev/null
+
+# carapace — autocompletado universal
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+# carapace is at ~/.local/bin/carapace (via mise)
+source <(carapace _carapace 2>/dev/null)
+
+# -------------------------------------------------------------------
+# Starship prompt
 # -------------------------------------------------------------------
 eval "$(starship init zsh)"
 
 # -------------------------------------------------------------------
-# Atuin (historia mágica + sync)
+# Atuin (historia mágica con full-text search)
 # -------------------------------------------------------------------
 . "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh --disable-up-arrow)"
 
 # -------------------------------------------------------------------
-# Zellij (multiplexer) — auto-attach si no estamos dentro
+# zoxide — navegación inteligente
 # -------------------------------------------------------------------
-if [[ -z "$ZELLIJ" && -z "$TMUX" && $- == *i* ]]; then
-  zellij attach --create dev 2>/dev/null || true
-fi
+eval "$(zoxide init zsh)" 2>/dev/null
 
 # -------------------------------------------------------------------
-# Direnv (via mise)
+# zsh-autosuggestions
 # -------------------------------------------------------------------
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
+
+# -------------------------------------------------------------------
+# Herdr (multiplexer AI) — auto-attach si no estamos dentro
+# -------------------------------------------------------------------
+if [[ -z "$HERDR_ENV" && -z "$TMUX" && $- == *i* && -t 1 ]]; then
+  herdr
+fi
 
 # -------------------------------------------------------------------
 # chezmoi (dotfiles sync)
@@ -166,5 +181,34 @@ command -v chezmoi >/dev/null && alias cz="chezmoi"
 # -------------------------------------------------------------------
 # Terminal
 # -------------------------------------------------------------------
-export TERMINAL=kittyexport PATH="$HOME/.opencode/bin:$PATH"
+export TERMINAL=ghostty
+export PATH="$HOME/.opencode/bin:$PATH"
 export PLAYWRIGHT_HOST_PLATFORM_OVERRIDE=ubuntu24.04-x64
+
+# -------------------------------------------------------------------
+# zsh-syntax-highlighting — DEBE IR AL FINAL
+# -------------------------------------------------------------------
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+
+# ─── Life Management System ────────────────────────────────────
+alias hey="just hey"              # AI Life Assistant
+alias today="just daily"          # Daily review
+alias endday="just end-day"       # End of day
+alias t="task"                    # taskwarrior shorthand
+alias tl="task list"
+alias ta="task add"
+alias td="task done"
+alias tn="just note"
+alias tj="jrnl -today"
+alias pomo="just pomodoro"
+alias focus="just focus"
+alias tt="timew summary today"
+alias tw="timew"
+alias cal="khal calendar"
+alias jf="just"
+
+# Better alternatives (cleanup 2026)
+alias mlr="mlr"              # miller (csv processor)
+alias restic="restic"        # modern backup
+alias xsv="xsv"              # csv index/slice
+alias htmlq="htmlq"          # HTML processor (jq for HTML)

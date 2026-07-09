@@ -1,0 +1,378 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "build",
+  "provider": {
+    "opencode": {
+      "options": {
+        "timeout": false,
+        "chunkTimeout": 120000
+      }
+    }
+  },
+  "lsp": {
+    "python": {
+      "command": [
+        "pyright-langserver",
+        "--stdio"
+      ],
+      "extensions": [
+        ".py"
+      ],
+      "disabled": false
+    },
+    "typescript": {
+      "command": [
+        "typescript-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".ts",
+        ".tsx"
+      ],
+      "disabled": false
+    },
+    "javascript": {
+      "command": [
+        "typescript-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".cjs"
+      ],
+      "disabled": false
+    },
+    "go": {
+      "command": [
+        "gopls"
+      ],
+      "extensions": [
+        ".go"
+      ],
+      "disabled": false
+    },
+    "rust": {
+      "command": [
+        "rust-analyzer"
+      ],
+      "extensions": [
+        ".rs"
+      ],
+      "disabled": false
+    },
+    "bash": {
+      "command": [
+        "bash-language-server",
+        "start"
+      ],
+      "extensions": [
+        ".sh",
+        ".bash",
+        ".zsh"
+      ],
+      "disabled": false
+    },
+    "yaml": {
+      "command": [
+        "yaml-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".yaml",
+        ".yml"
+      ],
+      "disabled": false
+    },
+    "json": {
+      "command": [
+        "vscode-json-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".json"
+      ],
+      "disabled": false
+    },
+    "dockerfile": {
+      "command": [
+        "docker-langserver",
+        "--stdio"
+      ],
+      "extensions": [
+        "Dockerfile"
+      ],
+      "disabled": false
+    },
+    "markdown": {
+      "command": [
+        "marksman"
+      ],
+      "extensions": [
+        ".md"
+      ],
+      "disabled": true
+    },
+    "toml": {
+      "command": [
+        "taplo",
+        "lsp",
+        "--stdio"
+      ],
+      "extensions": [
+        ".toml"
+      ],
+      "disabled": false
+    }
+  },
+  "agent": {
+    "build-error-resolver": {
+      "description": "Build and TypeScript error resolution specialist. Use PROACTIVELY when build fails or type errors occur. Fixes build/type errors only with minimal diffs, no architectural edits. Focuses on getting the build green quickly.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: build-error-resolver. Follow instructions at ~/.config/opencode/agents/build-error-resolver.md",
+      "mode": "all"
+    },
+    "cavecrew-builder": {
+      "description": ">",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cavecrew-builder. Follow instructions at ~/.config/opencode/agents/cavecrew-builder.md",
+      "mode": "all"
+    },
+    "cavecrew-investigator": {
+      "description": ">",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cavecrew-investigator. Follow instructions at ~/.config/opencode/agents/cavecrew-investigator.md",
+      "mode": "all"
+    },
+    "cavecrew-reviewer": {
+      "description": ">",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: cavecrew-reviewer. Follow instructions at ~/.config/opencode/agents/cavecrew-reviewer.md",
+      "mode": "all"
+    },
+    "code-reviewer": {
+      "description": "Expert code review specialist. Proactively reviews code for quality, security, and maintainability. Use immediately after writing or modifying code. MUST BE USED for all code changes.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: code-reviewer. Follow instructions at ~/.config/opencode/agents/code-reviewer.md",
+      "mode": "all"
+    },
+    "docs-lookup": {
+      "description": "When the user asks how to use a library, framework, or API or needs up-to-date code examples, use Context7 MCP to fetch current documentation and return answers with examples. Invoke for docs/API/setup questions.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: docs-lookup. Follow instructions at ~/.config/opencode/agents/docs-lookup.md",
+      "mode": "all"
+    },
+    "planner": {
+      "description": "Expert planning specialist for complex features and refactoring. Use PROACTIVELY when users request feature implementation, architectural changes, or complex refactoring. Automatically activated for planning tasks.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: planner. Follow instructions at ~/.config/opencode/agents/planner.md",
+      "mode": "all"
+    },
+    "security-reviewer": {
+      "description": "Security vulnerability detection and remediation specialist. Use PROACTIVELY after writing code that handles user input, authentication, API endpoints, or sensitive data. Flags secrets, SSRF, injection, unsafe crypto, and OWASP Top 10 vulnerabilities.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: security-reviewer. Follow instructions at ~/.config/opencode/agents/security-reviewer.md",
+      "mode": "all"
+    },
+    "tdd-guide": {
+      "description": "Test-Driven Development specialist enforcing write-tests-first methodology. Use PROACTIVELY when writing new features, fixing bugs, or refactoring code. Ensures 80%+ test coverage.",
+      "tools": {
+        "bash": true,
+        "read": true,
+        "edit": true,
+        "write": true
+      },
+      "prompt": "Agent: tdd-guide. Follow instructions at ~/.config/opencode/agents/tdd-guide.md",
+      "mode": "all"
+    }
+  },
+  "mcp": {
+    "context7": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "engram": {
+      "command": [
+        "engram",
+        "mcp",
+        "--tools=agent"
+      ],
+      "type": "local",
+      "enabled": true
+    },
+    "filesystem": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/reeinharrrd/projects",
+        "/home/reeinharrrd/.config"
+      ]
+    },
+    "firecrawl": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.firecrawl.dev/fc-412aba2a43ba47daabae244cb8a72af9/v2/mcp"
+    },
+    "github": {
+      "_enabled_by_project_bootstrap": true,
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "environment": {
+        "GITHUB_TOKEN": "{env:GITHUB_TOKEN}"
+      }
+    },
+    "sequential-thinking": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "snapmcp": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "snapmcp"
+      ]
+    },
+    "royal-mcp": {
+      "enabled": true,
+      "type": "remote",
+      "url": "http://localhost/wp-json/royal-mcp/v1/mcp",
+      "headers": {
+        "X-Royal-MCP-API-Key": "30df259a8a68ebd0b6085985185d05af"
+      }
+    }
+  },
+  "formatter": true,
+  "tool_output": {
+    "max_lines": 1000,
+    "max_bytes": 25600
+  },
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "tail_turns": 5,
+    "reserved": 25000
+  },
+  "watcher": {
+    "ignore": [
+      "node_modules/**",
+      ".git/**",
+      "dist/**",
+      "captures/**",
+      "memory-bank/**"
+    ]
+  },
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "git push *": "ask",
+      "git commit *": "ask",
+      "rm -rf": "deny",
+      "rm -rf *": "deny"
+    }
+  },
+  "references": {
+    "gstack": {
+      "path": "~/tools/gstack",
+      "description": "GStack skill suite: browser QA, design system, benchmarks, ship/deploy workflows"
+    },
+    "superpowers": {
+      "path": "~/tools/superpowers",
+      "description": "Superpowers: brainstorming, TDD, debugging, plan execution patterns",
+      "hidden": true
+    },
+    "caveman": {
+      "path": "~/tools/caveman",
+      "hidden": true
+    },
+    "gentle-ai": {
+      "path": "~/tools/gentle-ai",
+      "hidden": true
+    },
+    "ecc": {
+      "path": "~/tools/ECC",
+      "hidden": true
+    },
+    "claude-skills": {
+      "path": "~/tools/claude-skills",
+      "hidden": true
+    },
+    "taste-skill": {
+      "path": "~/tools/taste-skill",
+      "hidden": true
+    },
+    "last30days": {
+      "path": "~/tools/last30days-skill",
+      "hidden": true
+    },
+    "community-skills": {
+      "path": "~/tools/skills",
+      "hidden": true
+    },
+    "power-pack": {
+      "path": "~/tools/opencode-power-pack",
+      "hidden": true
+    },
+    "new-project": {
+      "path": "~/tools/new-project",
+      "hidden": true
+    }
+  },
+  "share": "disabled"
+}

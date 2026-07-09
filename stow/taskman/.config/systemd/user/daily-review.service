@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily Review — morning routine
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/projects/personal/dotfiles/scripts/daily-review.sh
+Environment=TERM=xterm-ghostty
+StandardOutput=journal
+StandardError=journal

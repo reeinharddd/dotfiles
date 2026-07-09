@@ -21,7 +21,7 @@
 [pull]
 	rebase = true
 [credential]
-	helper = store
+	helper = cache --timeout=3600
 [url "ssh://git@github.com/"]
 	insteadOf = https://github.com/
 [commit]

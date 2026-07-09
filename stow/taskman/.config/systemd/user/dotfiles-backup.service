@@ -1,0 +1,7 @@
+[Unit]
+Description=Auto backup dotfiles to GitHub
+
+[Service]
+Type=oneshot
+ExecStart=%h/projects/personal/dotfiles/scripts/backup-dotfiles.sh
+Environment=TERM=xterm-ghostty

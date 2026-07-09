@@ -1,1 +1,0 @@
-/home/reeinharrrd/tools/skills/skills/in-progress/writing-fragments//SKILL.md

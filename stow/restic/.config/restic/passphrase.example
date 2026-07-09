@@ -1,0 +1,4 @@
+# Place your restic passphrase in a file called 'passphrase' (NOT this example file)
+# Generate: head -c 32 /dev/urandom | base64 > passphrase
+# chmod 600 passphrase
+# This file is the EXAMPLE; do not commit the real passphrase

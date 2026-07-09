@@ -1,0 +1,10 @@
+[Unit]
+Description=End of day — wrap up routine
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/projects/personal/dotfiles/scripts/end-day.sh
+Environment=TERM=xterm-ghostty
+StandardOutput=journal
+StandardError=journal

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Taskwarrior hook: auto-start/stop Timewarrior on task start/stop
+# on-modify hook: triggered when a task changes
+
+# When a task is started, start timewarrior
+# When a task is completed/stopped, stop timewarrior
+
+while read -r old_task; do
+  read -r new_task
+
+  old_status=$(echo "$old_task" | task _export | python3 -c "import sys,json; print(json.load(sys.stdin).get('status',''))" 2>/dev/null)
+  new_status=$(echo "$new_task" | task _export | python3 -c "import sys,json; print(json.load(sys.stdin).get('status',''))" 2>/dev/null)
+
+  # If task was started
+  if [ "$new_status" = "pending" ] && [ "$old_status" != "pending" ]; then
+    # Could start timewarrior here, but let the user do it manually
+    :
+  fi
+
+  # If task was completed
+  if [ "$new_status" = "completed" ] && [ "$old_status" != "completed" ]; then
+    timew stop 2>/dev/null || true
+  fi
+done

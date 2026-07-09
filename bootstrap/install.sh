@@ -11,12 +11,12 @@
 set -u
 
 REPO_URL="ssh://git@github.com/reeinharddd/dotfiles"
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/projects/dotfiles}"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/projects/personal/dotfiles}"
 CLONE=false
 DETECT=true
 DEPLOY=true
 DRY_RUN=false
-SYS_INSPECTOR_DIR="$HOME/projects/sys-inspector"
+SYS_INSPECTOR_DIR="$HOME/projects/personal/sys-inspector"
 
 for arg in "$@"; do
   case "$arg" in

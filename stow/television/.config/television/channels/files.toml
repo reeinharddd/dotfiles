@@ -1,0 +1,14 @@
+[metadata]
+name = "Files"
+description = "Find and preview files"
+requirements = []
+
+[source]
+command = "fd --type f --hidden --exclude .git"
+
+[preview]
+command = "bat -n --color=always {}"
+offset = 0
+
+[ui]
+show_icon = true

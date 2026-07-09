@@ -1,0 +1,149 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json",
+  "telemetry": false,
+  "hashline_edit": true,
+  "disabled_commands": [
+    "ralph-loop",
+    "cancel-ralph",
+    "ulw-loop",
+    "stop-continuation",
+    "hyperplan"
+  ],
+  "agents": {
+    "sisyphus": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    },
+    "hephaestus": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    },
+    "oracle": {
+      "model": "mistral/mistral-large-latest",
+      "fallback_models": [
+        { "model": "opencode/deepseek-v4-flash-free" },
+        { "model": "opencode/north-mini-code-free" }
+      ]
+    },
+    "librarian": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    },
+    "explore": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    },
+    "multimodal-looker": {
+      "model": "mistral/mistral-large-latest",
+      "fallback_models": [
+        { "model": "opencode/deepseek-v4-flash-free" },
+        { "model": "opencode/north-mini-code-free" }
+      ]
+    },
+    "prometheus": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    },
+    "metis": {
+      "model": "mistral/mistral-large-latest",
+      "fallback_models": [
+        { "model": "opencode/deepseek-v4-flash-free" },
+        { "model": "opencode/north-mini-code-free" }
+      ]
+    },
+    "momus": {
+      "model": "mistral/mistral-large-latest",
+      "fallback_models": [
+        { "model": "opencode/deepseek-v4-flash-free" },
+        { "model": "opencode/north-mini-code-free" }
+      ]
+    },
+    "atlas": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    },
+    "sisyphus-junior": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    }
+  },
+  "categories": {
+    "visual-engineering": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    },
+    "ultrabrain": {
+      "model": "mistral/mistral-large-latest",
+      "fallback_models": [
+        { "model": "opencode/deepseek-v4-flash-free" },
+        { "model": "opencode/north-mini-code-free" }
+      ]
+    },
+    "deep": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    },
+    "artistry": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    },
+    "quick": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    },
+    "unspecified-low": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    },
+    "unspecified-high": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    },
+    "writing": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback_models": [
+        { "model": "opencode/north-mini-code-free" },
+        { "model": "opencode/mimo-v2.5-free" }
+      ]
+    }
+  }
+}

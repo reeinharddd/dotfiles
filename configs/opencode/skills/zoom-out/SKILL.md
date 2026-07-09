@@ -1,1 +1,0 @@
-/home/reeinharrrd/tools/skills/skills/engineering/zoom-out/SKILL.md

@@ -1,1 +1,0 @@
-/home/reeinharrrd/tools/skills/skills/misc/migrate-to-shoehorn//SKILL.md
