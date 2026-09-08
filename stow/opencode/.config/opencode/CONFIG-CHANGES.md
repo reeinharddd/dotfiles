@@ -189,3 +189,38 @@
   routing policy (manual/overflow only, never in guard cascade; plan B = shekohex plugin).
 - `capabilities/harness-operations.md` rewritten: runtime data map, retention policies,
   update cadence.
+
+## 2026-09-08 (evening) — Log audit + env fix + LSP daemon fix + dep bumps
+
+### Root cause: provider env vars never reached opencode (morph plugin)
+- `opencode.env` had 9 credential lines WITHOUT `export` — `source` in zshrc set shell vars only,
+  never child process env. Providers worked via `auth.json` (opencode native), but plugins reading
+  `process.env` (morph) saw nothing. Fixed: `export ` prefix on all 9 lines. Takes effect on next
+  opencode restart (current instance PID 38542 predates fix).
+- Doctor WARN "missing provider environment names" = same root cause, self-clears after restart.
+
+### LSP daemon stale-owner loop fixed
+- `~/.omo/lsp-daemon/v0.1.0/daemon.owner` held dead PID 1274447 (Sep 4) + stale `daemon.endpoint`
+  (Sep 3) → infinite `DaemonStartupDeferredError: owner_changed_during_cleanup`. Removed both
+  (backed up to /tmp/opencode-trash/lsp-daemon-stale-20260908/). Daemon re-acquires on next LSP call.
+- lsp_status verified: 42 configured, 5 installed (deno, oxlint, biome, ruff, rust).
+
+### Log audit (opencode.log, Sep 8)
+- 98 stream errors: 92 on glm-5.3-free (65 rate-limit 8 req/min, 18 connect timeout,
+  8 gateway overload) + 6 zen nemotron 502 (known Nvidia upstream flakiness).
+- Midnight blip 00:07: 11 MCP "server unavailable" + websearch fetch fails — transient network.
+- prettier formatter failures: transient edit-time noise (known, documented 2026-08-28).
+- fff WARN: file picker can't init in home/root dirs — cosmetic, TUI-only.
+
+### Dep bumps (commit 354096c)
+- @opencode-ai/plugin+sdk 1.18.13→1.18.29, @opentui trio 0.5.1→0.5.11 (EBADENGINE advisory
+  only — wants node>=26.4, have 24.19; smoke-tested: core/DCP/OMO all load OK),
+  @tarquinen/opencode-dcp 3.1.14→3.1.15, morph-plugin 2.0.16→2.0.17.
+- npm audit: 12 vulns (9 low, 3 moderate) — all transitive via @babel/core/diff/uuid inside
+  opentui/plugin chains, no direct fix available (upstream pins). Accepted.
+
+### Known gaps (documented, not fixed today)
+- yaml-hooks destructive-bash hook does NOT fire in subagent sessions (verified experimentally
+  m0206-m0208). Main-session protection works. Candidate fix: enforcement in model-routing-guard.js.
+- glm-5.3-free rate limit (8 req/min) causes oracle/subagent stream errors under
+  parallel load — consider fallback ordering or stagger.
