@@ -1,0 +1,1 @@
+Read README_PROMPT.txt and create a file README.md that summarizes its content in exactly 3 lines. No more, no less.

@@ -1,11 +1,11 @@
 {
   "hostname": "ThinkPad-T14-Gen-3",
-  "kernel": "7.0.0-22-generic",
-  "os": "Ubuntu 26.04 LTS",
+  "kernel": "7.0.0-29-generic",
+  "os": "Ubuntu 26.04.1 LTS",
   "cpu": "AMD Ryzen 7 PRO 6850U with Radeon Graphics",
   "cores": "16",
   "ram": "13Gi",
   "ram_used": "11Gi",
-  "disk": "loop0       4K loop;loop1   200.9M loop;loop2   198.8M loop;loop3    13.5M loop;loop4   198.8M loop;",
+  "disk": "loop0    13.1M loop;loop1      14M loop;loop2       4K loop;loop3   200.9M loop;loop4   150.6M loop;",
   "gpu": "Advanced Micro Devices, Inc. [AMD/ATI] Rembrandt [Radeon 680M] (rev d1)"
 }

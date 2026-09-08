@@ -1,3 +1,6 @@
+---
+description: Detecta stack del proyecto y genera PROJECT_CONTEXT.md con skills y MCPs específicos
+---
 Detecta el stack del proyecto actual y genera `.opencode/PROJECT_CONTEXT.md` con las skills y MCPs específicos del proyecto.
 
 ## Uso
@@ -24,7 +27,7 @@ Detecta el stack del proyecto actual y genera `.opencode/PROJECT_CONTEXT.md` con
 
 El agente principal debe:
 1. Leer `.opencode/PROJECT_CONTEXT.md` para saber qué skills aplicar
-2. Cargar `~/.config/opencode/domain-registry/REGISTRY.md` para skills adicionales
+2. Buscar skills adicionales en la bodega (`capability-scanner` / `skill-router`)
 3. Invocar `skill(name="...")` solo cuando aplique, no pre-injectar
 
 ## Importante

@@ -5,9 +5,20 @@
 
 set -euo pipefail
 
+FORCE=0
+if [ "${1:-}" = "--force" ]; then
+  FORCE=1
+  shift
+fi
 PROJECT_ROOT="${1:-$PWD}"
 TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 OUTPUT="$PROJECT_ROOT/.opencode/PROJECT_CONTEXT.md"
+
+if [ -e "$OUTPUT" ] && [ "$FORCE" -ne 1 ]; then
+  echo "PROJECT_CONTEXT.md already exists; refusing to overwrite: $OUTPUT" >&2
+  echo "Use --force only after reviewing a backup and diff." >&2
+  exit 3
+fi
 
 # Crear .opencode si no existe
 mkdir -p "$PROJECT_ROOT/.opencode"
@@ -29,6 +40,7 @@ FRAMEWORK="none"
 [ -f "$PROJECT_ROOT/angular.json" ] && FRAMEWORK="angular"
 [ -f "$PROJECT_ROOT/pubspec.yaml" ] && FRAMEWORK="flutter"
 [ -f "$PROJECT_ROOT/Cargo.toml" ] && grep -q '\[target.*android' "$PROJECT_ROOT/Cargo.toml" 2>/dev/null && FRAMEWORK="rust-mobile"
+[ -d "$PROJECT_ROOT/wp-content" ] || [ -f "$PROJECT_ROOT/wp-config.php" ] && STACK+=("wordpress") && FRAMEWORK="wordpress"
 
 # Detectar infraestructura
 HAS_DOCKER=$([ -f "$PROJECT_ROOT/Dockerfile" ] || [ -f "$PROJECT_ROOT/docker-compose.yml" ] && echo "yes" || echo "no")
@@ -50,25 +62,31 @@ declare -a PROJECT_SKILLS=()
 [[ "$FRAMEWORK" == "angular" ]] && PROJECT_SKILLS+=("angular-architect")
 [[ "$FRAMEWORK" == "nestjs" ]] && PROJECT_SKILLS+=("nestjs-expert")
 [[ "$FRAMEWORK" == "flutter" ]] && PROJECT_SKILLS+=("flutter-expert")
+[ "$FRAMEWORK" = "wordpress" ] && PROJECT_SKILLS+=("wp-wpcli-and-ops" "wp-performance" "wp-rest-api")
 [ "$HAS_DOCKER" = "yes" ] && PROJECT_SKILLS+=("devops-engineer")
 [ "$HAS_K8S" = "yes" ] && PROJECT_SKILLS+=("kubernetes-specialist")
 [ "$HAS_TF" = "yes" ] && PROJECT_SKILLS+=("terraform-engineer")
 [ "$HAS_GH_ACTIONS" = "yes" ] && PROJECT_SKILLS+=("devops-engineer")
 
 # MCPs relevantes
-declare -a PROJECT_MCPS=("filesystem" "engram")
+declare -a PROJECT_MCPS=("engram")
 [ -d "$PROJECT_ROOT/.git" ] && PROJECT_MCPS+=("github")
 # Codebase memory solo si hay suficiente código fuente (50+ archivos)
-PROJECT_FILE_COUNT=$(find "$PROJECT_ROOT" -maxdepth 3 -type f \( -name "*.ts" -o -name "*.js" -o -name "*.py" -o -name "*.go" -o -name "*.rs" \) 2>/dev/null | wc -l)
+PROJECT_FILE_COUNT=$(rg --files -g '*.ts' -g '*.js' -g '*.py' -g '*.go' -g '*.rs' "$PROJECT_ROOT" 2>/dev/null | wc -l)
 [ "$PROJECT_FILE_COUNT" -gt 50 ] && PROJECT_MCPS+=("codebase-memory-mcp")
 # Browsers para QA / web dev
-[[ "$FRAMEWORK" =~ ^(angular|react|nextjs|vue|nestjs)$ ]] && PROJECT_MCPS+=("playwright")
+[[ "$FRAMEWORK" =~ ^(angular|react|nextjs|vue|nestjs|wordpress)$ ]] && PROJECT_MCPS+=("playwright")
 # Container/orchestration
 [ "$HAS_DOCKER" = "yes" ] && PROJECT_MCPS+=("docker")
 [ "$HAS_K8S" = "yes" ] && PROJECT_MCPS+=("docker")
 # Code review / graph analysis (ya evaluado arriba)
 
 # Generar output
+if [ -e "$OUTPUT" ] && [ "$FORCE" -eq 1 ]; then
+  backup="$OUTPUT.bak.$(date +%s)"
+  cp -p "$OUTPUT" "$backup"
+  echo "Backup: $backup"
+fi
 cat > "$OUTPUT" <<EOF
 # Project Context — $(basename "$PROJECT_ROOT")
 > **Generated**: $TIMESTAMP
@@ -112,30 +130,11 @@ echo "Stack detectado: $LANG / $FRAMEWORK"
 echo "Skills: ${#PROJECT_SKILLS[@]}"
 echo "MCPs: ${#PROJECT_MCPS[@]}"
 
-# Habilitar MCPs en opencode.json según detección
-OPENCODE_CONFIG="$HOME/.config/opencode/opencode.json"
-if [ -f "$OPENCODE_CONFIG" ]; then
-  echo ""
-  echo "Habilitando MCPs en opencode.json..."
-  for mcp in "${PROJECT_MCPS[@]}"; do
-    if grep -q "\"$mcp\":" "$OPENCODE_CONFIG"; then
-      # Cambiar enabled: false → true
-      if grep -A6 "\"$mcp\":" "$OPENCODE_CONFIG" | grep -q '"enabled": false'; then
-        sed -i "0,/\"$mcp\": {/{s//\"$mcp\": {\n      \"_enabled_by_project_bootstrap\": true,/}" "$OPENCODE_CONFIG"
-        # Cambiar enabled: false a enabled: true solo en la primera ocurrencia dentro del bloque mcp
-        node -e "
-const fs = require('fs');
-const cfg = JSON.parse(fs.readFileSync('$OPENCODE_CONFIG','utf-8'));
-if (cfg.mcp && cfg.mcp['$mcp']) {
-  cfg.mcp['$mcp'].enabled = true;
-  fs.writeFileSync('$OPENCODE_CONFIG', JSON.stringify(cfg, null, 2) + '\n');
-}
-"
-        echo "  ✅ $mcp habilitado"
-      fi
-    fi
-  done
-fi
+# Reportar MCPs sugeridos sin modificar la configuración global.
+echo ""
+echo "MCPs sugeridos (no se habilitan automáticamente):"
+printf '%s\n' "${PROJECT_MCPS[@]}" | sort -u | sed 's/^/  - /'
+echo "Activa solo los MCPs necesarios en la configuración del proyecto."
 
 # Discovery: detectar capabilities adicionales no registradas
 SCANNER="$HOME/.config/opencode/scripts/capability-scanner.sh"
@@ -160,7 +159,7 @@ let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{
       [ -n "$EXTRA_SKILLS" ] && echo "$EXTRA_SKILLS" | sed 's/^/    skill: /'
       [ -n "$EXTRA_MCPS" ] && echo "$EXTRA_MCPS" | sed 's/^/    mcp: /'
       echo ""
-      echo "Para usarlas: skill(name=\"<name>\") o habilita en opencode.json"
+      echo "Para usarlas: skill(name=\"<name>\") o habilita el MCP en el proyecto"
     fi
   fi
 fi

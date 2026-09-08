@@ -1,3 +1,6 @@
+---
+description: Descubre skills, MCPs y binarios no registrados en core/registry/project-context
+---
 Descubre capabilities (skills, MCPs, binarios) que existen en el sistema pero NO están registradas en core/registry/project-context.
 
 ## Uso

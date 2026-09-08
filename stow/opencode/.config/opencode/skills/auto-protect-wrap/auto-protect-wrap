@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# auto-protect-wrap - Auto-wrap high-value tool outputs in <protect> tags
+
+set -euo pipefail
+
+SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Thresholds for auto-wrapping
+declare -A THRESHOLDS=(
+    ["codegraph_explore"]=500
+    ["codegraph_node"]=300
+    ["task"]=200
+    ["skill"]=200
+    ["read"]=500
+    ["grep"]=100
+    ["glob"]=100
+    ["bash"]=300
+)
+
+wrap_output() {
+    local tool="$1"
+    local output="$2"
+    local lines=$(echo "$output" | wc -l)
+
+    if [[ ${THRESHOLDS[$tool]:-0} -gt 0 ]] && [[ $lines -ge ${THRESHOLDS[$tool]} ]]; then
+        echo "<protect>"
+        echo "$output"
+        echo "</protect>"
+        return 0
+    fi
+
+    echo "$output"
+    return 1
+}
+
+# If called with args, process stdin
+if [[ $# -gt 0 ]]; then
+    case "$1" in
+        wrap)
+            tool="$2"
+            cat | while IFS= read -r line; do
+                wrap_output "$tool" "$line"
+            done
+            ;;
+        *)
+            echo "Usage: $0 wrap <tool_name> < input"
+            exit 1
+            ;;
+    esac
+fi

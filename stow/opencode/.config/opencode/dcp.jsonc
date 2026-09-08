@@ -1,0 +1,112 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Opencode-DCP/opencode-dynamic-context-pruning/master/dcp.schema.json",
+  "enabled": true,
+  "autoUpdate": true,
+  "debug": false,
+  "pruneNotification": "minimal",
+  "pruneNotificationType": "chat",
+  "commands": {
+    "enabled": true,
+    "protectedTools": [
+      "extract"
+    ]
+  },
+  "manualMode": {
+    "enabled": false,
+    "automaticStrategies": true
+  },
+  "turnProtection": {
+    "enabled": true,
+    "turns": 4
+  },
+  "experimental": {
+    "allowSubAgents": true,
+    "customPrompts": false
+  },
+  "protectedFilePatterns": [
+    "**/.config/opencode/**",
+    "**/AGENTS.md",
+    "**/CLAUDE.md",
+    "**/.opencode/**",
+    "**/Justfile",
+    "**/docker-compose.yml",
+    "**/Dockerfile",
+    "**/stow/**",
+    "**/engram*/**"
+  ],
+  "compress": {
+    "mode": "range",
+    "permission": "allow",
+    "showCompression": true,
+    "summaryBuffer": true,
+    "maxContextLimit": 1000000,
+    "minContextLimit": 50000,
+    "modelMaxLimits": {
+      "opencode-zen/big-pickle": 200000,
+      "opencode-zen/nemotron-3-ultra-free": 800000,
+      "opencode-zen/hy3-free": 800000,
+      "opencode-zen/mimo-v2.5-free": 800000,
+      "opencode-zen/laguna-s-2.1-free": 200000,
+      "opencode-go/deepseek-v4-pro": 128000,
+      "opencode-go/deepseek-v4-flash": 128000,
+      "opencode-go/gpt-5.6-luna": 1100000,
+      "opencode-go/kimi-k2.7-code": 256000,
+      "google/gemini-3.6-flash": 800000,
+      "google/gemini-3.6-flash-lite": 800000,
+      "mistral/pixtral-12b": 100000
+    },
+    "modelMinLimits": {
+      "opencode-zen/big-pickle": 100000,
+      "opencode-zen/nemotron-3-ultra-free": 400000,
+      "opencode-zen/hy3-free": 400000,
+      "opencode-zen/mimo-v2.5-free": 400000,
+      "opencode-zen/laguna-s-2.1-free": 100000,
+      "opencode-go/deepseek-v4-pro": 50000,
+      "opencode-go/deepseek-v4-flash": 50000,
+      "opencode-go/gpt-5.6-luna": 500000,
+      "opencode-go/kimi-k2.7-code": 100000,
+      "google/gemini-3.6-flash": 400000,
+      "google/gemini-3.6-flash-lite": 400000,
+      "mistral/mistral-large-latest": 100000,
+      "mistral/pixtral-12b": 50000
+    },
+    "nudgeFrequency": 6,
+    "iterationNudgeThreshold": 10,
+    "nudgeForce": "strong",
+    "protectedTools": [
+      "task",
+      "skill",
+      "todowrite",
+      "todoread",
+      "edit",
+      "write",
+      "codegraph_explore",
+      "codegraph_node",
+      "extract"
+    ],
+    "protectTags": true,
+    "protectUserMessages": true
+  },
+  "strategies": {
+    "deduplication": {
+      "enabled": true,
+      "protectedTools": [
+        "task",
+        "skill",
+        "todowrite",
+        "todoread",
+        "edit"
+      ]
+    },
+    "purgeErrors": {
+      "enabled": true,
+      "turns": 3,
+      "protectedTools": [
+        "task",
+        "skill",
+        "todowrite",
+        "todoread"
+      ]
+    }
+  }
+}

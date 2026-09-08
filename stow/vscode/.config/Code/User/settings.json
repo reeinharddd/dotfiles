@@ -7,8 +7,8 @@
   "terminal.integrated.profiles.linux": {
     "zsh": {
       "source": "User",
-      "path": "/usr/bin/zsh",
-    },
+      "path": "/usr/bin/zsh"
+    }
   },
   "editor.wordWrap": "on",
   "workbench.iconTheme": "material-icon-theme",
@@ -40,15 +40,13 @@
   "chat.viewSessions.orientation": "stacked",
   "github.copilot.chat.agent.autoFix": true,
   "github.copilot.chat.codeGeneration.useInstructionFiles": true,
-
-  // Explicit always-on injection — fires for EVERY Copilot interaction regardless of workspace or file context
   "github.copilot.chat.codeGeneration.instructions": [
     {
-      "file": "/home/reeinharrrd/.config/Code/User/prompts/global.instructions.md",
+      "file": "/home/reeinharrrd/.config/Code/User/prompts/global.instructions.md"
     },
     {
-      "file": "/home/reeinharrrd/.config/Code/User/prompts/environment.instructions.md",
-    },
+      "file": "/home/reeinharrrd/.config/Code/User/prompts/environment.instructions.md"
+    }
   ],
   "github.copilot.chat.alternateGeminiModelFPrompt.enabled": true,
   "github.copilot.chat.alternateGptPrompt.enabled": true,
@@ -67,56 +65,38 @@
   "chat.mcp.gallery.enabled": true,
   "chat.mcp.autoStart": true,
   "chat.agent.maxRequests": 100,
-
-  // Scenario-specific instructions — reference real files or inline text
   "github.copilot.chat.reviewSelection.instructions": [
     {
-      "file": "/home/reeinharrrd/.config/Code/User/prompts/global.instructions.md",
+      "file": "/home/reeinharrrd/.config/Code/User/prompts/global.instructions.md"
     },
     {
-      "file": "/home/reeinharrrd/.config/Code/User/prompts/environment.instructions.md",
-    },
+      "file": "/home/reeinharrrd/.config/Code/User/prompts/environment.instructions.md"
+    }
   ],
   "github.copilot.chat.testGeneration.instructions": [
     {
-      "file": "/home/reeinharrrd/.config/Code/User/prompts/tests.instructions.md",
+      "file": "/home/reeinharrrd/.config/Code/User/prompts/tests.instructions.md"
     },
     {
-      "file": "/home/reeinharrrd/.config/Code/User/prompts/global.instructions.md",
-    },
+      "file": "/home/reeinharrrd/.config/Code/User/prompts/global.instructions.md"
+    }
   ],
   "github.copilot.chat.commitMessageGeneration.instructions": [
     {
-      "text": "Use Conventional Commits: <type>(<scope>): <summary>. Types: feat|fix|refactor|chore|docs|test|style|perf|ci|build. Max 72 chars, lowercase, imperative mood, no period. Body only when WHY is non-obvious. Never include debug logs, commented-out code, or .env files.",
-    },
+      "text": "Use Conventional Commits: <type>(<scope>): <summary>. Types: feat|fix|refactor|chore|docs|test|style|perf|ci|build. Max 72 chars, lowercase, imperative mood, no period. Body only when WHY is non-obvious. Never include debug logs, commented-out code, or .env files."
+    }
   ],
-
-  // Pick up ~/.claude/CLAUDE.md as always-on instructions (works across Copilot, Claude Code, etc.)
   "chat.useClaudeMdFile": true,
-
-  // Pick up AGENTS.md files in workspace root
   "chat.useAgentsMdFile": true,
-
-  // Show prompt files as recommended slash commands when starting a new chat
   "chat.promptFilesRecommendations": {
     "plan": true,
     "a11y-audit": "resourceExtname == .html",
-    "document": "resourceLangId == markdown",
+    "document": "resourceLangId == markdown"
   },
-
-  // Ensure file-based .instructions.md files are automatically applied
   "chat.includeApplyingInstructions": true,
-
-  // Additional locations to scan for .instructions.md files
   "chat.instructionsFilesLocations": {
     ".github/instructions": true,
-    "~/.claude/rules": true,
-    "C:\\Users\\beltr\\AppData\\Local\\Temp\\postman-collections-post-response.instructions.md": true,
-    "C:\\Users\\beltr\\AppData\\Local\\Temp\\postman-collections-pre-request.instructions.md": true,
-    "C:\\Users\\beltr\\AppData\\Local\\Temp\\postman-folder-post-response.instructions.md": true,
-    "C:\\Users\\beltr\\AppData\\Local\\Temp\\postman-folder-pre-request.instructions.md": true,
-    "C:\\Users\\beltr\\AppData\\Local\\Temp\\postman-http-request-post-response.instructions.md": true,
-    "C:\\Users\\beltr\\AppData\\Local\\Temp\\postman-http-request-pre-request.instructions.md": true,
+    "~/.claude/rules": true
   },
   "chat.checkpoints.showFileChanges": true,
   "chat.agent.thinking.collapsedTools": "withThinking",
@@ -131,7 +111,7 @@
     "claude-desktop": true,
     "windsurf": true,
     "cursor-global": true,
-    "cursor-workspace": true,
+    "cursor-workspace": true
   },
   "chat.mcp.assisted.nuget.enabled": true,
   "chat.includeReferencedInstructions": true,
@@ -149,7 +129,7 @@
   "markdown.extension.theming.decoration.renderParagraph": true,
   "redhat.telemetry.enabled": false,
   "[python]": {
-    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.defaultFormatter": "charliermarsh.ruff"
   },
   "github.copilot.chat.newWorkspace.useContext7": true,
   "prettier.enableDebugLogs": true,
@@ -166,11 +146,13 @@
   "update.mode": "start",
   "chat.experimental.useSkillAdherencePrompt": true,
   "chat.tools.terminal.autoReplyToPrompts": true,
-
   "explorer.excludeGitIgnore": true,
   "chat.autopilot.enabled": true,
   "chat.useCustomAgentHooks": true,
-  "github.copilot.chat.githubMcpServer.toolsets": ["default", "all"],
+  "github.copilot.chat.githubMcpServer.toolsets": [
+    "default",
+    "all"
+  ],
   "chat.agent.allowedNetworkDomains": [
     "pypi.org",
     "files.pythonhosted.org",
@@ -181,7 +163,7 @@
     "raw.githubusercontent.com",
     "objects.githubusercontent.com",
     "bun.sh",
-    "nodejs.org",
+    "nodejs.org"
   ],
   "chat.agent.sandbox.enabled": "on",
   "chat.agent.sandbox.fileSystem.linux": {
@@ -190,9 +172,8 @@
       "/home/reeinharrrd/**",
       "/tmp/**",
       "/var/tmp/**",
-      "/root/**",
-      "/home/reeinharrrd/projects/mnemos",
-    ],
+      "/root/**"
+    ]
   },
   "chat.mcp.serverSampling": {
     "Global in Code: googleWorkspace": {
@@ -218,9 +199,9 @@
         "copilotcli/gpt-5.4-mini",
         "copilot/gpt-5.4-mini",
         "copilot/grok-code-fast-1",
-        "copilot/oswe-vscode-prime",
-      ],
-    },
+        "copilot/oswe-vscode-prime"
+      ]
+    }
   },
   "oaicopilot.baseUrl": "http://127.0.0.1:4141",
   "oaicopilot.models": [
@@ -228,46 +209,46 @@
       "id": "nemotron-3-super-free",
       "owned_by": "opencode",
       "max_tokens": 8192,
-      "temperature": 0,
+      "temperature": 0
     },
     {
       "id": "qwen3.6-plus-free",
       "owned_by": "opencode",
       "max_tokens": 8192,
-      "temperature": 0,
+      "temperature": 0
     },
     {
       "id": "minimax-m2.5-free",
       "owned_by": "opencode",
       "max_tokens": 8192,
-      "temperature": 0,
+      "temperature": 0
     },
     {
       "id": "deepseek-v4-flash-free",
       "owned_by": "opencode",
       "max_tokens": 8192,
-      "temperature": 0,
+      "temperature": 0
     },
     {
       "id": "ring-2.6-1t-free",
       "owned_by": "opencode",
       "max_tokens": 8192,
-      "temperature": 0,
+      "temperature": 0
     },
     {
       "id": "trinity-large-preview-free",
       "owned_by": "opencode",
       "max_tokens": 8192,
-      "temperature": 0,
-    },
+      "temperature": 0
+    }
   ],
   "security.workspace.trust.untrustedFiles": "open",
   "terminal.integrated.env.windows": {},
   "mssql.connectionGroups": [
     {
       "name": "ROOT",
-      "id": "090C6FD9-2EB0-40EA-B460-DCB10AF7AFF2",
-    },
+      "id": "090C6FD9-2EB0-40EA-B460-DCB10AF7AFF2"
+    }
   ],
   "python.languageServer": "Default",
   "json.schemaDownload.trustedDomains": {
@@ -276,23 +257,32 @@
     "https://json.schemastore.org/": true,
     "https://models.dev/model-schema.json": true,
     "https://opencode.ai": true,
+    "https://opencode.ai/config.json": true,
+    "https://opencode.dev/schema.json": true,
     "https://raw.githubusercontent.com/devcontainers/spec/": true,
     "https://raw.githubusercontent.com/microsoft/vscode/": true,
     "https://schemastore.azurewebsites.net/": true,
-    "https://www.schemastore.org/": true,
-    "https://opencode.ai/config.json": true,
+    "https://www.schemastore.org/": true
   },
   "workbench.colorTheme": "One Dark Pro Darker",
   "yaml.schemas": {
     "file:///home/reeinharrrd/.vscode/extensions/continue.continue-1.2.22-linux-x64/config-yaml-schema.json": [
-      ".continue/**/*.yaml",
+      ".continue/**/*.yaml"
     ],
     "file:///home/reeinharrrd/.vscode/extensions/continue.continue-1.2.24-linux-x64/config-yaml-schema.json": [
-      ".continue/**/*.yaml",
+      ".continue/**/*.yaml"
     ],
     "file:///home/reeinharrrd/.vscode/extensions/continue.continue-2.0.0-linux-x64/config-yaml-schema.json": [
-      ".continue/**/*.yaml",
-    ],
+      ".continue/**/*.yaml"
+    ]
   },
   "terminal.integrated.fontLigatures.enabled": true,
+  "yaml.disableSchemaDetection": [
+    "**/.github/workflows/*.yml",
+    "**/.github/workflows/*.yaml",
+    "**/.gitea/workflows/*.yml",
+    "**/.gitea/workflows/*.yaml",
+    "**/.forgejo/workflows/*.yml",
+    "**/.forgejo/workflows/*.yaml"
+  ]
 }

@@ -15,6 +15,11 @@
   },
   "plugin": [
     "opencode-subagent-statusline",
-    "oh-my-openagent@latest"
+    "oh-my-openagent@latest",
+    "oh-my-openagent@4.19.4",
+    "opencode-workspaces",
+    "opencode-vibeguard",
+    "opencode-yaml-hooks",
+    "opencode-dcp"
   ]
 }

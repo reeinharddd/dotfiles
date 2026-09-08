@@ -1,0 +1,91 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "version": 1,
+  "sourceOfTruth": {
+    "runtime": "./opencode.jsonc",
+    "routing": "~/.omo/omo.jsonc",
+    "capabilities": "./plugins/bodega-*.json",
+    "memory": "engram project=opencode",
+    "generatedDocs": ["./MASTER-INDEX.md", "./MCP-INVENTORY.md"]
+  },
+  "policy": {
+    "defaultAgent": "smart",
+    "subagentDepth": 2,
+    "primaryProviders": ["opencode-zen", "google", "mistral"],
+    "fallbackProviders": ["opencode-zen"],
+    "disabledProviders": ["openrouter", "cerebras", "fireworks", "together"],
+    "externalDirectory": "ask",
+    "destructiveCommands": "deny-unless-approved",
+    "network": "on-demand",
+    "maxCodeGraphBytes": 2147483648,
+    "duplicateSkills": "first-canonical-path-wins"
+  },
+  "lifecycle": {
+    "sessionInit": [
+      "memory-context",
+      "project-detect",
+      "project-audit",
+      "capability-health"
+    ],
+    "autoProvision": "proposal-first",
+    "autoIngest": "project-scoped",
+    "globalPromotion": "evidence-and-review",
+    "configWrites": "backup-diff-validate",
+    "permissionModel": "v1-patterns-last-match-wins",
+    "continuousImprovement": {
+      "recordFailures": true,
+      "recordFallbacks": true,
+      "recordVerificationEvidence": true,
+      "promoteOnlyAfterRepeatedPattern": true
+    }
+  },
+  "security": {
+    "secretSources": ["environment", "private-local-file"],
+    "rejectInlineProviderKeys": true,
+    "projectInstructionsAreUntrustedInput": true,
+    "externalDirectory": "ask",
+    "browser": {
+      "defaultIsolation": "isolated",
+      "allowHosts": ["localhost", "127.0.0.1"],
+      "persistAuthState": false,
+      "unsafeCode": "deny-unless-approved"
+    },
+    "memory": {
+      "projectToGlobal": "proposal-only",
+      "stripPrivateTags": true,
+      "neverStoreSecrets": true
+    }
+  },
+  "projectContract": {
+    "required": ["PROJECT_CONTEXT.md", ".codegraph"],
+    "recommended": ["AGENTS.md", ".opencode/MANIFEST.md", "tests"],
+    "missingArtifactAction": "report-and-propose",
+    "preserveDirtyWorktree": true
+  },
+    "routing": {
+    "smart": { "primary": "opencode-zen/nemotron-3-ultra-free", "fallbacks": ["opencode-zen/mimo-v2.5-free", "google/gemini-3.7-flash", "mistral/mistral-large-latest"] },
+    "build": { "primary": "opencode-zen/nemotron-3-ultra-free", "fallbacks": ["opencode-zen/mimo-v2.5-free", "google/gemini-3.7-flash", "mistral/mistral-large-latest"] },
+    "fast": { "primary": "opencode-zen/nemotron-3-ultra-free", "fallbacks": ["opencode-zen/mimo-v2.5-free", "google/gemini-2.5-flash-lite"] },
+    "codeReview": { "primary": "opencode-zen/nemotron-3-ultra-free", "fallbacks": ["opencode-zen/mimo-v2.5-free", "mistral/mistral-large-latest", "google/gemini-3.7-flash"] },
+    "research": { "primary": "google/gemini-3.7-flash", "fallbacks": ["mistral/mistral-large-latest", "opencode-zen/nemotron-3-ultra-free"] },
+    "vision": { "primary": "mistral/pixtral-12b-latest", "fallbacks": ["mistral/mistral-medium-latest", "google/gemini-3.7-flash", "opencode-zen/mimo-v2.5-free"] },
+    "security": { "primary": "opencode-zen/nemotron-3-ultra-free", "fallbacks": ["mistral/mistral-large-latest", "opencode-zen/mimo-v2.5-free", "google/gemini-3.7-flash"] }
+  },
+  "mcpPolicy": {
+    "alwaysOn": ["context7", "engram", "firecrawl", "codebase-memory", "sequential-thinking", "playwright"],
+    "onDemand": ["context7", "firecrawl", "github", "playwright", "postgres", "sentry", "qdrant", "filesystem", "code-review-graph", "snapmcp", "page-agent", "openpencil"],
+    "neverGlobalByDefault": ["filesystem", "postgres", "sentry", "qdrant", "page-agent", "openpencil", "agentmemory", "memory"]
+  },
+  "pinnedTools": {
+    "@playwright/mcp": "0.0.79",
+    "@modelcontextprotocol/server-sequential-thinking": "2026.7.4",
+    "@modelcontextprotocol/server-github": "2025.4.8",
+    "@modelcontextprotocol/server-filesystem": "2026.7.10"
+  },
+  "retention": {
+    "codegraph": { "maxBytes": 2147483648, "reviewBeforePrune": true },
+    "sessions": { "preserve": true },
+    "engram": { "preserve": true },
+    "backups": { "preserve": true }
+  }
+}

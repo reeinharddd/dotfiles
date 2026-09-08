@@ -1,0 +1,50 @@
+{
+  "enabled": true,
+  "debug": false,
+  "session": {
+    "ttl": "2h",
+    "max_mappings": 100000
+  },
+  "patterns": {
+    "keywords": [],
+    "regex": [
+      { "pattern": "sk-[A-Za-z0-9]{48}", "category": "OPENAI_KEY" },
+      { "pattern": "sk-[A-Za-z0-9]{32,128}", "category": "OPENAI_PROJECT_KEY" },
+      { "pattern": "(ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9]{36,40}", "category": "GITHUB_TOKEN" },
+      { "pattern": "github_pat_[A-Za-z0-9]{22,}_[A-Za-z0-9]{59,}", "category": "GITHUB_PAT" },
+      { "pattern": "AKIA[0-9A-Z]{16}", "category": "AWS_ACCESS_KEY" },
+      { "pattern": "(?i)aws_secret_access_key['\"]?\\s*[:=]\\s*['\"][A-Za-z0-9/+]{40}['\"]", "category": "AWS_SECRET_KEY" },
+      { "pattern": "AIza[0-9A-Za-z_-]{35}", "category": "GCP_API_KEY" },
+      { "pattern": "ya29\\.[0-9A-Za-z_-]+", "category": "GCP_OAUTH" },
+      { "pattern": "xox[baprs]-[0-9A-Za-z-]{10,70}", "category": "SLACK_TOKEN" },
+      { "pattern": "pk_live_[0-9A-Za-z]{24,}", "category": "STRIPE_LIVE_KEY" },
+      { "pattern": "sk_live_[0-9A-Za-z]{24,}", "category": "STRIPE_SECRET_KEY" },
+      { "pattern": "SG\\.[0-9A-Za-z_-]{22,}\\.[0-9A-Za-z_-]{43,}", "category": "SENDGRID_KEY" },
+      { "pattern": "s3cr3t_[0-9A-Za-z]{20,}", "category": "GENERIC_SECRET" },
+      { "pattern": "(?i)(password|passwd|pwd|secret|token|api[_-]?key)['\"]?\\s*[:=]\\s*['\"][^'\"]{8,}['\"]", "category": "CREDENTIAL" },
+      { "pattern": "-----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----", "category": "PRIVATE_KEY" },
+      { "pattern": "mongodb(?:\\+srv)?://[^\\s/$.?#][^\\s]*", "category": "MONGODB_URI" },
+      { "pattern": "postgres(?:ql)?://[^\"\\s]+:[^\"\\s]+@[^\"\\s]+", "category": "POSTGRES_URI" },
+      { "pattern": "https?://[^\"\\s]+:[^\"\\s]+@[^\"\\s/]+", "category": "URL_CREDENTIALS" },
+      { "pattern": "eyJ[A-Za-z0-9_-]{10,}\\.eyJ[A-Za-z0-9_-]{10,}\\.[A-Za-z0-9_-]{10,}", "category": "JWT_TOKEN" },
+      { "pattern": "sk-[0-9a-fA-F]{32,}", "category": "OPENAI_LEGACY" },
+      { "pattern": "hf_[A-Za-z0-9]{34,}", "category": "HUGGINGFACE_TOKEN" }
+    ],
+    "builtin": ["email", "uuid", "ipv4", "mac"],
+    "exclude": [
+      "example.com",
+      "example.org",
+      "example.net",
+      "localhost",
+      "127.0.0.1",
+      "0.0.0.0",
+      "::1",
+      "192.168.",
+      "10.",
+      "172.16.",
+      "test.com",
+      "test.org",
+      "test.net"
+    ]
+  }
+}

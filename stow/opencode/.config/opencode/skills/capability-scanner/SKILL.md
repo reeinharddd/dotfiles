@@ -1,4 +1,5 @@
 ---
+name: capability-scanner
 description: >
   Descubre capabilities (skills, MCPs, binarios) que existen en el sistema pero no
   están registradas en core/registry/project context. Trigger: "I need a skill for X

@@ -1,0 +1,8 @@
+{
+  "name": "dcg",
+  "description": "Destructive Command Guard - Rust hook for blocking dangerous commands (rm -rf, sudo rm, etc). Already installed at ~/.local/bin/dcg. Used as a skill for on-demand agent hardening.",
+  "type": "skill",
+  "scope": "bodega",
+  "activation": "on-demand",
+  "source": "/home/reeinharrrd/tools/destructive_command_guard"
+}

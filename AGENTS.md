@@ -3,6 +3,27 @@
 > Lean rules for AI agents (opencode, claude, etc). No bloat.
 > Full tool inventory: `mise ls`, `which`, `ls stow/`, `engram mem_search`.
 
+## Init Protocol (cada sesion)
+
+Al recibir cualquier mensaje:
+1. `engram mem_context` — recuperar contexto de sesiones previas
+2. `engram mem_current_project` — detectar proyecto actual
+3. Leer AGENTS.md / CLAUDE.md del proyecto
+4. Si `.codegraph/` falta → ofrecer `npx codegraph init`
+5. Pre-task gate: verificar archivos existen, lsp_diagnostics clean, buscar trabajo similar en engram
+
+Despues de compaction:
+1. `engram mem_session_summary` — salvar resumen inmediatamente
+2. `engram mem_context` — recuperar contexto
+
+## Rules Hierarchy
+
+Precedencia: user instructions (AGENTS.md/CLAUDE.md/direct requests) > skills > system prompt
+- Core `~/.config/opencode/instructions/*.md` — siempre cargados (init, hard-rules, quality, mcp-tools)
+- Core `~/.config/opencode/skills/core-constitution/` — 12 reglas Karpathy (inmutables)
+- `~/AGENTS.md` — este archivo (reglas personales)
+- Project `AGENTS.md` / `CLAUDE.md` — por proyecto (override parcial)
+
 ## Quién soy
 
 - Full-stack dev + sysadmin, Ubuntu 26.04 + Wayland/Hyprland
@@ -40,8 +61,8 @@
   - `tdd-guide` red-green-refactor
   - `docs-lookup` via context7 (use FIRST para libs)
   - `oracle` cuando stuck >15min
-- **MCP servers**: context7 (lib docs), engram (memory), firecrawl (web), github (PRs), royal-mcp (WP/Woo)
-- **Skills via triage auto-route** — 30+ skills, no memorizar, deja que triage dispatch
+- **MCP servers**: context7, engram, firecrawl, github, codegraph (core) + 14 on-demand (playwright, postgres, sentry, etc)
+- **Skills via triage auto-route** — deja que triage dispatch
 - **NO instalar** avante.nvim/codecompanion.nvim en nvim (fragmentan contexto)
 
 ## Tools clave

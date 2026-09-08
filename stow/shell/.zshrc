@@ -1,5 +1,6 @@
 # ~/.zshrc — Modern Zsh config (Starship + Atuin + Ghostty)
 # No OMZ, no bloat — standalone plugins, modern tooling
+# Restored from stow (2026-09-06) + deltas: fzf --zsh, atuin directo, herdr attach
 
 
 # -------------------------------------------------------------------
@@ -8,6 +9,7 @@
 export EDITOR="nvim"
 export VISUAL="nvim"
 export BROWSER="/snap/bin/brave"
+
 
 # -------------------------------------------------------------------
 # PATH
@@ -28,6 +30,7 @@ path=(
 # Runtime managers
 # -------------------------------------------------------------------
 eval "$(mise activate zsh)"
+
 source "$HOME/.cargo/env"
 
 # direnv — env vars por directorio (via mise)
@@ -92,8 +95,7 @@ alias dotfiles="cd ~/projects/personal/dotfiles"
 # -------------------------------------------------------------------
 # fzf
 # -------------------------------------------------------------------
-source /usr/share/doc/fzf/examples/key-bindings.zsh 2>/dev/null
-source /usr/share/doc/fzf/examples/completion.zsh 2>/dev/null
+source <(fzf --zsh) 2>/dev/null || source /usr/share/doc/fzf/examples/key-bindings.zsh 2>/dev/null
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type d --hidden --follow --exclude .git"
@@ -123,7 +125,7 @@ export BAT_THEME="Dracula"
 # === Secret env vars (opencode MCP, etc.) ===
 # Generate token at: https://github.com/settings/tokens (repo scope)
 # Despues de agregarlo: source ~/.zshrc
-export GITHUB_TOKEN="${GITHUB_TOKEN:-}"
+# GitHub credentials are loaded only from the private OpenCode environment file.
 
 # -------------------------------------------------------------------
 # Completions
@@ -153,7 +155,6 @@ eval "$(starship init zsh)"
 # -------------------------------------------------------------------
 # Atuin (historia mágica con full-text search)
 # -------------------------------------------------------------------
-. "$HOME/.atuin/bin/env"
 eval "$(atuin init zsh --disable-up-arrow)"
 
 # -------------------------------------------------------------------
@@ -169,8 +170,8 @@ source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 # -------------------------------------------------------------------
 # Herdr (multiplexer AI) — auto-attach si no estamos dentro
 # -------------------------------------------------------------------
-if [[ -z "$HERDR_ENV" && -z "$TMUX" && $- == *i* && -t 1 ]]; then
-  herdr
+if [[ -z "$HERDR_ENV" && -z "$TMUX" && -z "$ZELLIJ" && $- == *i* && -t 1 ]]; then
+  exec herdr session attach main 2>/dev/null || exec herdr
 fi
 
 # -------------------------------------------------------------------
@@ -212,3 +213,24 @@ alias mlr="mlr"              # miller (csv processor)
 alias restic="restic"        # modern backup
 alias xsv="xsv"              # csv index/slice
 alias htmlq="htmlq"          # HTML processor (jq for HTML)
+
+# ─── AI Provider API Keys (Free Tiers 2026) ─────────────────────
+# Source: https://aistudio.google.com/apikey | https://console.groq.com/keys
+#         https://cloud.cerebras.ai | https://api.together.ai
+#         https://fireworks.ai/account/api-keys | https://console.mistral.ai
+
+# Provider credentials are loaded only from ~/.config/opencode/opencode.env.
+
+# dcg: warn if hook was silently removed from Claude Code settings
+if command -v dcg &>/dev/null && command -v jq &>/dev/null; then
+  if [ -f "$HOME/.claude/settings.json" ] && \
+     ! jq -e '.hooks.PreToolUse[]? | select(.hooks[]?.command | test("dcg$"))' \
+       "$HOME/.claude/settings.json" &>/dev/null; then
+    printf '\033[1;33m[dcg] Hook missing from ~/.claude/settings.json — run: dcg install\033[0m\n'
+  fi
+fi
+
+# Secrets (opencode.env)
+if [[ -r "$HOME/.config/opencode/opencode.env" ]]; then
+  source "$HOME/.config/opencode/opencode.env"
+fi

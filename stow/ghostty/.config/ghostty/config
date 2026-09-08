@@ -3,7 +3,7 @@
 # https://ghostty.org/docs/configuration
 
 # -------------------------------------------------------------------
-# Theme — Catppuccin Mocha (built-in, uno de los mejores temas dark)
+# Theme — Catppuccin Mocha (built-in)
 # -------------------------------------------------------------------
 theme = Catppuccin Mocha
 
@@ -17,12 +17,22 @@ font-size = 12
 # Window
 # -------------------------------------------------------------------
 background-opacity = 0.95
+background-blur = true
+window-vsync = true
 window-padding-x = 4
 window-padding-y = 4
 window-padding-color = background
 mouse-hide-while-typing = true
 copy-on-select = clipboard
+clipboard-trim-trailing-spaces = true
 confirm-close-surface = false
+scrollbar = never
+gtk-titlebar-style = tabs
+
+# Herencia de directorio de trabajo (mouseless: splits/tabs abren en el cwd actual)
+window-inherit-working-directory = true
+tab-inherit-working-directory = true
+split-inherit-working-directory = true
 
 # -------------------------------------------------------------------
 # Cursor
@@ -38,16 +48,62 @@ shell-integration-features = cursor,no-sudo,title,path
 term = xterm-ghostty
 
 # -------------------------------------------------------------------
-# Keybindings — solo overrides sobre defaults
-# https://ghostty.org/docs/configuration/keybind
+# Scrollback / performance
 # -------------------------------------------------------------------
-# Ventana nueva (default: ctrl+shift+n)
+scrollback-limit = 33554432
+quit-after-last-window-closed = true
+quit-after-last-window-closed-delay = 5m
+
+# -------------------------------------------------------------------
+# Keybindings — solo overrides sobre defaults (super = modificador principal)
+# https://ghostty.org/docs/configuration/keybind
+# Verificado contra ~/.config/hypr/hyprland.conf ($mainMod = SUPER):
+#   - NO se usan super+1..9 (workspace en Hyprland) ni super+shift+arrows (movewindow)
+#   - Esos casos quedan en defaults de ghostty: alt+1..9 (goto_tab),
+#     shift+page_up/down y shift+home/end (scroll)
+# -------------------------------------------------------------------
+# Ventana nueva (default ghostty: ctrl+shift+n)
 keybind = super+shift+n=new_window
 
-# Font size con super (default: ctrl +/-/0)
-keybind = super+plus=increase_font_size
-keybind = super+minus=decrease_font_size
+# Font size con super (default ghostty: ctrl+= / ctrl+- / ctrl+0)
+# Nota: la accion increase/decrease exige el parametro :1 en este build
+keybind = super+=increase_font_size:1
+keybind = super+-=decrease_font_size:1
 keybind = super+0=reset_font_size
 
 # Recargar config
-keybind = super+shift+,=reload_config
+keybind = super+shift+comma=reload_config
+
+# Editar esta config en $EDITOR (nvim)
+keybind = super+shift+period=open_config
+
+# Abrir opencode en un split nuevo (mouseless)
+keybind = super+shift+o=new_split:right
+keybind = chain=text:opencode\n
+
+# Navegacion entre splits (vim, super+letra — no choca con Hyprland que usa arrows)
+keybind = super+h=goto_split:left
+keybind = super+j=goto_split:down
+keybind = super+k=goto_split:up
+keybind = super+l=goto_split:right
+keybind = super+ctrl+h=resize_split:left,10
+keybind = super+ctrl+j=resize_split:down,10
+keybind = super+ctrl+k=resize_split:up,10
+keybind = super+ctrl+l=resize_split:right,10
+keybind = super+shift+enter=toggle_split_zoom
+
+# Tabs / ventanas
+keybind = super+shift+t=new_tab
+keybind = super+shift+w=close_tab:this
+
+# Ir a pestaña N (super+ctrl+1..9 — libre en Hyprland, que usa super+1..9 para workspaces)
+# Nota: goto_tab solo acepta numero en este build (no :previous/:next)
+keybind = super+ctrl+1=goto_tab:1
+keybind = super+ctrl+2=goto_tab:2
+keybind = super+ctrl+3=goto_tab:3
+keybind = super+ctrl+4=goto_tab:4
+keybind = super+ctrl+5=goto_tab:5
+keybind = super+ctrl+6=goto_tab:6
+keybind = super+ctrl+7=goto_tab:7
+keybind = super+ctrl+8=goto_tab:8
+keybind = super+ctrl+9=goto_tab:9

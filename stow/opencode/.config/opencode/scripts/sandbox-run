@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# sandbox-run — ejecuta un comando en sandbox endurecido (docker primario, bwrap fallback).
+#
+# Uso:
+#   sandbox-run <comando...>            # sin red (default-deny egress)
+#   sandbox-run --net <comando...>      # red bridge (npm/pip/etc.)
+#
+# Filosofía: el sandbox asume que el comando malo se ejecuta; limita el daño.
+#   - no-root, rootfs read-only, cap-drop ALL, no-new-privileges
+#   - workspace = solo el cwd actual (bind mount read-write, acotado)
+#   - límites: pids, memoria, cpu, timeout
+#   - efímero: --rm, sin persistencia
+#
+# Nota: con --net se abre red completa (bridge). Para egress estricto por
+# allowlist haría falta un proxy (p.ej. OpenShell); documentado como tradeoff.
+set -euo pipefail
+
+NET="none"
+if [[ "${1:-}" == "--net" ]]; then
+  NET="bridge"
+  shift
+fi
+
+if [[ $# -eq 0 ]]; then
+  echo "uso: sandbox-run [--net] <comando...>" >&2
+  exit 2
+fi
+
+CMD_STR="$(printf '%q ' "$@")"
+
+# --- Docker path ---
+if command -v docker >/dev/null 2>&1; then
+  exec docker run --rm \
+    --user 1000:1000 \
+    --network "$NET" \
+    --read-only \
+    --cap-drop ALL \
+    --security-opt no-new-privileges \
+    --pids-limit 128 \
+    --memory 1g --memory-swap 1g \
+    --cpus 1 \
+    --tmpfs /tmp:rw,size=256m \
+    -v "$PWD:/workspace" \
+    -w /workspace \
+    --entrypoint /bin/sh \
+    alpine:latest -c "$CMD_STR"
+fi
+
+# --- bwrap fallback (sin red, cwd bind) ---
+if command -v bwrap >/dev/null 2>&1; then
+  RO="--ro-bind /usr /usr --ro-bind /lib /lib --ro-bind /lib64 /lib64 --ro-bind /bin /bin --ro-bind /etc /etc --proc /proc --dev /dev"
+  NET_ARGS="--unshare-net"
+  [[ "$NET" == "bridge" ]] && NET_ARGS="--share-net"
+  exec bwrap $RO $NET_ARGS --unshare-pid --unshare-uts --bind "$PWD" /workspace --chdir /workspace -- /bin/sh -c "$CMD_STR"
+fi
+
+echo "sandbox-run: ni docker ni bwrap disponibles; ejecución directa (SIN sandbox)" >&2
+exec "$@"

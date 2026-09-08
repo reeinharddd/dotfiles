@@ -1,4 +1,5 @@
 ---
+name: skill-router
 description: >
   Lazy router for domain skills. Use this when you need a skill outside the core 7 — it
   will tell you whether to invoke `skill(name=...)` directly, check the project context,
@@ -22,17 +23,17 @@ description: >
 
 ### 1. ¿Es una skill core?
 
-Las 7 skills core están **siempre inyectadas**. Si la tarea matchea:
+Las 5 skills core están **siempre inyectadas**. Si la tarea matchea:
 
 | Tarea | Skill core |
 |-------|------------|
-| Session start, system info | `system-context` |
-| Bug, regression, performance | `diagnose` |
-| Test-driven dev, red-green | `tdd` |
-| Writing tests, coverage | `test-master` |
-| Stack trace, error parsing | `debugging-wizard` |
-| Delegar a subagent, ahorrar contexto | `cavecrew` |
+| Tarea | Skill core |
+|-------|------------|
+| Session start, principios de comportamiento | `core-constitution` |
+| Session start, info del sistema | `system-context` |
+| Detección de proyecto/stack | `project-auto-detect` |
 | Buscar skill/MCP no registrado | `capability-scanner` |
+| Enrutar a skill de dominio/proyecto | `skill-router` |
 
 → **No me invoques a mí**, invoca la skill directamente.
 
@@ -43,7 +44,7 @@ Las 7 skills core están **siempre inyectadas**. Si la tarea matchea:
 
 ### 3. ¿Es una skill de dominio pero no del proyecto?
 
-→ Lee `~/.config/opencode/domain-registry/REGISTRY.md`
+→ Lee `~/.config/opencode/REGISTRY.md`
 → Busca por trigger en la tabla
 → Si matchea → invoca `skill(name="<skill>")`
 

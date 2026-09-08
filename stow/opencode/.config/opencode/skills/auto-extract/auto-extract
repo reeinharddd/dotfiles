@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# auto-extract - Auto-distills large tool outputs using DCP extract tool
+
+set -euo pipefail
+
+# Threshold: auto-extract if output exceeds this many lines
+EXTRACT_THRESHOLD=800
+
+# Tools that benefit from extraction
+EXTRACT_TOOLS=(
+    "codegraph_explore"
+    "codegraph_node"
+    "task"
+    "bash"
+    "read"
+    "grep"
+)
+
+should_extract() {
+    local tool="$1"
+    local lines="$2"
+
+    for t in "${EXTRACT_TOOLS[@]}"; do
+        if [[ "$tool" == "$t" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+main() {
+    local tool="$1"
+    shift
+    local output="$*"
+    local lines=$(echo "$output" | wc -l)
+
+    if should_extract "$tool" && [[ $lines -ge $EXTRACT_THRESHOLD ]]; then
+        # Call DCP extract tool via opencode
+        echo "{\"tool\": \"extract\", \"args\": {\"content\": $(echo "$output" | jq -Rs .), \"source_tool\": \"$tool\"}}" | opencode run --json 2>/dev/null || {
+            # Fallback: just wrap in protect tags
+            echo "<protect>"
+            echo "$output"
+            echo "</protect>"
+        }
+    else
+        echo "$output"
+    fi
+}
+
+main "$@"

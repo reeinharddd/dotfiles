@@ -198,6 +198,20 @@ hey:
     @echo "Iniciando asistente personal..."
     @bash scripts/life-agent.sh
 
+# ─── Harness (opencode) mantenimiento ───────────────────────────
+
+# Alias compat AGENTS.md (just pq-add "cmd")
+pq-add cmd:
+    @pueue add "{{cmd}}"
+
+update-env:
+    @echo "== update cadence =="
+    @opencode update 2>/dev/null || echo "opencode: ya actualizado"
+    @python3 ~/.config/opencode/plugins/regenerate-manifests.py 2>/dev/null || echo "manifests: regeneración manual pendiente"
+    @bash ~/.config/opencode/scripts/opencode-capability-doctor 2>/dev/null || echo "capability-doctor: sin reporte"
+    @systemctl --user status metronous --no-pager 2>/dev/null | head -3 || echo "metronous: no activo"
+    @echo "== si algo cambió: revisa MASTER-INDEX/MCP-INVENTORY y comitea con: just ship 'update env' =="
+
 # ─── Recordatorios ──────────────────────────────────────────────
 
 remind msg datetime:

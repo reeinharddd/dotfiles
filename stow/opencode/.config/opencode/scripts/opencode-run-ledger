@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Run OpenCode while recording non-sensitive execution metadata.
+set -uo pipefail
+
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/opencode"
+LEDGER="$STATE_DIR/runs.jsonl"
+mkdir -p "$STATE_DIR"
+chmod 700 "$STATE_DIR"
+
+model=""
+agent=""
+for ((i=1; i<=$#; i++)); do
+  case "${!i}" in
+    --model|-m) ((i++)); model="${!i}" ;;
+    --agent) ((i++)); agent="${!i}" ;;
+  esac
+done
+
+task_id=""
+task_file="${OPENCODE_PROJECT_DIR:-$PWD}/.opencode/state/task.json"
+if [[ -f "$task_file" ]]; then
+  task_id=$(python3 - "$task_file" <<'PY'
+import json
+import sys
+try:
+    print(json.load(open(sys.argv[1], encoding="utf-8")).get("id", ""))
+except Exception:
+    print("")
+PY
+)
+fi
+
+started=$(date +%s)
+opencode run "$@"
+status=$?
+finished=$(date +%s)
+duration=$((finished - started))
+
+OC_LEDGER_MODEL="$model" \
+OC_LEDGER_AGENT="$agent" \
+OC_LEDGER_DURATION="$duration" \
+OC_LEDGER_STATUS="$status" \
+OC_LEDGER_FILE="$LEDGER" \
+OC_LEDGER_TASK_ID="$task_id" \
+node -e '
+const fs = require("fs");
+const record = {
+  timestamp: new Date().toISOString(),
+  model: process.env.OC_LEDGER_MODEL || null,
+  agent: process.env.OC_LEDGER_AGENT || null,
+  directory: process.cwd(),
+  taskId: process.env.OC_LEDGER_TASK_ID || null,
+  durationMs: Number(process.env.OC_LEDGER_DURATION || 0),
+  exitCode: Number(process.env.OC_LEDGER_STATUS || 1)
+};
+fs.appendFileSync(process.env.OC_LEDGER_FILE, JSON.stringify(record) + "\n", { mode: 0o600 });
+'
+
+exit "$status"

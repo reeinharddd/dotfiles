@@ -1,0 +1,57 @@
+42090	tt-a1i/archify	Agent skill for beautiful, verifiable architecture, workflow, sequence, data-flow, and lifecycle diagrams—self-contained HTML with motion and crisp export.
+111	collidingScopes/liquid-logo	A free, open-source tool for creating animated logos with a liquid metal aesthetic. Create logo animations in real-time in the browser.
+2155	ruucm/shadergradient	Create beautiful moving gradients on Framer, Figma and React
+81275	Egonex-AI/Understand-Anything	Graphs that teach > graphs that impress. Turn any code into an interactive knowledge graph you can explore, search, and ask questions about. Works with Claude Code, Codex, Cursor, Copilot, Gemini CLI, and more.
+59469	penpot/penpot	Penpot: The open-source design platform for Product teams that need scalable collaboration.
+27758	Nutlope/hallmark	Anti-AI-slop design skill for Claude Code, Cursor, and Codex.
+5894	Dicklesworthstone/destructive_command_guard	The Destructive Command Guard (dcg) is for blocking dangerous git and shell commands from being executed by agents.
+69773	career-ops-hq/career-ops	Open-source AI job search: scan job portals, evaluate listings into a structured A-H report with a global 1-5 score, tailor your CV, track applications — runs locally in your AI coding CLI (Claude Code, Codex, OpenCode, Antigravity…)
+491	waybarrios/opencode-power-pack	54 rigorous skills for Codex, OpenCode, and Pi: code review, security audit, feature development, frontend design, MCP tools, Hugging Face ML/training, and more.
+280473	obra/superpowers	An agentic skills framework & software development methodology that works.
+6139	Gentleman-Programming/gentle-ai	
+4131	Opencode-DCP/opencode-dynamic-context-pruning	Dynamic context pruning plugin for OpenCode - intelligently manages conversation context to optimize token usage
+2023	12britz/awesome-free-models	A curated list of free AI models, APIs, and tools you can use without paying a cent.
+39862	MadsLorentzen/ai-job-search	The job search that runs on your machine. AI job application framework built on Claude Code: evaluate postings, tailor CVs, write cover letters, prep interviews. Fork it and own it.
+120079	DietrichGebert/ponytail	Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.
+203081	anomalyco/opencode	The open source coding agent.
+68592	code-yeongyu/oh-my-openagent	omo/lazycodex: The coding agent for tokenmaxxers;the one and only agent harness for complex codebases. For your Codex, for your OpenCode
+41742	DeusData/codebase-memory-mcp	High-performance code intelligence MCP server. Indexes codebases into a persistent knowledge graph — average repo in milliseconds. 158 languages, sub-ms queries, 99% fewer tokens. Single static binary, zero dependencies.
+6267	Gentleman-Programming/engram	Persistent memory system for AI coding agents. Agent-agnostic Go binary with SQLite + FTS5, MCP server, HTTP API, CLI, and TUI.
+1112	withkynam/vibecode-pro-max-kit	Your AI forgets. This remembers. Spec-driven coding harness for vibecoders, product owners, CEOs and real builders — self-improving context memory, 15 agents, 33 skills working with /goal, agent-team, & workflow on autopilot loops with 0 need for human gate. Kills context rot, ships features, not spaghetti. Claude Code & Codex. Any stack
+5779	ZSeven-W/openpencil	The world's first open-source AI-native vector design tool and the first to feature concurrent Agent Teams. Design-as-Code. Turn prompts into UI directly on the live canvas. A modern alternative to Pencil.
+9050	bytedance/Dolphin	The official repo for “Dolphin: Document Image Parsing via Heterogeneous Anchor Prompting”, ACL, 2025.
+2034	hyperspaceai/agi	The first distributed AGI system. Thousands of autonomous AI agents collaboratively train models, share experiments via P2P gossip, and push breakthroughs here. Fully peer-to-peer. Join from your browser or CLI.
+2195	cporter202/social-media-scraping-apis	A curated collection of social media scraping APIs and tools for Instagram, LinkedIn, Twitter/X, TikTok, YouTube, Facebook, and more. Extract posts, profiles, videos, comments, and engagement metrics.
+12203	HKUDS/ViMax	"ViMax: Agentic Video Generation (Director, Screenwriter, Producer, and Video Generator All-in-One)"
+23001	floci-io/floci	Light, fluffy, and always free - The AWS Local Emulator alternative
+7379	zai-org/GLM-OCR	GLM-OCR: Accurate ×  Fast × Comprehensive
+11282	Jeffallan/claude-skills	67 Specialized Skills for Full-Stack Developers. Transform Claude Code into your expert pair programmer.
+27910	rohitg00/agentmemory	#1 Persistent memory for AI coding agents based on real-world benchmarks
+244047	mattpocock/skills	Skills for Real Engineers. Straight from my .agents directory.
+241590	trimstray/the-book-of-secret-knowledge	A collection of inspiring lists, manuals, cheatsheets, blogs, hacks, one-liners, cli/web tools and more.
+544625	codecrafters-io/build-your-own-x	Master programming by recreating your favorite technologies from scratch.
+123919	nextlevelbuilder/ui-ux-pro-max-skill	An AI skill that provides design intelligence for building professional UI/UX across multiple platforms.
+135647	Shubhamsaboo/awesome-llm-apps	100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source.
+1448	win4r/ClawTeam-OpenClaw	ClawTeam fork fully adapted for OpenClaw — multi-agent swarm coordination with OpenClaw as the default agent
+1876	czl9707/build-your-own-openclaw	A step-by-step guide to build your own AI agent.
+38222	ueberdosis/tiptap	The headless rich text editor framework for web artisans.
+10131	zubair-trabzada/geo-seo-claude	GEO-first SEO skill for Claude Code. Comprehensive AI search optimization for any website — citability scoring, AI crawler analysis, brand authority, schema markup, platform-specific optimization, and PDF reports.  If you want learn how to sell this to real businesses, check out the skool community
+406	cporter202/agentic-ai-apis	The ultimate collection of APIs for building autonomous AI agents — 2,036 production-ready APIs across Agents, AI Models, and MCP Servers. Stop wasting weeks building infrastructure. Plug these in and ship your agent today.
+8661	companion-inc/feynman	
+102280	JuliusBrussee/caveman	🪨 why use many token when few token do trick — Claude Code skill that cuts 65% of tokens by talking like caveman
+28890	opendataloader-project/opendataloader-pdf	PDF Parser for AI-ready data. Automate PDF accessibility. Open-source.
+131003	garrytan/gstack	Use Garry Tan's exact Claude Code setup: 23 opinionated tools that serve as CEO, Designer, Eng Manager, Release Manager, Doc Engineer, and QA
+25	MaTriXy/auto-skill	create skills while working on your flows
+28942	alibaba/page-agent	JavaScript in-page GUI agent. Control web interfaces with natural language.
+29527	liquidslr/leetcode-company-wise-problems	Lists of company wise questions. Every csv file in the companies directory corresponds to a list of questions on leetcode for a specific company based on the leetcode company tags. Updated as of 20 June, 2025
+50140	chenglou/pretext	Fast, accurate & comprehensive text measurement & layout
+60905	mvanhorn/last30days-skill	AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary
+245797	affaan-m/ECC	The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.
+8557	jamwithai/production-agentic-rag-course	
+31710	FujiwaraChoki/MoneyPrinterV2	Automate the process of making money online.
+83348	Leonxlnx/taste-skill	Taste-Skill - gives your AI good taste. stops the AI from generating boring, generic slop 
+31075	tirth8205/code-review-graph	Local-first code intelligence graph for MCP and CLI. Builds a persistent map of your codebase so AI coding tools read only what matters, with benchmarked context reductions on reviews and large-repo workflows.
+10828	Untrivial-ai/agent-orchestrator	Agent IDE that enables you to manage fleets of coding agents. It comes with an agentic orchestrator that plans tasks, spawns agents, and autonomously handles CI fixes, merge conflicts, and code reviews.
+42	korchasa/awesome-ai-agents	This curated list focuses on tools and frameworks for building AI agents
+6163	heilcheng/awesome-agent-skills	Tutorials, Guides and Agent Skills Directories
+5110	braedonsaunders/codeflow	Paste any GitHub URL → interactive architecture map. See how files connect, find what breaks if you change something. No install, no accounts — runs entirely in your browser.

@@ -1,0 +1,29 @@
+# Global hooks.yaml — runs for ALL projects
+# Minimal: only safety blocks. Per-project hooks go in .opencode/hooks.yaml
+hooks:
+  # Block known destructive patterns globally
+  - event: tool.before.bash
+    action: stop
+    actions:
+      - bash: |
+          payload=$(cat)
+          cmd=$(printf '%s' "$payload" | jq -r '.tool_args.command // empty' 2>/dev/null || true)
+          case "$cmd" in
+            *"rm -rf"*|*"sudo rm "*|*"mkfs"*|*"dd if="*|*"git reset --hard"*|*"git clean"*|*"git push --force"*|*"wp db reset"*)
+              echo "Blocked destructive bash command by global hook." >&2
+              exit 2
+              ;;
+          esac
+
+  # Auto-save context on idle (runs project script if it exists)
+  # Use literal block scalar | (preserves newlines) — fold scalar >- merges the
+  # if/fi blocks onto one line, producing "fi if" which is invalid bash syntax.
+  - event: session.idle
+    actions:
+      - bash: |
+          if [ -x "$OPENCODE_PROJECT_DIR/.opencode/auto-save.sh" ]; then
+            bash "$OPENCODE_PROJECT_DIR/.opencode/auto-save.sh"
+          fi
+          if [ -f "$OPENCODE_PROJECT_DIR/.opencode/STATE.md" ]; then
+            printf '\n- [auto] %s - session idle, state checkpoint\n' "$(date '+%Y-%m-%d %H:%M')" >> "$OPENCODE_PROJECT_DIR/.opencode/STATE.md"
+          fi

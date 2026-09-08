@@ -10,3 +10,12 @@
 
 # Bootstrap temp
 bootstrap/*.tmp
+.gitignore
+antigravity-accounts.json
+antigravity-accounts.json.*.tmp
+antigravity-signature-cache.json
+antigravity-logs/
+
+# Secrets - never commit
+.env.providers
+opencode.env

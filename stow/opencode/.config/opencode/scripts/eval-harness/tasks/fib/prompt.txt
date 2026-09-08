@@ -1,0 +1,1 @@
+Create a file lib.py with a function fib(n) that returns the nth Fibonacci number (0-indexed: fib(0)=0, fib(1)=1, fib(2)=1, fib(10)=55). No extra functions, no tests, no prints.
