@@ -1,0 +1,17 @@
+[Unit]
+Description=WeDo Backend (NestJS dev watch)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/projects/personal/wedo/backend
+Environment=NODE_ENV=development
+ExecStart=/home/reeinharrrd/.local/share/mise/installs/bun/latest/bin/bun run dev
+Restart=on-failure
+RestartSec=3
+
+StandardOutput=append:%h/projects/personal/wedo/.logs/backend.log
+StandardError=append:%h/projects/personal/wedo/.logs/backend.log
+
+[Install]
+WantedBy=default.target

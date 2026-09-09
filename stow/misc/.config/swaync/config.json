@@ -1,0 +1,17 @@
+{
+    "layer": "overlay",
+    "position-x": "right",
+    "position-y": "top",
+    "control-center-width": 400,
+    "control-center-height": 600,
+    "notification-2fa-action": true,
+    "notification-body-image": true,
+    "notification-inline-replies": true,
+    "notification-visibility": {
+        "low": true,
+        "normal": true,
+        "critical": true
+    },
+    "css-priority": "application",
+    "scripts": {}
+}

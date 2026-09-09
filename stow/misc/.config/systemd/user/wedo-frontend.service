@@ -1,0 +1,17 @@
+[Unit]
+Description=WeDo Frontend (Angular dev server)
+After=network.target wedo-backend.service
+Wants=wedo-backend.service
+
+[Service]
+Type=simple
+WorkingDirectory=%h/projects/personal/wedo/frontend
+ExecStart=/home/reeinharrrd/.local/share/mise/installs/bun/latest/bin/bun run dev
+Restart=on-failure
+RestartSec=3
+
+StandardOutput=append:%h/projects/personal/wedo/.logs/frontend.log
+StandardError=append:%h/projects/personal/wedo/.logs/frontend.log
+
+[Install]
+WantedBy=default.target

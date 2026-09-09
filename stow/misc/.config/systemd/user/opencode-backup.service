@@ -1,0 +1,7 @@
+[Unit]
+Description=Backup OpenCode config to dotfiles
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/opencode/scripts/opencode-backup.sh
+StandardOutput=journal

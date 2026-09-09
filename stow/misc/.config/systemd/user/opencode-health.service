@@ -1,0 +1,7 @@
+[Unit]
+Description=OpenCode configuration health check
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/opencode/scripts/opencode-health.sh
+StandardOutput=journal

@@ -1,0 +1,19 @@
+[Default Applications]
+text/html=brave_brave.desktop
+x-scheme-handler/http=brave_brave.desktop
+x-scheme-handler/https=brave_brave.desktop
+x-scheme-handler/about=brave_brave.desktop
+x-scheme-handler/unknown=brave_brave.desktop
+x-scheme-handler/mailto=brave_brave.desktop
+text/markdown=code.desktop
+application/schema+json=code.desktop
+application/json=code.desktop
+text/plain=code.desktop
+x-scheme-handler/opencode=ai.opencode.desktop.desktop
+
+[Added Associations]
+text/markdown=code.desktop;
+application/x-trash=code.desktop;
+application/schema+json=code.desktop;
+application/json=code.desktop;
+text/plain=code.desktop;

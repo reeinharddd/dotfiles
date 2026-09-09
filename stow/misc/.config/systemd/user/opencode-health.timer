@@ -1,0 +1,9 @@
+[Unit]
+Description=Weekly OpenCode health check
+
+[Timer]
+OnCalendar=Mon *-*-* 09:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
