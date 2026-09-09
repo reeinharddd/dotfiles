@@ -16,6 +16,8 @@ antigravity-accounts.json.*.tmp
 antigravity-signature-cache.json
 antigravity-logs/
 
-# Secrets - never commit
+# Never-commit sensitive files
 .env.providers
 opencode.env
+# Generated strict-JSON mirror of opencode.jsonc for metronous agent-model lookup
+stow/opencode/.config/opencode/opencode.json

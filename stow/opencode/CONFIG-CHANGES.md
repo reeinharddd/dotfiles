@@ -140,5 +140,117 @@
 - skills/caveman nesting roto fixeado (stow tenía el bueno)
 - .env.providers ELIMINADO (4 keys muertas: GOOGLE_AI, GOOGLE_GEMINI, CEREBRAS, FIREWORKS) + línea removida de opencode-backup.sh
 - Residuos a trash: opencode-kit.db*, bun.lock, .backups-20260828/, hook/, agent/, oh-my-openagent.json.bak, plugins-disabled/, stale-baks
-- Docs actualizados: AGENTS.md (24 skills, 6 providers, ~1900 bodega), PERSONAL.md §6 (+tokenrouter, 9 keys), MASTER-INDEX.md, SISTEMA_DOC.md, INVENTORY.md
+- Docs actualizados: AGENTS.md (24 skills, 6 providers, ~1900 bodega), PERSONAL.md §6 (nuevo proveedor GLM, 9 credenciales), MASTER-INDEX.md, SISTEMA_DOC.md, INVENTORY.md
 - Arquitectura central cerrada: CORE (siempre-cargado, pequeño, fijo) + ON-DEMAND (registro abierto e ilimitado: bodega 1274 skills / 316 commands / 314 agents + 14 project MCPs + starred repos + fuentes internet)
+
+## 2026-09-08 — Full Update & Cleanup (authorized "realiza todo ya")
+
+### Updates
+- **opencode v1.18.22 → v1.18.29** via official installer (NOT mise; binary at ~/.opencode/bin).
+  Gains: compaction keeps complete recent turns + clearer summaries (small models), retry caps
+  + jitter (429-prone free providers), network_error retry, 5min default timeouts, unknown
+  config fields ignored instead of parse-fail.
+- **opencode-antigravity-auth v1.9.0 → v1.10.0** (JoshRob297 fork). Local patch preserved and
+  committed on branch `local-v1.10.0` (commit bffa4a0): strips `x-goog-api-key` header
+  (Antigravity rejects API keys). Upstream gains: model-turn sanitization (Gemini 400 fix),
+  server-data quota reset timestamps, fail-fast all-accounts-blocked. Broken placeholder
+  origin URL (`ssh://__VG_EMAIL_...__`) fixed to https.
+
+### Storage rule applied
+- Antigravity plugin repo moved `~/.config/opencode/plugins/` → `~/tools/opencode-antigravity-auth`
+  + symlink back. Now complies with the decision rule (third-party modified → clone in ~/tools
+  + reference, patch on branch). ~/tools/ = 18 repos.
+
+### Deps prune
+- 7 dead deps removed from package.json (shell-non-interactive-strategy, linear-mcp,
+  type-inject, skillful, scheduler, websearch-cited, worktree) — present in node_modules but
+  0 references in any config. `opencode-power-pack` git dep also removed (real source =
+  ~/tools clone + symlinks; plugin file is a no-op guard). `.npmrc` allow-git deleted.
+- node_modules: 979M/~330 pkgs → 626M/13 deps. Install scripts approved for
+  oh-my-openagent, msgpackr-extract, comment-checker. `--legacy-peer-deps` required (DCP
+  peer conflict with @opentui/core 0.5.1).
+
+### Cleanup
+- `opencode.jsonc` chmod 600 (symlink → stow file).
+- 11 old logs (2026-06/07, ~300K) → /tmp/opencode-trash. 0 dead symlinks verified
+  (skills/commands/plugins/capabilities). gstack dir already gone.
+
+### CodeGraph 3.24GB warning — solved
+- Warning source = `~/.omo/codegraph/projects/` (OMO codegraph), NOT ~/.codegraph (28K).
+  `School-bdd…/codegraph.db` = 3.0G = 93% of total. Active project (328 sessions, sessions
+  today) → keep, warning accepted. Documented in capabilities/harness-operations.md.
+
+### opencode.db (8.5G) — retention policy decided
+- NO prune now: DB 3 months old, 0 sessions >6mo, freelist 0. Backup-first rule for any
+  future prune. Triggers + candidates documented in capabilities/harness-operations.md.
+
+### Docs
+- `capabilities/plugins.md` rewritten: 14 active plugins (was stale at 10), antigravity
+  routing policy (manual/overflow only, never in guard cascade; plan B = shekohex plugin).
+- `capabilities/harness-operations.md` rewritten: runtime data map, retention policies,
+  update cadence.
+
+## 2026-09-08 (evening) — Log audit + env fix + LSP daemon fix + dep bumps
+
+### Root cause: provider env vars never reached opencode (morph plugin)
+- `opencode.env` had 9 credential lines WITHOUT `export` — `source` in zshrc set shell vars only,
+  never child process env. Providers worked via `auth.json` (opencode native), but plugins reading
+  `process.env` (morph) saw nothing. Fixed: `export ` prefix on all 9 lines. Takes effect on next
+  opencode restart (current instance PID 38542 predates fix).
+- Doctor WARN "missing provider environment names" = same root cause, self-clears after restart.
+
+### LSP daemon stale-owner loop fixed
+- `~/.omo/lsp-daemon/v0.1.0/daemon.owner` held dead PID 1274447 (Sep 4) + stale `daemon.endpoint`
+  (Sep 3) → infinite `DaemonStartupDeferredError: owner_changed_during_cleanup`. Removed both
+  (backed up to /tmp/opencode-trash/lsp-daemon-stale-20260908/). Daemon re-acquires on next LSP call.
+- lsp_status verified: 42 configured, 5 installed (deno, oxlint, biome, ruff, rust).
+
+### Log audit (opencode.log, Sep 8)
+- 98 stream errors: 92 on glm-5.3-free (65 rate-limit 8 req/min, 18 connect timeout,
+  8 gateway overload) + 6 zen nemotron 502 (known Nvidia upstream flakiness).
+- Midnight blip 00:07: 11 MCP "server unavailable" + websearch fetch fails — transient network.
+- prettier formatter failures: transient edit-time noise (known, documented 2026-08-28).
+- fff WARN: file picker can't init in home/root dirs — cosmetic, TUI-only.
+
+### Dep bumps (commit 354096c)
+- @opencode-ai/plugin+sdk 1.18.13→1.18.29, @opentui trio 0.5.1→0.5.11 (EBADENGINE advisory
+  only — wants node>=26.4, have 24.19; smoke-tested: core/DCP/OMO all load OK),
+  @tarquinen/opencode-dcp 3.1.14→3.1.15, morph-plugin 2.0.16→2.0.17.
+- npm audit: 12 vulns (9 low, 3 moderate) — all transitive via @babel/core/diff/uuid inside
+  opentui/plugin chains, no direct fix available (upstream pins). Accepted.
+
+### Known gaps (documented, not fixed today)
+- yaml-hooks destructive-bash hook does NOT fire in subagent sessions (verified experimentally
+  m0206-m0208). Main-session protection works. Candidate fix: enforcement in model-routing-guard.js.
+- glm-5.3-free rate limit (8 req/min) causes oracle/subagent stream errors under
+  parallel load — consider fallback ordering or stagger.
+
+## 2026-09-09 — Metronous metrics fixes (weak points resolved)
+
+### Root causes found (all verified live)
+- **0 benchmarks ever**: cron default `0 0 2 * * 1` (Mon 02:00) — machine OFF/asleep at that hour
+  every week (boots 13:40-17:27). Job registered correctly, window simply never hit. Not a code bug.
+- **opencode.json heuristic fallback**: metronous hardcodes strict-JSON `opencode.json` path
+  (internal/config/opencode.go); our config is JSONC with comments → unparseable. Only decodes
+  `{agent: {id: {model}}}` shape.
+- **plugin.log readPortFile ENOENT**: Sep 2 historical, mcp.port exists now. Resolved.
+- **thresholds.json missing**: defaults in use, acceptable (YAGNI).
+
+### Fixes applied
+1. **Schedule retuned**: `~/.metronous/config.yaml` created with
+   `scheduler.benchmark_schedule: "0 0 21 * * 0"` (Sunday 21:00 — evening, machine typically on).
+   Daemon restarted, log confirms: "registered weekly benchmark job" schedule=0 0 21 * * 0.
+2. **opencode.json generated**: strict-JSON mirror of opencode.jsonc agent models (23 agents),
+   generated via python (comment-strip + trailing-comma removal). Metronous now logs
+   "active model from opencode.json config" (no more heuristic fallback for configured agents).
+   File is GENERATED — added to .gitignore (never commit; regenerate after agent model changes).
+3. **Pipeline validated end-to-end**: `metronous benchmark run` executed manually — 135 rows in
+   benchmark_runs (was 0), verdicts computed (oracle/glm-5.3-free KEEP 747 samples 99.3% acc,
+   Sisyphus/big-pickle KEEP 527 samples 98.5%, nemotron KEEP 433 samples 98.2%). First real
+   data points in history of the DB.
+
+### Notes
+- `metronous benchmark run` = on-demand CLI (uses last 7 days of tracking.db data).
+- `metronous report` shows latest results; `metronous dashboard` = TUI.
+- Regenerate opencode.json after any agent model change in opencode.jsonc (python one-liner
+  in CONFIG-CHANGES history or rerun from this entry).
