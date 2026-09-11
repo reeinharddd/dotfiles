@@ -1,9 +1,10 @@
-# Mako config — minimal working
+# Mako config — minimal working + matugen dynamic colors
+# Los colores vienen de ~/.config/mako/colors (generado por matugen)
+# Este archivo solo define comportamiento; el include va AL FINAL
+# para que los colores dinámicos ganen a los fallbacks de arriba.
+
 default-timeout=5000
 border-size=2
-border-color=#cba6f7
-background-color=#1e1e2e
-text-color=#cdd6f4
 border-radius=12
 font=JetBrainsMono Nerd Font Mono 11
 anchor=top-right
@@ -14,6 +15,11 @@ markup=1
 actions=1
 format=%a
 icon-path=/usr/share/icons/Papirus/24x24/status:/usr/share/icons/Papirus/24x24/actions:/usr/share/icons/Papirus/24x24/places
+
+# Fallbacks estáticos (Catppuccin Mocha) si matugen no ha corrido
+border-color=#cba6f7
+background-color=#1e1e2e
+text-color=#cdd6f4
 
 [urgency=low]
 background-color=#313244
@@ -30,3 +36,6 @@ default-timeout=0
 background-color=#f38ba8
 text-color=#1e1e2e
 border-color=#f38ba8
+
+# Colores dinámicos generados por matugen (sobreescriben lo de arriba)
+include=~/.config/mako/colors

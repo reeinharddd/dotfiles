@@ -8,7 +8,7 @@ data.location=~/.local/share/task
 default.project=inbox
 
 # Weekly review day (Monday = 1, Sunday = 7)
-weekstart=1
+weekstart=Monday
 
 # Urgency settings for better task sorting
 urgency.user.0%=5
@@ -61,3 +61,8 @@ daily.report=daily
 # Bug and feature tracking
 bug.project=work
 feature.project=personal
+
+# --- Sync (taskchampion-sync-server, docker 127.0.0.1:8090) ---
+sync.server.url=http://127.0.0.1:8090
+sync.server.client_id=72eb7eb0-7cd8-4cae-b78c-ac7723d827ad
+sync.encryption_secret=ec55148e6e808716cab6d36d0cb21c52d7dac191dd419ec24ac3844938efd91e

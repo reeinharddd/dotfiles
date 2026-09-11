@@ -1,0 +1,41 @@
+# matugen — Material You dynamic theming
+# Genera colores desde wallpaper y los aplica a Hyprland/fuzzel/waybar/mako/ghostty
+# Uso: matugen image -m dark ~/Pictures/wallpapers/<wallpaper>
+
+[config]
+version_check = false
+fallback_color = "#cba6f7"
+prefer = "closest-to-fallback"
+contrast = 0.9
+
+[config.wallpaper]
+# Resiliente: si swww-daemon no corre (p.ej. sesión GNOME), falla silencioso
+command = "swww img --transition-type center --transition-fps 60 {{ image }} 2>/dev/null || true"
+
+# Hyprland: colores de bordes generados
+[templates.hyprland]
+input_path = "~/.config/matugen/templates/hyprland-colors.conf"
+output_path = "~/.config/hypr/matugen-colors.conf"
+post_hook = "hyprctl reload 2>/dev/null || true"
+
+# fuzzel: colores del launcher
+[templates.fuzzel]
+input_path = "~/.config/matugen/templates/fuzzel-colors.ini"
+output_path = "~/.config/fuzzel/colors.ini"
+
+# waybar: colores de la barra
+[templates.waybar]
+input_path = "~/.config/matugen/templates/waybar-colors.css"
+output_path = "~/.config/waybar/colors.css"
+post_hook = "pkill -SIGUSR2 waybar 2>/dev/null || true"
+
+# mako: colores de notificaciones
+[templates.mako]
+input_path = "~/.config/matugen/templates/mako-colors"
+output_path = "~/.config/mako/colors"
+post_hook = "makoctl reload 2>/dev/null || true"
+
+# ghostty: paleta del terminal
+[templates.ghostty]
+input_path = "~/.config/matugen/templates/ghostty-colors"
+output_path = "~/.config/ghostty/colors"

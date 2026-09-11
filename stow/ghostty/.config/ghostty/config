@@ -3,9 +3,10 @@
 # https://ghostty.org/docs/configuration
 
 # -------------------------------------------------------------------
-# Theme — Catppuccin Mocha (built-in)
+# Theme — dinámico via matugen (fallback: Catppuccin Mocha built-in)
 # -------------------------------------------------------------------
-theme = Catppuccin Mocha
+# theme = Catppuccin Mocha
+config-file = ~/.config/ghostty/colors
 
 # -------------------------------------------------------------------
 # Font

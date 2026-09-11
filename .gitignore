@@ -21,3 +21,8 @@ antigravity-logs/
 opencode.env
 # Generated strict-JSON mirror of opencode.jsonc for metronous agent-model lookup
 stow/opencode/.config/opencode/opencode.json
+
+# matugen generated artifacts (live inside stow via dir-symlinks)
+stow/hyprland/.config/hypr/matugen-colors.conf
+stow/mako/.config/mako/colors
+stow/waybar/.config/waybar/colors.css

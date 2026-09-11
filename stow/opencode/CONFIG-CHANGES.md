@@ -140,7 +140,7 @@
 - skills/caveman nesting roto fixeado (stow tenía el bueno)
 - .env.providers ELIMINADO (4 keys muertas: GOOGLE_AI, GOOGLE_GEMINI, CEREBRAS, FIREWORKS) + línea removida de opencode-backup.sh
 - Residuos a trash: opencode-kit.db*, bun.lock, .backups-20260828/, hook/, agent/, oh-my-openagent.json.bak, plugins-disabled/, stale-baks
-- Docs actualizados: AGENTS.md (24 skills, 6 providers, ~1900 bodega), PERSONAL.md §6 (nuevo proveedor GLM, 9 credenciales), MASTER-INDEX.md, SISTEMA_DOC.md, INVENTORY.md
+- Docs actualizados: AGENTS.md (24 skills, 6 providers, ~1900 bodega), PERSONAL.md §6 (+tokenrouter, 9 keys), MASTER-INDEX.md, SISTEMA_DOC.md, INVENTORY.md
 - Arquitectura central cerrada: CORE (siempre-cargado, pequeño, fijo) + ON-DEMAND (registro abierto e ilimitado: bodega 1274 skills / 316 commands / 314 agents + 14 project MCPs + starred repos + fuentes internet)
 
 ## 2026-09-08 — Full Update & Cleanup (authorized "realiza todo ya")
@@ -224,33 +224,3 @@
   m0206-m0208). Main-session protection works. Candidate fix: enforcement in model-routing-guard.js.
 - glm-5.3-free rate limit (8 req/min) causes oracle/subagent stream errors under
   parallel load — consider fallback ordering or stagger.
-
-## 2026-09-09 — Metronous metrics fixes (weak points resolved)
-
-### Root causes found (all verified live)
-- **0 benchmarks ever**: cron default `0 0 2 * * 1` (Mon 02:00) — machine OFF/asleep at that hour
-  every week (boots 13:40-17:27). Job registered correctly, window simply never hit. Not a code bug.
-- **opencode.json heuristic fallback**: metronous hardcodes strict-JSON `opencode.json` path
-  (internal/config/opencode.go); our config is JSONC with comments → unparseable. Only decodes
-  `{agent: {id: {model}}}` shape.
-- **plugin.log readPortFile ENOENT**: Sep 2 historical, mcp.port exists now. Resolved.
-- **thresholds.json missing**: defaults in use, acceptable (YAGNI).
-
-### Fixes applied
-1. **Schedule retuned**: `~/.metronous/config.yaml` created with
-   `scheduler.benchmark_schedule: "0 0 21 * * 0"` (Sunday 21:00 — evening, machine typically on).
-   Daemon restarted, log confirms: "registered weekly benchmark job" schedule=0 0 21 * * 0.
-2. **opencode.json generated**: strict-JSON mirror of opencode.jsonc agent models (23 agents),
-   generated via python (comment-strip + trailing-comma removal). Metronous now logs
-   "active model from opencode.json config" (no more heuristic fallback for configured agents).
-   File is GENERATED — added to .gitignore (never commit; regenerate after agent model changes).
-3. **Pipeline validated end-to-end**: `metronous benchmark run` executed manually — 135 rows in
-   benchmark_runs (was 0), verdicts computed (oracle/glm-5.3-free KEEP 747 samples 99.3% acc,
-   Sisyphus/big-pickle KEEP 527 samples 98.5%, nemotron KEEP 433 samples 98.2%). First real
-   data points in history of the DB.
-
-### Notes
-- `metronous benchmark run` = on-demand CLI (uses last 7 days of tracking.db data).
-- `metronous report` shows latest results; `metronous dashboard` = TUI.
-- Regenerate opencode.json after any agent model change in opencode.jsonc (python one-liner
-  in CONFIG-CHANGES history or rerun from this entry).
