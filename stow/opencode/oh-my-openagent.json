@@ -13,7 +13,9 @@
     "mode": "primary",
     "fallback_models": [
      "opencode-zen/mimo-v2.5-free",
-     "google/gemini-3.7-flash"
+     "google/gemini-3.8-flash",
+     "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+     "mistral/mistral-medium-latest"
     ]
    },
    "build": {
@@ -21,7 +23,9 @@
    "mode": "primary",
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.7-flash"
+    "google/gemini-3.8-flash",
+    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "mistral/mistral-medium-latest"
    ]
   },
   "smart": {
@@ -29,14 +33,17 @@
    "mode": "primary",
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.7-flash"
+    "google/gemini-3.8-flash",
+    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "mistral/mistral-medium-latest"
    ]
   },
   "fast": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "opencode-zen/nemotron-3.5-lightning-free",
    "mode": "primary",
    "fallback_models": [
-    "opencode-zen/nemotron-3-ultra-free",
+    "opencode-zen/big-pickle",
+    "google/gemini-3.5-flash-lite",
     "mistral/ministral-8b-latest"
    ]
   },
@@ -44,8 +51,10 @@
    "model": "opencode-zen/nemotron-3-ultra-free",
    "mode": "primary",
    "fallback_models": [
-    "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.7-flash"
+    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "google/antigravity-claude-sonnet-4-6",
+    "google/gemini-3.8-flash",
+    "opencode-zen/mimo-v2.5-free"
    ]
   },
   "plan": {
@@ -53,7 +62,9 @@
    "mode": "primary",
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.7-flash"
+    "google/gemini-3.8-flash",
+    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "mistral/mistral-medium-latest"
    ]
   },
   "code-reviewer": {
@@ -61,7 +72,9 @@
    "mode": "primary",
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.7-flash"
+    "google/gemini-3.8-flash",
+    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "mistral/mistral-medium-latest"
    ]
   },
   "security-reviewer": {
@@ -69,31 +82,38 @@
    "mode": "primary",
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.7-flash"
+    "google/gemini-3.8-flash",
+    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "mistral/mistral-medium-latest"
    ]
   },
   "explore": {
    "model": "opencode-zen/nemotron-3-ultra-free",
    "mode": "primary",
    "fallback_models": [
-    "opencode-zen/nemotron-3-ultra-free",
-    "google/gemini-3.7-flash"
+    "opencode-zen/nemotron-3.5-lightning-free",
+    "opencode-zen/mimo-v2.5-free",
+    "google/gemini-3.5-flash-lite",
+    "mistral/ministral-8b-latest"
    ]
   },
   "scout": {
    "model": "opencode-zen/nemotron-3-ultra-free",
    "mode": "primary",
    "fallback_models": [
-    "opencode-zen/nemotron-3-ultra-free",
-    "google/gemini-3.7-flash"
+    "opencode-zen/nemotron-3.5-lightning-free",
+    "opencode-zen/mimo-v2.5-free",
+    "google/gemini-3.5-flash-lite",
+    "mistral/ministral-8b-latest"
    ]
   },
   "docs-lookup": {
-   "model": "google/gemini-3.7-flash",
+   "model": "google/gemini-3.8-flash",
    "mode": "primary",
    "fallback_models": [
     "opencode-zen/nemotron-3-ultra-free",
-    "opencode-zen/mimo-v2.5-free"
+    "opencode-zen/mimo-v2.5-free",
+    "mistral/mistral-medium-latest"
    ]
   },
   "tdd-guide": {
@@ -101,7 +121,9 @@
    "mode": "primary",
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.7-flash"
+    "google/gemini-3.8-flash",
+    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "mistral/mistral-medium-latest"
    ]
   },
   "qa-enforcer": {
@@ -109,7 +131,9 @@
    "mode": "primary",
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.7-flash"
+    "google/gemini-3.8-flash",
+    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "mistral/mistral-medium-latest"
    ]
   },
   "subagent-orchestrator": {
@@ -117,33 +141,38 @@
    "mode": "primary",
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.7-flash"
+    "google/gemini-3.8-flash",
+    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "mistral/mistral-medium-latest"
    ]
   },
   "vision": {
-   "model": "mistral/pixtral-12b-latest",
+   "model": "opencode-zen/mimo-v2.5-free",
    "mode": "primary",
    "fallback_models": [
+    "google/gemini-3.8-flash",
+    "google/antigravity-gemini-3.8-flash",
     "mistral/mistral-medium-latest",
-    "google/gemini-3.7-flash",
-    "mistral/pixtral-12b-latest"
+    "google/gemini-robotics-er-2-preview"
    ]
   },
   "multimodal-looker": {
-   "model": "mistral/pixtral-12b-latest",
+   "model": "opencode-zen/mimo-v2.5-free",
    "mode": "primary",
    "fallback_models": [
+    "google/gemini-3.8-flash",
+    "google/antigravity-gemini-3.8-flash",
     "mistral/mistral-medium-latest",
-    "google/gemini-3.7-flash",
-    "mistral/pixtral-12b-latest"
+    "google/gemini-robotics-er-2-preview"
    ]
   },
   "librarian": {
-   "model": "google/gemini-3.7-flash",
+   "model": "google/gemini-3.8-flash",
    "mode": "primary",
    "fallback_models": [
     "opencode-zen/nemotron-3-ultra-free",
-    "opencode-zen/mimo-v2.5-free"
+    "opencode-zen/mimo-v2.5-free",
+    "mistral/mistral-medium-latest"
    ]
   },
   "metis": {
@@ -151,7 +180,9 @@
    "mode": "primary",
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.7-flash"
+    "google/gemini-3.8-flash",
+    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "mistral/mistral-medium-latest"
    ]
   },
   "momus": {
@@ -159,15 +190,18 @@
    "mode": "primary",
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.7-flash"
+    "google/gemini-3.8-flash",
+    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "mistral/mistral-medium-latest"
    ]
   },
   "sisyphus-junior": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "opencode-zen/nemotron-3.5-lightning-free",
    "mode": "primary",
    "fallback_models": [
-    "opencode-zen/nemotron-3-ultra-free",
-    "google/gemini-3.7-flash"
+    "opencode-zen/big-pickle",
+    "google/gemini-3.5-flash-lite",
+    "mistral/ministral-8b-latest"
    ]
   }
  },
