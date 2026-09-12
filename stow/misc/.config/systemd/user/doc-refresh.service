@@ -1,0 +1,6 @@
+[Unit]
+Description=Refresh system documentation (INVENTORY.md + related docs)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /home/reeinharrrd/.config/opencode/system-inventory.py --full --update-files

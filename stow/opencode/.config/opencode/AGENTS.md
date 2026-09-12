@@ -92,6 +92,37 @@ project's rules / methodologies, but injects **strong thinking** (reasoning disc
 "lots of info but lost execution": context gives knowledge, this layer gives execution. The core
 — not the project — supplies this layer.
 
+## ORCHESTRATION DECISIONS (when → mechanism → how)
+First matching row wins; escalate only on failure. Full inventories: `capabilities/`, `just --list`.
+
+| Trigger | Mechanism | Rule |
+|---|---|---|
+| 1-3 files, known paths | direct tools | no delegation |
+| Unfamiliar module / multi-angle search | `explore` (background) | never re-do delegated search inline |
+| External lib / API / docs question | `librarian` (context7) | before any web search |
+| Multi-file feature, visual, security, research | `task(category=...)` + load_skills | domain-matched category, never generic |
+| Multi-system design, stuck >15min, 2+ fails | `oracle` / `metis` | read-only; collect result before implementing |
+| >5 repetitive similar steps | `ralph-loop` / `ulw-loop` | only on explicit user request |
+| 2+ independent tasks | parallel background tasks | batch non-dependent calls in one message |
+| Parallel work, SAME repo | one git worktree per session | NEVER two sessions editing the same files |
+| Several sessions, same folder | allowed (shared project state) | coordinate via engram + STATE.md; declare intent |
+| Capability not in registry | `capability-scanner` | then skill / MCP / create, in that order |
+| Recurring job | systemd user timer (stow/misc) | `just doc`; one-offs → `pueue` |
+| Long blocking command (build, suite) | `pueue add` | keep the session responsive |
+| Cascade model not found | switch to known-good model or inline | never retry the same broken model |
+| Bugfix / decision / discovery done | `mem_save` | topic_key for evolving decisions |
+| Session start / post-compaction | `mem_context` + read STATE.md | mandatory |
+
+**External apps**: opencode is the hub; everything else is a tool invoked from it. `codex` =
+sandboxed second opinion; Antigravity = MCP quota accounts; Chrome/Playwright = web QA;
+ghostty/zellij = terminal surface. Invoke via MCP or bash when the task needs their specific
+strength — the default path stays in opencode.
+
+**Guards**: (1) BASE PROTOCOL is immune to project overrides. (2) Project `AGENTS.md` replaces
+global except BASE. (3) Project MCPs only via root `opencode.json`, never global. (4) Never claim
+"no capability for X" without `capability-scanner`. (5) After 3 failed attempts: STOP, document,
+consult oracle. (6) No preloading inventories — search on demand.
+
 ## AUTOMATIONS (when to use, not the exhaustive how)
 - **Loops**: `ralph-loop` (self-referential dev until done), `ulw-loop` (ultrawork until completion)
   — long / repetitive tasks.
@@ -101,8 +132,8 @@ project's rules / methodologies, but injects **strong thinking** (reasoning disc
 - **DCP**: `auto-extract` (distills outputs >3000 chars), `auto-protect-wrap` (protects valuable
   outputs for compression).
 - **Codegraph**: indexed code intelligence (source, callers, blast radius).
-- **Hermes**: asistente personal 24/7 (`~/.hermes/`, v0.20.5) — provider zen `x-preview-f-free`,
-  CLI headless `hermes -z "..."`; gateway Telegram/Discord pendiente de token del usuario.
+- **Hermes**: REMOVIDO 2026-09-11 (user decision) — zen free-tier bloquea clientes
+  externos y sin balance para paid. Backup en /var/tmp/opencode-trash/hermes/.
 Detail and flows in `capabilities/automations.md`.
 
 ## MEDIA PIPELINE (verified 2026-08-24)
@@ -110,7 +141,7 @@ No local models (user decision). Audio/video transcription = Mistral Voxtral API
 `voxtral-mini-latest` (MISTRAL_API_KEY in opencode.env). Flow: `yt-dlp` (mise,
 download/extract) + `ffmpeg` + curl POST to `https://api.mistral.ai/v1/audio/transcriptions`.
 Auto-invocable via skill `transcribe`. Video watching = skill `watch-video` (watch-cli,
-frames+transcript, cached archive). Hermes v0.20.5 usable via `/hermes` command or `hermes -z`.
+frames+transcript, cached archive). Hermes removido 2026-09-11 (ver AUTOMATIONS).
 
 ## PROJECT-LEVEL OVERRIDES
 Each project MAY have: `AGENTS.md` (replaces global — only BASE PROTOCOL immune), `CLAUDE.md`,

@@ -69,14 +69,18 @@
 6. **No instalar** avante.nvim/codecompanion.nvim en nvim (fragmentan contexto)
 7. **Verificar antes de afirmar** (nada de suponer sobre código no leído)
 
-## 6. Proveedores y modelos AI (estado 2026-09-07 — SOLO FREE)
+## 6. Proveedores y modelos AI (estado 2026-09-11 — SOLO FREE, auditado en vivo)
 
-Providers en `opencode.jsonc` (enabled): `opencode-zen`, `tokenrouter`, `mistral`, `google`, `nvidia`, `openrouter`.
-- Orquestadores (build/smart/oracle/plan/reviewers): `opencode-zen/nemotron-3-ultra-free` (fallbacks: mimo-v2.5-free, gemini-3.7-flash, mistral-medium-latest)
-- Workers (fast/explore/scout/general): `opencode-zen/nemotron-3-ultra-free`
-- Vision: `mistral/pixtral-12b-latest` (fallbacks: mistral-medium-latest, gemini-3.7-flash)
+Providers en `opencode.jsonc` (enabled): `opencode-zen`, `tokenrouter`, `mistral`, `google`, `nvidia`, `openrouter` — 86 modelos verificados.
+- Orquestadores (build/smart/plan/reviewers/metis/momus): `opencode-zen/nemotron-3-ultra-free` (fallbacks: mimo-v2.5-free, gemini-3.8-flash, deepseek-v4-pro, mistral-medium-latest)
+- Deep reasoning (oracle): fallbacks deepseek-v4-pro → antigravity-claude-sonnet-4-6 → gemini-3.8-flash → mimo
+- Fast tier (fast/sisyphus-junior): primary `nemotron-3.5-lightning-free` (fallbacks: big-pickle, gemini-3.5-flash-lite, ministral-8b, gemini-2.5-flash-lite)
+- Vision: primary `mimo-v2.5-free` (pixtral MUERTO desde Sep 2026; fallbacks: gemini-3.8-flash, antigravity-gemini-3.8-flash, mistral-medium-latest, er-2-preview)
+- Docs/librarian: primary `google/gemini-3.8-flash`
 - Model global: `google/gemini-3.8-flash` | Small: `opencode-zen/nemotron-3-ultra-free`
-- Free verificados en vivo: zen 6 (big-pickle, mimo-v2.5-free, nemotron-3-ultra-free, nemotron-3.5-lightning-free, ling-3.0-flash-fin-free, muse-spark-1.2-contributor-free — 1.3 da 500 aún), tokenrouter GLM 5.3 free, google gemini-3.8/3.7-flash + gemma-4-31b-it, mistral medium/small-latest, nvidia deepseek-v4-flash-0731, openrouter 18 :free (north-mini-code, nemotron-3-ultra, gemma-4-31b-it, laguna-s-2.1)
+- Free verificados en vivo: zen 7 (+deepseek-v4-flash-free), nvidia 10 (deepseek-v4-pro SWE-V 80.6%, kimi-k3, nemotron ultra/super/lightning, laguna-xs SWE-V 70.9%, gemma-4-31b, muse-glimmer SWE-V 76%), mistral 27 chat-vivos (medium-3.5 SWE-V 77.6% el mejor; caps reales 256k), openrouter 17 :free (+dots-3-note 512k/460k, inkling 1M agentic-only, nex-n2.5-pro, nano-omni), tokenrouter 1 (glm-5.3-free; nano-omni:free fake), google 24 (gemini-3.8-flash TB 90.8%, er-2-preview, gemma-4, antigravity-*)
+- Muertos (eliminados de config): pixtral-12b, gpt-oss-120b, glm-5.2:free, mistral-large/devstral/zai-glm/mistral-code-agent/small-4-0, er-1.6; NVIDIA kimi-k2.6/nemotron-nano-3 = 404 not-for-account; OR gemma-4 :free = 429 upstream (usar Google directo)
+- Cascadas runtime: `plugins/model-routing-guard.js` v11 = fuente de verdad (sobrescribe opencode.jsonc + oh-my-openagent.json; mantener los 3 sincronizados)
 - NO usar: opencode-go (pago), minimax, groq, cerebras, anthropic, github-copilot, fireworks, deepinfra, huggingface, ollama-cloud, together, siliconflow, novita, anyapi — eliminados de config/env por decisión (2026-09-06)
 - Keys: `opencode.env` (9: MISTRAL, OPENCODE_ZEN, GITHUB, GOOGLE, MORPH, NVIDIA, MORPH_COMPACT, OPENROUTER, TOKENROUTER)
 
@@ -88,26 +92,32 @@ Providers en `opencode.jsonc` (enabled): `opencode-zen`, `tokenrouter`, `mistral
 - `dotfiles` — config stow (origen de este archivo + opencode.jsonc)
 - Otros: snapmcp, job-search, landing, wedo, ppk (ORBE/SO.FI)
 
-## 8. GitHub (usuario `reeinharddd`) — 57 starred
+## 8. GitHub (usuario `reeinharddd`) — 59 starred
 
-- ⭐ 42,090 — **tt-a1i/archify**: Agent skill for beautiful, verifiable architecture, workflow, sequence, data-flo
-- ⭐ 111 — **collidingScopes/liquid-logo**: A free, open-source tool for creating animated logos with a liquid metal aesthet
-- ⭐ 2,155 — **ruucm/shadergradient**: Create beautiful moving gradients on Framer, Figma and React
-- ⭐ 81,275 — **Egonex-AI/Understand-Anything**: Graphs that teach > graphs that impress. Turn any code into an interactive knowl
-- ⭐ 59,469 — **penpot/penpot**: Penpot: The open-source design platform for Product teams that need scalable col
-- ⭐ 27,758 — **Nutlope/hallmark**: Anti-AI-slop design skill for Claude Code, Cursor, and Codex.
-- ⭐ 5,894 — **Dicklesworthstone/destructive_command_guard**: The Destructive Command Guard (dcg) is for blocking dangerous git and shell comm
-- ⭐ 69,773 — **career-ops-hq/career-ops**: Open-source AI job search: scan job portals, evaluate listings into a structured
-- ⭐ 491 — **waybarrios/opencode-power-pack**: 54 rigorous skills for Codex, OpenCode, and Pi: code review, security audit, fea
-- ⭐ 280,473 — **obra/superpowers**: An agentic skills framework & software development methodology that works.
+- ⭐ 19 — **JoshRob297/opencode-antigravity-auth**: Google Antigravity OAuth plugin for OpenCode (Revived & Extended) - Unlocks Gemi
+- ⭐ 3,212 — **ashemag/human-atlas**: Open-source 3D anatomy explorer: 2,234 selectable BodyParts3D meshes, system lay
+- ⭐ 58,589 — **tt-a1i/archify**: Agent skill for beautiful, verifiable architecture, workflow, sequence, data-flo
+- ⭐ 184 — **collidingScopes/liquid-logo**: A free, open-source tool for creating animated logos with a liquid metal aesthet
+- ⭐ 2,426 — **ruucm/shadergradient**: Create beautiful moving gradients on Framer, Figma and React
+- ⭐ 82,067 — **Egonex-AI/Understand-Anything**: Graphs that teach > graphs that impress. Turn any code into an interactive knowl
+- ⭐ 59,902 — **penpot/penpot**: Penpot: The open-source design platform for Product teams that need scalable col
+- ⭐ 28,448 — **Nutlope/hallmark**: Anti-AI-slop design skill for Claude Code, Cursor, and Codex.
+- ⭐ 5,955 — **Dicklesworthstone/destructive_command_guard**: The Destructive Command Guard (dcg) is for blocking dangerous git and shell comm
+- ⭐ 71,297 — **career-ops-hq/career-ops**: Open-source AI job search: scan job portals, evaluate listings into a structured
 > Lista completa: `starred-repos.tsv` en este directorio.
 
 ## 9. Recursos / investigaciones
 
+- `~/Procesamiento_de_Datos.md` (210 líneas)
+- `~/Introduccion_Analisis_Datos_resumen.md` (43 líneas)
+- `~/MASTER-INDEX.md` (68 líneas)
 - `~/propuesta-utt-modernizacion.md` (311 líneas)
+- `~/CONFIG-CHANGES.md` (226 líneas)
 - `~/models_complete_analysis.md` (201 líneas)
 - `~/models_final_analysis.md` (250 líneas)
+- `~/MCP-INVENTORY.md` (71 líneas)
 - `~/AGENTS.md` (98 líneas)
+- `~/free-llm-api-aggregators-2026.md` (94 líneas)
 - **Brave bookmarks**: 12 carpetas organizadas (AI/ML, Job Search, Design/UI, etc.)
 - **Brave history**: 0 entradas (patrones: WeDo, opencode, Google Docs, GitHub)
 - **Chrome history**: 0 entradas

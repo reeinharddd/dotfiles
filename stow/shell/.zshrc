@@ -59,7 +59,6 @@ alias vi="nvim"
 
 # TUIs
 alias lg="lazygit"
-alias ld="lazydocker"
 alias gl="glow"
 alias yz="yazi"
 alias nv="navi"
@@ -197,6 +196,7 @@ alias today="just daily"          # Daily review
 alias endday="just end-day"       # End of day
 alias t="task"                    # taskwarrior shorthand
 alias tl="task list"
+alias oc="opencode"              # opencode shorthand
 alias ta="task add"
 alias td="task done"
 alias tn="just note"

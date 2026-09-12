@@ -27,3 +27,19 @@ hooks:
           if [ -f "$OPENCODE_PROJECT_DIR/.opencode/STATE.md" ]; then
             printf '\n- [auto] %s - session idle, state checkpoint\n' "$(date '+%Y-%m-%d %H:%M')" >> "$OPENCODE_PROJECT_DIR/.opencode/STATE.md"
           fi
+
+  # Desktop notification when child sessions (subagents) finish a tool
+  # Notify only for meaningful tools to avoid spam; async to not block the agent.
+  - event: tool.execute.after
+    scope: child
+    async: true
+    actions:
+      - bash: |
+          payload=$(cat)
+          event=$(printf '%s' "$payload" | jq -r '.event // empty' 2>/dev/null || true)
+          tool=$(printf '%s' "$payload" | jq -r '.tool_name // empty' 2>/dev/null || true)
+          case "$tool" in
+            bash|edit|write)
+              notify-send -a opencode -t 4000 "OpenCode subagent" "tool finished: ${tool:-unknown}" 2>/dev/null || true
+              ;;
+          esac

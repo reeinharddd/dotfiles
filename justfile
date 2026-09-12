@@ -60,6 +60,9 @@ pomodoro:
     @bash scripts/pomodoro.sh 25
 
 # ─── Tiempo (Timewarrior) ───────────────────────────────────────
+# NOTA (2026-09-11): desde la migración a Taskwarrior 3, timew es
+# STANDALONE. El hook on-modify-timewarrior de TW2 fue retirado (incompatible
+# con TW3). Los targets start/stop inician timew manualmente; sin sync task↔timew.
 
 time:
     @timew summary today
@@ -153,6 +156,14 @@ find query:
 
 http url:
     @xh {{url}}
+
+# ─── Docs del sistema ──────────────────────────────────────────
+
+# Re-escanea inventario + refresca INVENTORY/PERSONAL + sincroniza docs
+doc:
+    @echo "==> Re-escaneando sistema..."
+    @python3 ~/.config/opencode/system-inventory.py --full --update-files
+    @echo "==> Docs refrescadas. Revisa cambios con git diff en dotfiles."
 
 # ─── Sistema ────────────────────────────────────────────────────
 

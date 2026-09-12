@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# ocp — open a project in opencode via fuzzel dmenu
+# Bound to $mainMod SHIFT O in hyprland.conf
+set -euo pipefail
+
+# Live projects (update when projects change — see STATE.md)
+declare -A PROJECTS=(
+  ["wedo"]="$HOME/projects/personal/wedo"
+  ["dispositivos"]="$HOME/School/dispositivos"
+  ["maestro"]="$HOME/projects/personal/maestro"
+  ["snapmcp"]="$HOME/projects/personal/snapmcp"
+  ["dotfiles"]="$HOME/projects/personal/dotfiles"
+  ["uspace"]="$HOME/projects/personal/Uspace"
+  ["job-search"]="$HOME/projects/personal/job-search"
+  ["ideas"]="$HOME/projects/personal/ideas"
+  ["home"]="$HOME"
+)
+
+# Order keys for stable listing
+SELECTION=$(printf '%s\n' "${!PROJECTS[@]}" | sort | fuzzel --dmenu --prompt "opencode: ") || exit 0
+
+DIR="${PROJECTS[$SELECTION]:-$HOME}"
+exec ghostty --working-directory="$DIR" -e opencode

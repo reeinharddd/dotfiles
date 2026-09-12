@@ -223,4 +223,15 @@
 - yaml-hooks destructive-bash hook does NOT fire in subagent sessions (verified experimentally
   m0206-m0208). Main-session protection works. Candidate fix: enforcement in model-routing-guard.js.
 - glm-5.3-free rate limit (8 req/min) causes oracle/subagent stream errors under
-  parallel load — consider fallback ordering or stagger.
+  parallel load: consider fallback ordering or stagger.
+
+## 2026-09-11: Living System (purga + unificación + integraciones)
+
+- **Purga total**: 199G -> 118G (81G). Escolar 8° (School, cold/ 19 repos, Downloads, vols docker), docker muerto (22 imágenes, 13.5G builder), caches (npm/bun 6G, tracker, puppeteer), 12 binarios muertos, 18 configs huérfanas, Activepieces (nunca usado), snaps viejos (16 revisions + core20), journal 1G, kernel 7.0.0-22.
+- **Performance**: zram-tools zstd 6.9G (PERCENT=50), tracker-miner-fs-3 masked.
+- **Taskwarrior 3**: 3.5.0 cmake build reemplaza 2.6.2 (apt queda inofensivo). Migración import-v2 (5 tareas). Sync server docker :8090. Hook on-modify-timewarrior TW2 removido (rompía TW3).
+- **Memoria**: engram 40 -> 15 proyectos (merges okit+caveman -> maestro, atlas -> wedo, unknown -> snapmcp, superpowers -> opencode, ecc+projects -> reeinharrrd), 680 dup eliminados, 17 proyectos escolares fuera. opencode.db 8.6G -> 5.0G (1161 sesiones muertas, VACUUM 71s con sesiones activas).
+- **Theming**: matugen 4.2.0 + swww 0.11.2 (build source) -> 5 templates (hyprland/fuzzel/waybar/mako/ghostty). Stow NUEVO: stow/matugen.
+- **Restic**: ~/Pictures agregado a backup, ~/dotfiles (path muerto) removido, exclude .git/ se mantiene (GitHub cubre).
+- **Integraciones IA**: $mainMod+O, script ocp, notify-hook.sh, alias oc, hermes REMOVIDO (zen bloquea clientes externos), WORKFLOW.md.
+- **Docs**: STATE.md nuevo, SISTEMA_DOC reescrito, INVENTORY re-scan, just doc + timer semanal.
