@@ -92,18 +92,8 @@ Providers en `opencode.jsonc` (enabled): `opencode-zen`, `tokenrouter`, `mistral
 - `dotfiles` — config stow (origen de este archivo + opencode.jsonc)
 - Otros: snapmcp, job-search, landing, wedo, ppk (ORBE/SO.FI)
 
-## 8. GitHub (usuario `reeinharddd`) — 59 starred
+## 8. GitHub (usuario `reeinharddd`) — 0 starred
 
-- ⭐ 19 — **JoshRob297/opencode-antigravity-auth**: Google Antigravity OAuth plugin for OpenCode (Revived & Extended) - Unlocks Gemi
-- ⭐ 3,212 — **ashemag/human-atlas**: Open-source 3D anatomy explorer: 2,234 selectable BodyParts3D meshes, system lay
-- ⭐ 58,589 — **tt-a1i/archify**: Agent skill for beautiful, verifiable architecture, workflow, sequence, data-flo
-- ⭐ 184 — **collidingScopes/liquid-logo**: A free, open-source tool for creating animated logos with a liquid metal aesthet
-- ⭐ 2,426 — **ruucm/shadergradient**: Create beautiful moving gradients on Framer, Figma and React
-- ⭐ 82,067 — **Egonex-AI/Understand-Anything**: Graphs that teach > graphs that impress. Turn any code into an interactive knowl
-- ⭐ 59,902 — **penpot/penpot**: Penpot: The open-source design platform for Product teams that need scalable col
-- ⭐ 28,448 — **Nutlope/hallmark**: Anti-AI-slop design skill for Claude Code, Cursor, and Codex.
-- ⭐ 5,955 — **Dicklesworthstone/destructive_command_guard**: The Destructive Command Guard (dcg) is for blocking dangerous git and shell comm
-- ⭐ 71,297 — **career-ops-hq/career-ops**: Open-source AI job search: scan job portals, evaluate listings into a structured
 > Lista completa: `starred-repos.tsv` en este directorio.
 
 ## 9. Recursos / investigaciones
@@ -112,14 +102,14 @@ Providers en `opencode.jsonc` (enabled): `opencode-zen`, `tokenrouter`, `mistral
 - `~/Introduccion_Analisis_Datos_resumen.md` (43 líneas)
 - `~/MASTER-INDEX.md` (68 líneas)
 - `~/propuesta-utt-modernizacion.md` (311 líneas)
-- `~/CONFIG-CHANGES.md` (226 líneas)
+- `~/CONFIG-CHANGES.md` (237 líneas)
 - `~/models_complete_analysis.md` (201 líneas)
 - `~/models_final_analysis.md` (250 líneas)
 - `~/MCP-INVENTORY.md` (71 líneas)
 - `~/AGENTS.md` (98 líneas)
 - `~/free-llm-api-aggregators-2026.md` (94 líneas)
 - **Brave bookmarks**: 12 carpetas organizadas (AI/ML, Job Search, Design/UI, etc.)
-- **Brave history**: 0 entradas (patrones: WeDo, opencode, Google Docs, GitHub)
+- **Brave history**: 100 entradas (patrones: WeDo, opencode, Google Docs, GitHub)
 - **Chrome history**: 0 entradas
 - `INVENTORY.md` — inventario completo del sistema (tools, apps, proyectos) — fuente de verdad de bajo-frecuencia
 
