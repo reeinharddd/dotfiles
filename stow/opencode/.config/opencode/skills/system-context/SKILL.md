@@ -79,7 +79,7 @@ Returns:
 
 ## Anti-Patterns
 
-- ❌ NO sugerir instalar `eza`, `batcat`, `rg`, `fd`, `zoxide`, `delta`, `fzf`, `btop`, `lazygit`, `lazydocker`, `mise`, `atuin`, `starship`, `zellij`, `yazi`, `navi`, `procs`, `git-cliff`, `gitleaks`, `sops`, `age`, `jj`, `chezmoi`, `ollama`, `docker`, `gh`, `trivy`, `semgrep`
+- ❌ NO sugerir instalar `eza`, `batcat`, `rg`, `fd`, `zoxide`, `delta`, `fzf`, `btop`, `lazygit`, `lazydocker`, `mise`, `atuin`, `starship`, `herdr`, `yazi`, `navi`, `procs`, `git-cliff`, `gitleaks`, `sops`, `age`, `jj`, `chezmoi`, `ollama`, `docker`, `gh`, `trivy`, `semgrep`
 - ❌ NO preguntar "¿está instalado X?" — leer `software/current.json`
 - ❌ NO asumir nombres estándar — en Ubuntu `bat` = `batcat`, `fd` = `fdfind`
 - ❌ NO pedir sudo por defecto — solo cuando la operación lo requiera

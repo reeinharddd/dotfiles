@@ -68,7 +68,7 @@ Precedencia: user instructions (AGENTS.md/CLAUDE.md/direct requests) > skills > 
 ## Tools clave
 
 - **Edit**: nvim (LazyVim) o code
-- **Terminal**: ghostty
+- **Terminal**: herdr (agent runtime, dentro de ghostty)
 - **Files TUI**: yazi + broot
 - **Search**: fzf + tv + rg + fd
 - **Git**: lazygit + jj + gh

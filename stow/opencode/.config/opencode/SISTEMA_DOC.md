@@ -30,7 +30,7 @@ Volúmenes: 6 (wedo_pgdata, qdrant_storage, 02b84f9e=mikedb, supabase uspace x3 
 
 ## Stack de desarrollo
 
-- mise: 55 tools (eza bat fd fzf atuin delta dust zellij lazygit just gh yt-dlp supabase...)
+- mise: 55 tools (eza bat fd fzf atuin delta dust herdr lazygit just gh yt-dlp supabase...)
 - stow: 32+1 paquetes (nuevo: matugen): `stow --adopt -R -d stow -t ~ <pkg>`
 - ~/.local/bin: 45 binarios (opencode, codex, maestro, matugen, swww x2, task TW3.5, television, engram, carapace...)
 - Snaps: 25 (brave firefox discord bitwarden thunderbird insomnia vlc trivy auto-cpufreq + runtimes)

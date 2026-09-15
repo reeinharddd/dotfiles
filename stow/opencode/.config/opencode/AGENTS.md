@@ -115,8 +115,11 @@ First matching row wins; escalate only on failure. Full inventories: `capabiliti
 
 **External apps**: opencode is the hub; everything else is a tool invoked from it. `codex` =
 sandboxed second opinion; Antigravity = MCP quota accounts; Chrome/Playwright = web QA;
-ghostty/zellij = terminal surface. Invoke via MCP or bash when the task needs their specific
-strength — the default path stays in opencode.
+herdr = agent runtime (terminal/session layer, mise 0.9.0, zellij removed 2026-09-13; ghostty
+= emulador). Pane herdr para agentes/procesos observables, pueue para batch puro, systemd
+timers para recurrente. Skill `herdr` en opencode (activa con HERDR_ENV=1) permite al agente
+controlar panes, lanzar helpers y esperar estado. Invoke via MCP or bash when the task needs
+their specific strength — the default path stays in opencode.
 
 **Guards**: (1) BASE PROTOCOL is immune to project overrides. (2) Project `AGENTS.md` replaces
 global except BASE. (3) Project MCPs only via root `opencode.json`, never global. (4) Never claim

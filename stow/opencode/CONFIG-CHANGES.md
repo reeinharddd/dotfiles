@@ -235,3 +235,25 @@
 - **Restic**: ~/Pictures agregado a backup, ~/dotfiles (path muerto) removido, exclude .git/ se mantiene (GitHub cubre).
 - **Integraciones IA**: $mainMod+O, script ocp, notify-hook.sh, alias oc, hermes REMOVIDO (zen bloquea clientes externos), WORKFLOW.md.
 - **Docs**: STATE.md nuevo, SISTEMA_DOC reescrito, INVENTORY re-scan, just doc + timer semanal.
+
+## 2026-09-13 — herdr 0.9.0 upgrade + zellij removal
+
+### herdr 0.8.2 → 0.9.0 (mise, pinned)
+- `pane_history = false` (antes true): riesgo de fuga de password sudo/tokens en session-history.json. Resume nativo de opencode (integración v11) cubre lo que daba pane_history.
+- `confirm_close = true`: protege panes con agentes en trabajo largo.
+- Integración opencode instalada (v11, min v5): `herdr integration install opencode` → `~/.config/opencode/plugins/herdr-agent-state.js` + `herdr-tui-session.js` + `tui.jsonc`. Herdr-managed, NO adoptar en stow.
+- Skill `herdr` instalado global: `~/.agents/skills/herdr/SKILL.md` (npx skills add herdrdev/herdr --skill herdr -g --agent opencode -y). Activa solo con HERDR_ENV=1.
+- purge: session-history.json (104KB, 0 secrets verificados), logs stale root, herdr 0.8.2 uninstall.
+- Server restart PENDIENTE (protocol mismatch 22>20): runbook abajo.
+
+### zellij REMOVIDO 2026-09-13
+- mise: zellij uninstalled, línea removida de config.toml.
+- stow: paquete zellij movido a /tmp/opencode-trash/zellij-stow/ (config.kdl keys hjkl ya replicadas en herdr).
+- symlinks ~/zellij + ~/.config/zellij removidos, farm verificado sin broken links.
+- AGENTS.md/WORKFLOW.md/SISTEMA_DOC.md actualizados: herdr = agent runtime.
+
+### Runbook restart herdr server (cuando agentes idle)
+1. Verificar agentes: `herdr pane list | jq` → todos idle/done
+2. `HERDR_SOCKET_PATH=~/.config/herdr/sessions/main/herdr.sock herdr server stop`
+3. Reattach: `herdr` (server 0.9.0 arranca, snapshot restore + resume nativo opencode via --session)
+4. Verificar: `herdr status`, `herdr integration status | grep opencode`, config reload aplica pane_history=false

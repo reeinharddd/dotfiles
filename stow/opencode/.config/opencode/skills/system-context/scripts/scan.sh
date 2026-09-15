@@ -5,7 +5,7 @@ set -e
 BASE="$(dirname "$0")/.."
 
 echo "=== Scanning Hardware ==="
-cat > "$BASE/hardware/current.json" <<EOF
+cat >"$BASE/hardware/current.json" <<EOF
 {
   "hostname": "$(hostname)",
   "kernel": "$(uname -r)",
@@ -38,7 +38,7 @@ checks = [
     ('lazygit','lazygit --version | head -1'),('lazydocker','lazydocker --version | head -1'),
     ('btop','btop --version | head -1'),('htop','htop --version | head -1'),
     ('fzf','fzf --version'),('atuin','atuin --version | head -1'),
-    ('starship','starship --version | head -1'),    ('zellij','zellij --version | head -1'),
+    ('starship','starship --version | head -1'),    ('herdr','herdr --version | head -1'),
     ('yazi','yazi --version | head -1'),('navi','navi --version | head -1'),
     ('procs','procs --version | head -1'),('git-cliff','git-cliff --version | head -1'),
     ('gitleaks','gitleaks --version | head -1'),('sops','sops --version | head -1'),
@@ -84,6 +84,6 @@ open(os.path.join('$BASE', 'projects', 'registry.json'), 'w').write(json.dumps(p
 "
 
 echo "=== Done ==="
-echo "  hardware/current.json  - $(wc -c < "$BASE/hardware/current.json") bytes"
-echo "  software/current.json  - $(wc -c < "$BASE/software/current.json") bytes"
-echo "  projects/registry.json - $(wc -c < "$BASE/projects/registry.json") bytes"
+echo "  hardware/current.json  - $(wc -c <"$BASE/hardware/current.json") bytes"
+echo "  software/current.json  - $(wc -c <"$BASE/software/current.json") bytes"
+echo "  projects/registry.json - $(wc -c <"$BASE/projects/registry.json") bytes"

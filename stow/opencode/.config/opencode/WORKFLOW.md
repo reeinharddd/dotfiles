@@ -42,7 +42,7 @@
 
 - `task`: Taskwarrior 3 con sync (server :8090), alias t/tl
 - `timew`: Timewarrior standalone (hook TW2 removido; trackear manual)
-- `zellij`: sesiones terminal persistentes
+- `herdr`: agent runtime — sesiones terminal persistentes (zellij removed 2026-09-13)
 - `yazi` (yz), `lazygit` (lg), `gh`, `just`: dentro de bash tool
 - `ocp`: selector fuzzel de proyectos -> nueva terminal opencode en cwd
 - Notificaciones mako al terminar agentes (notify-hook.sh)

@@ -1,4 +1,4 @@
-# Herdr config — agent multiplexer
+# Herdr config — agent runtime (reemplaza zellij)
 # https://herdr.dev/docs/configuration/
 # Tema: Catppuccin Mocha (match Ghostty)
 
@@ -60,7 +60,7 @@ mouse_capture = true
 pane_borders = true
 pane_gaps = true
 show_agent_labels_on_pane_borders = true
-confirm_close = false
+confirm_close = true
 prompt_new_tab_name = false
 accent = "cyan"
 
@@ -75,7 +75,7 @@ resume_agents_on_restore = true
 
 [experimental]
 allow_nested = false
-pane_history = true
+pane_history = false
 
 [advanced]
 scrollback_limit_bytes = 50000000
