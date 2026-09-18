@@ -69,9 +69,9 @@ Precedencia: user instructions (AGENTS.md/CLAUDE.md/direct requests) > skills > 
 
 - **Edit**: nvim (LazyVim) o code
 - **Terminal**: herdr (agent runtime, dentro de ghostty)
-- **Files TUI**: yazi + broot
-- **Search**: fzf + tv + rg + fd
-- **Git**: lazygit + jj + gh
+- **Files TUI**: yazi
+- **Search**: fzf + rg + fd
+- **Git**: lazygit + gh
 - **System**: btop + procs
 - **AI**: opencode (TUI) — NO plugin IDE
 - **Tasks**: taskwarrior + timewarrior + jrnl

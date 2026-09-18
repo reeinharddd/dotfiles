@@ -13,10 +13,11 @@
 ## MCPs
 - `context7` for library docs (current, sourced) — prefer over web search for APIs.
 - `engram` for durable memory: save on every bugfix/decision/discovery/config/pattern/preference.
-- `codebase-memory` / `codegraph` for source understanding — call BEFORE reading files.
+- `codegraph` for source understanding — call BEFORE reading files.
 - `firecrawl` for web search/scrape/crawl; use `firecrawl_search_feedback` to improve quality.
 - `qdrant` for long-term semantic RAG, not ephemeral notes.
-- On-demand MCPs (`royal-mcp`, `snapmcp`, `code-review-graph`, `page-agent`, `openpencil`) →
+- On-demand MCPs (`royal-mcp`, `code-review-graph`, `page-agent`, `openpencil`, `qdrant`,
+  `agentmemory`, `postgres`, `sentry`, `memory`, `drive`, `docs`, `sheets`, `brave-search`) →
   enable per project via dotfiles, never hardcode in project config.
 
 ## Agents / Delegation

@@ -72,7 +72,7 @@
     "security": { "primary": "opencode-zen/nemotron-3-ultra-free", "fallbacks": ["mistral/mistral-large-latest", "opencode-zen/mimo-v2.5-free", "google/gemini-3.7-flash"] }
   },
   "mcpPolicy": {
-    "alwaysOn": ["context7", "engram", "firecrawl", "codebase-memory", "sequential-thinking", "playwright"],
+    "alwaysOn": ["context7", "engram", "firecrawl", "snapmcp", "sequential-thinking", "playwright"],
     "onDemand": ["context7", "firecrawl", "github", "playwright", "postgres", "sentry", "qdrant", "filesystem", "code-review-graph", "snapmcp", "page-agent", "openpencil"],
     "neverGlobalByDefault": ["filesystem", "postgres", "sentry", "qdrant", "page-agent", "openpencil", "agentmemory", "memory"]
   },

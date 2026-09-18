@@ -71,9 +71,6 @@ declare -a PROJECT_SKILLS=()
 # MCPs relevantes
 declare -a PROJECT_MCPS=("engram")
 [ -d "$PROJECT_ROOT/.git" ] && PROJECT_MCPS+=("github")
-# Codebase memory solo si hay suficiente código fuente (50+ archivos)
-PROJECT_FILE_COUNT=$(rg --files -g '*.ts' -g '*.js' -g '*.py' -g '*.go' -g '*.rs' "$PROJECT_ROOT" 2>/dev/null | wc -l)
-[ "$PROJECT_FILE_COUNT" -gt 50 ] && PROJECT_MCPS+=("codebase-memory-mcp")
 # Browsers para QA / web dev
 [[ "$FRAMEWORK" =~ ^(angular|react|nextjs|vue|nestjs|wordpress)$ ]] && PROJECT_MCPS+=("playwright")
 # Container/orchestration

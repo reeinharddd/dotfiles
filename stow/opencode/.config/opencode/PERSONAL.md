@@ -16,7 +16,7 @@
 - **Rol**: Full-stack dev + sysadmin + automatización
 - **Stack**: Python, TypeScript, Go, Rust, shell, Docker
 - **Hardware/OS**: ThinkPad T14 Gen 3, AMD Ryzen 7 PRO 6850U, Ubuntu 26.04, Wayland (Hyprland)
-- **Terminal**: kitty / ghostty | **Shell**: zsh / Starship | **Editor**: Helix / Neovim (LazyVim)
+- **Terminal**: ghostty | **Shell**: zsh / Starship | **Editor**: Neovim (LazyVim)
 - **Idiomas**: chat/comandos en **español (mx informal)**; código/docs en **inglés**
 
 ## 2. Comunicación (cómo hablo)
@@ -44,11 +44,11 @@
 
 | Área | Herramientas |
 |---|---|
-| Edición | Helix, Neovim (LazyVim) |
-| Terminal | kitty, ghostty, zsh + Starship |
-| Archivos | yazi, broot |
-| Búsqueda | fzf, tv, rg, fd |
-| Git | lazygit, jj, gh |
+| Edición | Neovim (LazyVim) |
+| Terminal | ghostty, zsh + Starship |
+| Archivos | yazi |
+| Búsqueda | fzf, rg, fd |
+| Git | lazygit, gh |
 | Sistema | btop, procs |
 | Tareas | taskwarrior, timewarrior, jrnl |
 | Backup | restic |
@@ -57,7 +57,7 @@
 
 (→ Inventario completo de tools/apps/proyectos: `INVENTORY.md` en este directorio)
 
-**Nota dev tools real (mise)**: node 24.19, python 3.14, go 1.27, gh, lazygit, jj, fd, ripgrep, fzf, eza, bat, delta, starship, supabase, just, direnv, yt-dlp, pueue, etc. Setup completo en INVENTORY.md §2-5.
+**Nota dev tools real (mise)**: node 24.19, python 3.14, go 1.27, gh, lazygit, fd, ripgrep, fzf, eza, bat, delta, starship, supabase, just, direnv, yt-dlp, pueue, etc. Setup completo en INVENTORY.md §2-5.
 
 ## 5. Constraints (reglas fijas)
 

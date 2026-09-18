@@ -1,108 +1,45 @@
 [
   {
-    "name": "DeWebPro",
-    "path": "/home/reeinharrrd/projects/archive/DeWebPro",
-    "lang": "archive"
-  },
-  {
-    "name": "Econnect",
-    "path": "/home/reeinharrrd/projects/archive/Econnect",
-    "lang": "archive",
-    "version": "0.0.0"
-  },
-  {
-    "name": "KeepAnEye",
-    "path": "/home/reeinharrrd/projects/archive/KeepAnEye",
-    "lang": "archive",
-    "version": ""
-  },
-  {
-    "name": "KeepAnEye---Movil",
-    "path": "/home/reeinharrrd/projects/archive/KeepAnEye---Movil",
-    "lang": "archive",
-    "version": "1.0.0"
-  },
-  {
-    "name": "KeepAnEyeC-",
-    "path": "/home/reeinharrrd/projects/archive/KeepAnEyeC-",
-    "lang": "archive"
-  },
-  {
-    "name": "PeriodicTable",
-    "path": "/home/reeinharrrd/projects/archive/PeriodicTable",
-    "lang": "archive"
-  },
-  {
-    "name": "SGPC",
-    "path": "/home/reeinharrrd/projects/archive/SGPC",
-    "lang": "archive"
-  },
-  {
-    "name": "backend",
-    "path": "/home/reeinharrrd/projects/archive/backend",
-    "lang": "archive",
-    "version": "1.0.0"
-  },
-  {
     "name": "bks",
-    "path": "/home/reeinharrrd/projects/archive/bks",
-    "lang": "archive"
+    "path": "/home/reeinharrrd/projects/cold/bks",
+    "lang": "cold"
   },
   {
     "name": "brain",
-    "path": "/home/reeinharrrd/projects/archive/brain",
-    "lang": "archive"
+    "path": "/home/reeinharrrd/projects/cold/brain",
+    "lang": "cold"
   },
   {
-    "name": "impulsa-monorepo",
-    "path": "/home/reeinharrrd/projects/archive/impulsa-monorepo",
-    "lang": "archive",
-    "version": "1.0.0"
+    "name": "ctx-analyze",
+    "path": "/home/reeinharrrd/projects/cold/ctx-analyze",
+    "lang": "cold"
   },
   {
     "name": "mnemos",
-    "path": "/home/reeinharrrd/projects/archive/mnemos",
-    "lang": "archive",
+    "path": "/home/reeinharrrd/projects/cold/mnemos",
+    "lang": "cold",
     "version": ""
   },
   {
     "name": "opencode-config",
-    "path": "/home/reeinharrrd/projects/archive/opencode-config",
-    "lang": "archive",
+    "path": "/home/reeinharrrd/projects/cold/opencode-config",
+    "lang": "cold",
     "version": ""
   },
   {
-    "name": "projects-backup-2026-02-21",
-    "path": "/home/reeinharrrd/projects/archive/projects-backup-2026-02-21",
-    "lang": "archive"
+    "name": "sys-inspector",
+    "path": "/home/reeinharrrd/projects/cold/sys-inspector",
+    "lang": "cold"
   },
   {
-    "name": "proyecto8b2",
-    "path": "/home/reeinharrrd/projects/archive/proyecto8b2",
-    "lang": "archive"
+    "name": ".codegraph",
+    "path": "/home/reeinharrrd/projects/personal/.codegraph",
+    "lang": "personal"
   },
   {
-    "name": "union-backend",
-    "path": "/home/reeinharrrd/projects/archive/union-backend",
-    "lang": "archive",
-    "version": "1.0.0"
-  },
-  {
-    "name": "union-frontend",
-    "path": "/home/reeinharrrd/projects/archive/union-frontend",
-    "lang": "archive",
-    "version": "0.0.0"
-  },
-  {
-    "name": "wedo",
-    "path": "/home/reeinharrrd/projects/archive/wedo",
-    "lang": "archive"
-  },
-  {
-    "name": "career-ops",
-    "path": "/home/reeinharrrd/projects/external/career-ops",
-    "lang": "external",
-    "version": "1.13.0"
+    "name": ".omo",
+    "path": "/home/reeinharrrd/projects/personal/.omo",
+    "lang": "personal"
   },
   {
     "name": ".opencode",
@@ -111,19 +48,19 @@
     "version": ""
   },
   {
-    "name": "atlas",
-    "path": "/home/reeinharrrd/projects/personal/atlas",
+    "name": "Uspace",
+    "path": "/home/reeinharrrd/projects/personal/Uspace",
     "lang": "personal",
-    "version": "0.2.0"
-  },
-  {
-    "name": "ctx-analyze",
-    "path": "/home/reeinharrrd/projects/personal/ctx-analyze",
-    "lang": "personal"
+    "version": "0.1.0"
   },
   {
     "name": "dotfiles",
     "path": "/home/reeinharrrd/projects/personal/dotfiles",
+    "lang": "personal"
+  },
+  {
+    "name": "ideas",
+    "path": "/home/reeinharrrd/projects/personal/ideas",
     "lang": "personal"
   },
   {
@@ -139,6 +76,11 @@
     "version": "0.0.1"
   },
   {
+    "name": "life-os",
+    "path": "/home/reeinharrrd/projects/personal/life-os",
+    "lang": "personal"
+  },
+  {
     "name": "maestro",
     "path": "/home/reeinharrrd/projects/personal/maestro",
     "lang": "personal"
@@ -152,48 +94,12 @@
     "name": "snapmcp",
     "path": "/home/reeinharrrd/projects/personal/snapmcp",
     "lang": "personal",
-    "version": "2.2.3"
+    "version": "2.3.2"
   },
   {
-    "name": "sys-inspector",
-    "path": "/home/reeinharrrd/projects/personal/sys-inspector",
-    "lang": "personal"
-  },
-  {
-    "name": "ORBE",
-    "path": "/home/reeinharrrd/projects/ppk/ORBE",
-    "lang": "ppk"
-  },
-  {
-    "name": "PPK-SOCsAPI",
-    "path": "/home/reeinharrrd/projects/ppk/PPK-SOCsAPI",
-    "lang": "ppk"
-  },
-  {
-    "name": "PPK-SOCsWeb",
-    "path": "/home/reeinharrrd/projects/ppk/PPK-SOCsWeb",
-    "lang": "ppk",
-    "version": "0.0.0"
-  },
-  {
-    "name": "SO.FI",
-    "path": "/home/reeinharrrd/projects/ppk/SO.FI",
-    "lang": "ppk"
-  },
-  {
-    "name": "orbe-backend",
-    "path": "/home/reeinharrrd/projects/ppk/orbe-backend",
-    "lang": "ppk"
-  },
-  {
-    "name": "orbe-frontend",
-    "path": "/home/reeinharrrd/projects/ppk/orbe-frontend",
-    "lang": "ppk",
-    "version": "0.0.0"
-  },
-  {
-    "name": "orbe-main",
-    "path": "/home/reeinharrrd/projects/ppk/orbe-main",
-    "lang": "ppk"
+    "name": "wedo",
+    "path": "/home/reeinharrrd/projects/personal/wedo",
+    "lang": "personal",
+    "version": "0.2.0"
   }
 ]

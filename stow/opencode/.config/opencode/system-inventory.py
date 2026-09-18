@@ -500,7 +500,7 @@ def generate_inventory_md(data: Dict, scores: Dict) -> str:
         "## 1. Sistema Base",
         f"- OS: Ubuntu 26.04 | Kernel: {subprocess.run(['uname', '-r'], capture_output=True, text=True).stdout.strip()}",
         f"- Hardware: ThinkPad T14 Gen 3, AMD Ryzen 7 PRO 6850U",
-        f"- Shell: zsh/Starship | Terminal: kitty/ghostty | Editor: Helix/Neovim",
+        f"- Shell: zsh/Starship | Terminal: ghostty | Editor: Neovim",
         "",
         "## 2. Navegadores (Relevancia: {:.0%})".format(
             scores.get("brave_bookmarks", 0)
@@ -722,7 +722,7 @@ Temas: agent frameworks/harnesses (opencode, superpowers, ECC, gstack), design/a
 - Personal activos (8): Uspace (Next.js/Supabase), maestro (Go agent harness), ideas (sistema seeds→graduated), dotfiles (stow 32 pkgs), snapmcp, job-search, landing, wedo.
 - Archive (17): proyectos históricos (KeepAnEye, Econnect, union-frontend/backend, ctx-analyze, mnemos, sys-inspector).
 - PPK (7): ORBE, SO.FI, orbe-backend/frontend/main, PPK-SOCsAPI/Web.
-- Tools (34): agentes/herramientas IA (engram, opencode-hooks, oh-my-openagent, superpowers, agentmemory, codebase-memory-mcp, metronous, gentle-ai, etc.).
+- Tools (33): agentes/herramientas IA (engram, opencode-hooks, oh-my-openagent, superpowers, agentmemory, metronous, gentle-ai, etc.).
 - Dotfiles: stow repo con 32 paquetes, origen de ~/.config/opencode + ~/AGENTS.md.""",
             "type": "pattern",
             "topic_key": "pattern/inventario-proyectos-completo",
@@ -736,10 +736,10 @@ Temas: agent frameworks/harnesses (opencode, superpowers, ECC, gstack), design/a
 **Why**: Define capacidades técnicas disponibles en cualquier scope.
 **Where**: mise, cargo, npm, pipx, apt, snap
 **Learned**: 
-- mise (37): actionlint, atuin, bat, bun, delta, deno, direnv, duf, dust, eza, fd, fzf, gh, go, herdr, htmlq, jq, just, lazygit, marksman, miller, node 24.19 LTS, python 3.14, restic, ripgrep, ruff, shellcheck, shfmt, starship, supabase, television, xh, yq, yt-dlp, pueue(aqua), sd(aqua).
+- mise (36): actionlint, atuin, bat, bun, delta, deno, direnv, duf, dust, eza, fd, fzf, gh, go, herdr, htmlq, jq, just, lazygit, marksman, miller, node 24.19 LTS, python 3.14, restic, ripgrep, ruff, shellcheck, shfmt, starship, supabase, xh, yq, yt-dlp, pueue(aqua), sd(aqua).
 - cargo (34): ast-grep, bandwhich, btop, choose, difft, doggo, gping, grex, gum, hexyl, hyperfine, lazydocker, navi, ouch, procs, rust-analyzer, sd, tldr, tokei, watchexec, zoxide.
-- pipx/~/.local/bin (61): engram, opencode, playwright, hermes, metronous, codex, uv/uvx, wp, yazi, tv, transcribe, semgrep, gitleaks, git-cliff, navi, new-project, etc.
-- apt: 2338 paquetes (code, broot, btop, alacritty, audacity, cmake, clang, docker, neovim, kitty, rustc, etc.).
+- pipx/~/.local/bin (60): engram, opencode, playwright, hermes, metronous, codex, uv/uvx, wp, yazi, transcribe, semgrep, gitleaks, git-cliff, navi, new-project, etc.
+- apt: 2336 paquetes (code, btop, alacritty, audacity, cmake, clang, docker, neovim, rustc, etc.).
 - snap (24): bitwarden, brave, chromium, discord, firefox, insomnia, vlc, trivy, auto-cpufreq, mesa-2404.""",
             "type": "pattern",
             "topic_key": "pattern/inventario-herramientas-completo",

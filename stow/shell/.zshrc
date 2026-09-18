@@ -20,7 +20,6 @@ typeset -U PATH path
 path=(
   "$HOME/.cargo/bin"
   "$HOME/.local/bin"
-  "$HOME/.local/share/broot/launcher/bash"
   "$BUN_INSTALL/bin"
   "$GOPATH/bin"
   $path
@@ -71,7 +70,6 @@ alias ga="git add"
 alias gcm="git commit -m"
 alias gco="git checkout"
 alias gb="git branch"
-alias gj="jj"  # jujutsu
 
 # Modern tools 2026
 alias hf="hyperfine"
@@ -81,8 +79,6 @@ alias wx="watchexec"
 alias http="xh"
 alias sd="sd"
 alias tar="ouch"
-alias br="broot"           # broot launcher
-alias tv="tv"              # television
 alias ch="cliphist"        # cliphist
 alias fz="fuzzel"          # fuzzel launcher
 alias p="pueue"            # process queue

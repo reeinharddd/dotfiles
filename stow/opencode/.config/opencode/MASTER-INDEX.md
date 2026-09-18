@@ -35,8 +35,8 @@
 |-----------|-------|---------|
 | Providers | 6 active | opencode-zen, tokenrouter, mistral, google, nvidia, openrouter |
 | Agents | 19+ | inline agents, OMO builtins, and bodega agents |
-| Core MCPs | 9 | context7, engram, firecrawl, codebase-memory, sequential-thinking, metronous, github, playwright, filesystem |
-| On-demand MCPs | 11 | agentmemory, qdrant, postgres, sentry, memory, brave-search, snapmcp, code-review-graph, page-agent, openpencil, royal-mcp |
+| Core MCPs | 9 | context7, engram, firecrawl, snapmcp, sequential-thinking, metronous, github, playwright, filesystem |
+| On-demand MCPs | 10 | agentmemory, qdrant, postgres, sentry, memory, brave-search, code-review-graph, page-agent, openpencil, royal-mcp |
 | Plugins | 14 active | oh-my-openagent, model-routing-guard, rtk, bodega-index, morph-plugin, yaml-hooks, notify, background-agents, opencode-dcp, caveman, superpowers, metronous, vibeguard, antigravity-auth |
 | Skills (core) | 24 | mix: stow symlinks + external repos (superpowers, power-pack) |
 | Categories | 6 | fast, deep, ultrabrain, vision, writing, business-logic |

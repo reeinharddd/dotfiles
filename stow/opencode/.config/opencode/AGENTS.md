@@ -8,7 +8,7 @@
 ## Identity
 - **Handle**: reeinharrrd | **Role**: Full-stack dev, sysadmin, automation
 - **Stack**: Python, TS, Go, Rust, shell, Docker | **OS**: Ubuntu 26.04 (Linux), Wayland
-- **Terminal**: kitty / zsh / Starship | **Editor**: Helix / Neovim
+- **Terminal**: ghostty / zsh / Starship | **Editor**: Neovim (LazyVim)
 - **Real user context (L0)**: chat/commands in Spanish (mx informal); code/docs in English;
   caveman mode on by default (`.caveman-active`). Password `270922` only for sudo when explicit.
   No sudo without explicit password; no commits without request; no `rm -rf` (use `/tmp/opencode-trash`).
@@ -42,7 +42,7 @@ Full 12 Karpathy rules in `core-constitution` skill (loaded every session).
 ## ARCHITECTURE — Core (global) + On-Demand
 The **core loads at startup** and works in any project. **On-demand** loads per-project only when needed.
 
-- **Core (always on)**: 9 core MCPs (`context7`, `engram`, `firecrawl`, `codebase-memory`,
+- **Core (always on)**: 9 core MCPs (`context7`, `engram`, `firecrawl`, `snapmcp`,
   `sequential-thinking`, `metronous`, `github`, `filesystem`, `playwright`), 6 free providers
   (`opencode-zen`, `tokenrouter`, `mistral`, `google`, `nvidia`, `openrouter`),
   11 LSPs, 23 agents, the 24 core skills, the bodega index mechanism, DCP, and RTK
@@ -51,7 +51,7 @@ The **core loads at startup** and works in any project. **On-demand** loads per-
   del repo; nunca en el global. All verified working.
 - **On-Demand**: ~1900 bodega entries (1274 skills / 316 commands / 314 agents on-demand,
   plus 24/187/67 global — discovered, NOT loaded at start),
-  14 project MCPs (royal-mcp, snapmcp, code-review-graph, page-agent, openpencil, qdrant,
+  13 project MCPs (royal-mcp, code-review-graph, page-agent, openpencil, qdrant,
   agentmemory, postgres, sentry, memory, drive, docs, sheets, brave-search — bloques
   copy-paste en `instructions/04-mcp-tools.md`), project-specific skills / agents, and
   `PROJECT_CONTEXT.md` rules.

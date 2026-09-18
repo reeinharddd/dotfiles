@@ -32,7 +32,7 @@ Volúmenes: 6 (wedo_pgdata, qdrant_storage, 02b84f9e=mikedb, supabase uspace x3 
 
 - mise: 55 tools (eza bat fd fzf atuin delta dust herdr lazygit just gh yt-dlp supabase...)
 - stow: 32+1 paquetes (nuevo: matugen): `stow --adopt -R -d stow -t ~ <pkg>`
-- ~/.local/bin: 45 binarios (opencode, codex, maestro, matugen, swww x2, task TW3.5, television, engram, carapace...)
+- ~/.local/bin: 43 binarios (opencode, codex, maestro, matugen, swww x2, task TW3.5, engram, carapace...)
 - Snaps: 25 (brave firefox discord bitwarden thunderbird insomnia vlc trivy auto-cpufreq + runtimes)
 - apt: 2116 paquetes (code, google-chrome, flameshot, ksnip, libreoffice, docker)
 

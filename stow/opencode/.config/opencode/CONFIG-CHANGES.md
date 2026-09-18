@@ -257,3 +257,56 @@
 2. `HERDR_SOCKET_PATH=~/.config/herdr/sessions/main/herdr.sock herdr server stop`
 3. Reattach: `herdr` (server 0.9.0 arranca, snapshot restore + resume nativo opencode via --session)
 4. Verificar: `herdr status`, `herdr integration status | grep opencode`, config reload aplica pane_history=false
+
+## 2026-09-17 — Consolidación one-app-per-function (residuos retirados + config única)
+
+### Config única: capa root legacy ELIMINADA
+- 7 archivos duplicados en `stow/opencode/` (stowed a `~/`): `opencode.jsonc`, `dcp.jsonc`,
+  `hooks.yaml`, `oh-my-openagent.json`, `MASTER-INDEX.md`, `MCP-INVENTORY.md`,
+  `CONFIG-CHANGES.md` → trash `/tmp/opencode-trash/consolidacion-2026-09-17/opencode-pkg-root/`.
+- Canon (único): `~/.config/opencode/` — verificado como la copia más nueva (oh-my-openagent 17:23 vs 16:44)
+  y la que carga el AGENTS.md real. Elimina riesgo de opencode.json legacy (codebase-memory)
+  chocando al abrir opencode desde $HOME.
+- Sanity: 0 refs a `~/dcp.jsonc`/`~/hooks.yaml`/`~/oh-my-openagent.json` en scripts/plugins/zshrc.
+
+### codebase-memory-mcp RETIRADO completamente (266MB)
+- Binario `~/.local/bin/codebase-memory-mcp` (266,062,944 bytes) + dir `~/tools/codebase-memory-mcp`
+  → trash `/tmp/opencode-trash/consolidacion-2026-09-17/codebase-memory/`. Fuera de PATH.
+- Reemplazado por **snapmcp** (core, verificado con handshake). jsonc final: 9 core MCPs alineados:
+  context7, engram, firecrawl, snapmcp, sequential-thinking, metronous, github, filesystem,
+  playwright — todos `enabled: true`. qdrant NO está en core (mueve a on-demand).
+- Docs alineadas: INVENTORY.md (Tools 20→19, pipx 43→42), capabilities/mcps.md (reescrito:
+  9 core + 13 on-demand, qdrant→on-demand, snapmcp→core), best-practices.md (codegraph solo,
+  on-demand sin snapmcp), harness-registry.jsonc (alwaysOn codebase-memory→snapmcp),
+  MCP-INVENTORY.md (9 core + 13 on-demand: drive/docs/sheets incluidas).
+- 04-mcp-tools.md sin refs a codebase-memory (verified).
+
+### Otros residuos one-app-per-function
+- hyprland.conf: `$mainMod+T` → ghostty -e tv ELIMINADO (television retirado). CTRL_ALT+T (ghostty) se queda.
+- system-context skill: scan.sh sin probe jj + timeout 8s por tool (antes colgaba >240s); render.sh
+  kitty→ghostty (palette/terminal), opencode.json→opencode.jsonc; CONTEXT.md + current.json
+  REGENERADOS (2026-09-17): sin jj/kitty, path correcto stow/opencode/.config/opencode.
+- SKILL.md:82: lista NO-instalar sin jj.
+- Sweep residual: 0 refs a codebase-memory/kitty/jj/broot/tv en configs (solo nota histórica
+  intencional en mcps.md:13).
+
+## 2026-09-17 — Metronous shim auth fix + broot (apt) + mise update
+
+### metronous MCP shim 401 → FIJADO
+- Causa raíz: el shim `metronous mcp` (stdio JSON-RPC → daemon HTTP `127.0.0.1:$(mcp.port)`) NO lee
+  `ingest.key` del disco; exige env `METRONOUS_INGEST_TOKEN` (firma HMAC-SHA256 del body). Sin env →
+  401 "authentication required"; key errónea → 401 "invalid authentication token".
+- Fix: `export METRONOUS_INGEST_TOKEN=<~/.metronous/data/ingest.key>` + comentario en
+  `~/.config/opencode/opencode.env` (local, gitignored por dotfiles, NO stow). Sourced por zshrc.
+- Verificado end-to-end: `zsh -c 'source ~/.config/opencode/opencode.env; metronous mcp'`
+  `tools/call ingest` → 200 `event ingested`. Aplica desde el próximo launch de opencode (el shim
+  de la sesión actual se spawn-eó sin el env).
+- Tool del shim = `ingest` (NO `metronous_ingest`). Sin flags CLI (solo -h).
+- `metronous install` apuntaría a `opencode.json` (nombre viejo) — NO correrlo; config canónica =
+  `opencode.jsonc` (bloque metronous ~1221-1229, sin env field: hereda del parent process).
+
+### broot retirado (apt)
+- `apt remove -y broot` (paquete apt `1.55.0-1`). `command -v broot` vacío. Traza solo en trash.
+
+### mise
+- `mise self-update` → `2026.9.11 linux-x64`.

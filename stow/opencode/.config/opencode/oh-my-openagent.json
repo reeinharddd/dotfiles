@@ -14,7 +14,7 @@
     "fallback_models": [
      "opencode-zen/mimo-v2.5-free",
      "google/gemini-3.8-flash",
-     "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+     "nvidia/deepseek-ai/deepseek-v4-flash-0731",
      "mistral/mistral-medium-latest"
     ]
    },
@@ -24,7 +24,7 @@
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "mistral/mistral-medium-latest"
    ]
   },
@@ -34,7 +34,7 @@
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "mistral/mistral-medium-latest"
    ]
   },
@@ -51,7 +51,7 @@
    "model": "opencode-zen/nemotron-3-ultra-free",
    "mode": "primary",
    "fallback_models": [
-    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "google/antigravity-claude-sonnet-4-6",
     "google/gemini-3.8-flash",
     "opencode-zen/mimo-v2.5-free"
@@ -63,7 +63,7 @@
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "mistral/mistral-medium-latest"
    ]
   },
@@ -73,7 +73,7 @@
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "mistral/mistral-medium-latest"
    ]
   },
@@ -83,7 +83,7 @@
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "mistral/mistral-medium-latest"
    ]
   },
@@ -122,7 +122,7 @@
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "mistral/mistral-medium-latest"
    ]
   },
@@ -132,7 +132,7 @@
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "mistral/mistral-medium-latest"
    ]
   },
@@ -142,7 +142,7 @@
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "mistral/mistral-medium-latest"
    ]
   },
@@ -181,7 +181,7 @@
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "mistral/mistral-medium-latest"
    ]
   },
@@ -191,7 +191,7 @@
    "fallback_models": [
     "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "mistral/mistral-medium-latest"
    ]
   },
@@ -250,7 +250,7 @@
    ]
   },
   "vision": {
-   "model": "mistral/pixtral-12b-latest",
+   "model": "opencode-zen/mimo-v2.5-free",
    "fallback_models": [
     {
      "model": "opencode-zen/mimo-v2.5-free"
@@ -292,7 +292,7 @@
    ]
   },
   "visual-engineering": {
-   "model": "mistral/pixtral-12b-latest",
+   "model": "opencode-zen/mimo-v2.5-free",
    "fallback_models": [
     {
      "model": "opencode-zen/mimo-v2.5-free"
@@ -334,7 +334,7 @@
    ]
   },
   "artistry": {
-   "model": "mistral/pixtral-12b-latest",
+   "model": "opencode-zen/mimo-v2.5-free",
    "fallback_models": [
     {
      "model": "opencode-zen/mimo-v2.5-free"

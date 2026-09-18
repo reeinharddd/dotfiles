@@ -8,9 +8,18 @@ HW="$BASE/hardware/current.json"
 SW="$BASE/software/current.json"
 PR="$BASE/projects/registry.json"
 
-[[ -f "$HW" ]] || { echo "Run scan.sh first (missing hardware data)" >&2; exit 1; }
-[[ -f "$SW" ]] || { echo "Run scan.sh first (missing software data)" >&2; exit 1; }
-[[ -f "$PR" ]] || { echo "Run scan.sh first (missing projects data)" >&2; exit 1; }
+[[ -f "$HW" ]] || {
+	echo "Run scan.sh first (missing hardware data)" >&2
+	exit 1
+}
+[[ -f "$SW" ]] || {
+	echo "Run scan.sh first (missing software data)" >&2
+	exit 1
+}
+[[ -f "$PR" ]] || {
+	echo "Run scan.sh first (missing projects data)" >&2
+	exit 1
+}
 
 jq() { command jq -r "$@" 2>/dev/null || echo "unknown"; }
 kv() { printf -- "- **%s**: %s\n" "$1" "${2:-}"; }
@@ -41,17 +50,15 @@ DISK=$(df -h / | awk 'NR==2{print $2 " total, " $3 " used (" $5 ")"}')
 FONT_NAME=$(fc-match "monospace" 2>/dev/null | awk -F: '{print $2}' | sed 's/^ *//; s/ *$//; s/"//g' || echo "unknown")
 FONT_FILE=$(fc-match "monospace" 2>/dev/null | awk -F: '{print $1}' || echo "unknown")
 
-KITTY_CONF="$HOME/.config/kitty/kitty.conf"
-PALETTE_BG=$(grep -oP '^background\s+\K#\w+' "$KITTY_CONF" 2>/dev/null || echo "#000000")
-PALETTE_FG=$(grep -oP '^foreground\s+\K#\w+' "$KITTY_CONF" 2>/dev/null || echo "#BBBBBB")
-PALETTE_FGBRIGHT=$(grep -oP '^color7\s+\K#\w+' "$KITTY_CONF" 2>/dev/null || echo "#BBBBBB")
+GHOSTTY_CONF="$HOME/.config/ghostty/config"
+PALETTE_BG=$(grep -oP '^background\s*=\s*(?:0x|#)\K[0-9a-fA-F]{6}' "$GHOSTTY_CONF" | head -1 || echo "#000000")
+PALETTE_FG=$(grep -oP '^foreground\s*=\s*(?:0x|#)\K[0-9a-fA-F]{6}' "$GHOSTTY_CONF" | head -1 || echo "#BBBBBB")
+PALETTE_FGBRIGHT=$(grep -oP '^palette\s*=\s*\d+=\K[0-9a-fA-F]{6}' "$GHOSTTY_CONF" | head -1 || echo "#BBBBBB")
 
-TERMINAL_CMD=$(cat /etc/xdg-terminals.list 2>/dev/null | grep -v '^#' | head -1 | awk -F: '{print $1}' || echo "kitty")
+TERMINAL_CMD=$(cat /etc/xdg-terminals.list 2>/dev/null | grep -v '^#' | head -1 | awk -F: '{print $1}' || echo "ghostty")
 TERMINAL_VER=$(_cmd_ver "$TERMINAL_CMD" --version 2>/dev/null || echo "unknown")
 
-KITTY_VER=$(_cmd_ver kitty --version | sed 's/kitty //' | sed 's/ created by.*//')
-
-cat > "$BASE/CONTEXT.md" << CONTEXT_EOF
+cat >"$BASE/CONTEXT.md" <<CONTEXT_EOF
 # System Context: $HOST
 
 ## System Overview
@@ -79,13 +86,13 @@ $(kv "Palette" "bg: $PALETTE_BG, fg: $PALETTE_FG, bright: $PALETTE_FGBRIGHT")
 
 ## Shell Aliases
 $(grep -oP '^alias \K\w+="[^"]*"' "$HOME/.zshrc" 2>/dev/null | sed 's/="/=/' | sed 's/"$//' | while IFS='=' read -r name val; do
-  kv "$name" "$val"
+	kv "$name" "$val"
 done)
 
 ## Development Runtimes
 $(for t in mise node python go bun cargo rustc; do
-  v=$(_tool "$t")
-  [[ "$v" != "not found" ]] && kv "$t" "$v"
+	v=$(_tool "$t")
+	[[ "$v" != "not found" ]] && kv "$t" "$v"
 done)
 
 ## Tool Inventory
@@ -98,10 +105,10 @@ for name in sorted(sw):
 
 ## Services & Containers
 $(for svc in Docker Ollama SSH; do
-  s=$(echo "$svc" | tr '[:upper:]' '[:lower:]')
-  status=$(systemctl is-active "$s" 2>/dev/null || true)
-  status=${status:-inactive}
-  kv "$svc" "$status"
+	s=$(echo "$svc" | tr '[:upper:]' '[:lower:]')
+	status=$(systemctl is-active "$s" 2>/dev/null || true)
+	status=${status:-inactive}
+	kv "$svc" "$status"
 done)
 
 ## Configuration Files
@@ -115,8 +122,8 @@ files = {
     '.gitconfig': 'Git config: delta pager, zdiff3, remotes',
     '.config/mise/config.toml': 'mise runtimes: versions, env vars',
     '.config/Code/User/settings.json': 'VS Code: font, theme, terminal',
-    '.config/kitty/kitty.conf': 'Kitty terminal: palette, font, keybinds',
-    '.config/opencode/opencode.json': 'OpenCode: agents, MCP servers',
+    '.config/ghostty/config': 'Ghostty terminal: theme, font, keybinds',
+    '.config/opencode/opencode.jsonc': 'OpenCode: agents, MCP servers',
     '.config/fontconfig/fonts.conf': 'Fontconfig: font preferences',
 }
 for path, desc in sorted(files.items()):
@@ -155,7 +162,7 @@ $(kv "Editor" "VS Code + One Dark Pro Darker + Material Icons + Continue.dev")
 ## Quick Reference
 $(kv "Rescan system" "\`$BASE/scripts/scan.sh\`")
 $(kv "Regen context" "\`$BASE/scripts/render.sh\`")
-$(kv "OpenCode start" "opencode --mcp ~/.config/opencode/opencode.json")
+$(kv "OpenCode start" "opencode --mcp ~/.config/opencode/opencode.jsonc")
 $(kv "Run models" "ollama run qwen3:8b")
 
 ---

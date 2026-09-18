@@ -1,15 +1,17 @@
-/** guard v12 — free-only routing, audited live 2026-09-11.
+/** guard v14 — free-only routing, audited live 2026-09-17.
  *  FIX CRÍTICO: NO inyectar `fallback_models` en config.agent de opencode.
  *  opencode 1.18.29 enruta campos desconocidos de agent → provider options → body API;
  *  NVIDIA responde 400 "Unsupported parameter(s): `fallback_models`" (validación estricta).
  *  Los fallbacks en cascada viven SOLO en oh-my-openagent.json (model_fallback runtime real).
- *  Aquí solo se fija el model primario por agent (fuente de verdad de routing). */
+ *  v14 (2026-09-17): general mode "all"→"primary" — mode=all hacía que el subagente
+ *  general invocara zen free vía API path y fallara con AI_APICallError "free tier can
+ *  only be used from within OpenCode". Todos los agentes quedan en primary. */
 const CASCADE = {
   "build":            "opencode-zen/nemotron-3-ultra-free",
   "smart":            "opencode-zen/nemotron-3-ultra-free",
   "general":          "opencode-zen/nemotron-3-ultra-free",
   "plan":             "opencode-zen/nemotron-3-ultra-free",
-  "oracle":           "nvidia/deepseek-ai/deepseek-v4-pro-0813",
+  "oracle":           "nvidia/deepseek-ai/deepseek-v4-flash-0731",
   "tdd-guide":        "opencode-zen/nemotron-3-ultra-free",
   "qa-enforcer":      "opencode-zen/nemotron-3-ultra-free",
   "subagent-orchestrator": "opencode-zen/nemotron-3-ultra-free",
@@ -29,7 +31,7 @@ const CASCADE = {
   "vision":           "opencode-zen/mimo-v2.5-free",
   "multimodal-looker": "opencode-zen/mimo-v2.5-free",
 };
-const MODE = { general: "all" };
+const MODE = {};
 export default async function modelRoutingGuard(){
   return { config: async (c) => {
     c.agent = c.agent || {};

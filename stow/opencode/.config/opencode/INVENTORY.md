@@ -7,7 +7,7 @@
 ## 1. Sistema Base
 - OS: Ubuntu 26.04 | Kernel: 7.0.0-29-generic
 - Hardware: ThinkPad T14 Gen 3, AMD Ryzen 7 PRO 6850U
-- Shell: zsh/Starship | Terminal: kitty/ghostty | Editor: Helix/Neovim
+- Shell: zsh/Starship | Terminal: ghostty | Editor: Neovim
 
 ## 2. Navegadores (Relevancia: 95%)
 ### Brave (snap) — Bookmarks organizados
@@ -59,9 +59,8 @@
 - **.opencode** (node) [PROJECT_CONTEXT.md]: `/home/reeinharrrd/projects/personal/.opencode`
   ... y 3 más
 
-### Tools (20)
+### Tools (19)
 - **opencode-antigravity-auth**: `/home/reeinharrrd/tools/opencode-antigravity-auth`
-- **codebase-memory-mcp**: `/home/reeinharrrd/tools/codebase-memory-mcp`
 - **cold**: `/home/reeinharrrd/tools/cold`
 - **superpowers**: `/home/reeinharrrd/tools/superpowers`
 - **hallmark**: `/home/reeinharrrd/tools/hallmark`
@@ -77,8 +76,8 @@
 ### Cargo/Rust (18 binarios)
 ast-grep, btop, cargo, cargo-clippy, cargo-fmt, cargo-miri, clippy-driver, rls, rust-analyzer, rust-gdb, rust-gdbgui, rust-lldb, rustc, rustdoc, rustfmt, rustup, sg, zoxide
 
-### pipx/~/.local/bin (43 herramientas)
-auto-extract, auto-protect-wrap, backup-restic.sh, browse, carapace, cliphist, cliphist-menu.sh, codebase-memory-mcp, cua-driver, curl-cffi, dcg, dl-video, engram, extract-frames, getnf, maestro, matugen, metronous, mise, models, ocp, opencode, opencode-desktop-env, playwright, pre-commit, pre-compaction-save, pueue, pueued, semgrep, start-agentmemory
+### pipx/~/.local/bin (42 herramientas)
+auto-extract, auto-protect-wrap, backup-restic.sh, browse, carapace, cliphist, cliphist-menu.sh, cua-driver, curl-cffi, dcg, dl-video, engram, extract-frames, getnf, maestro, matugen, metronous, mise, models, ocp, opencode, opencode-desktop-env, playwright, pre-commit, pre-compaction-save, pueue, pueued, semgrep, start-agentmemory
 
 ### APT: 2115 paquetes | Snap: 23 apps
 

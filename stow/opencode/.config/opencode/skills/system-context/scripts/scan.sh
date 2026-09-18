@@ -24,7 +24,7 @@ python3 -W ignore -c "
 import subprocess, json, re
 def sh(cmd):
     try:
-        out = subprocess.check_output(cmd, shell=True, text=True, stderr=subprocess.DEVNULL).strip()
+        out = subprocess.check_output(cmd, shell=True, text=True, stderr=subprocess.DEVNULL, timeout=8).strip()
         return re.sub(r'\x1b\[[0-9;]*m', '', out)
     except: return ''
 tools = {}
@@ -42,7 +42,7 @@ checks = [
     ('yazi','yazi --version | head -1'),('navi','navi --version | head -1'),
     ('procs','procs --version | head -1'),('git-cliff','git-cliff --version | head -1'),
     ('gitleaks','gitleaks --version | head -1'),('sops','sops --version | head -1'),
-    ('age','age --version | head -1'),('jj','jj --version | head -1'),
+    ('age','age --version | head -1'),
     ('chezmoi','chezmoi --version | head -1'),('gh','gh --version | head -1'),
     ('trivy','trivy --version | head -1'),('semgrep','semgrep --version'),
     ('cargo','cargo --version | head -1'),('npm','npm --version'),
