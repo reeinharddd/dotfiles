@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# opencode-trace — snapshot de diagnostico de opencode
+# Consolida: version, MCPs vivos, errores del log del dia, stats de uso LLM,
+# sesiones recientes, telemetria y oracle actual. Read-only sobre config.
+# Uso: opencode-trace [--save]
+set -uo pipefail
+
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/opencode"
+LOG_FILE="$HOME/.local/share/opencode/log/opencode.log"
+TELE_DIR="$HOME/.local/share/opencode/telemetry/events"
+SNAP_DIR="$HOME/.local/share/opencode/telemetry/snapshots"
+TODAY="$(date +%Y-%m-%d)"
+
+echo "=== opencode-trace $(date '+%Y-%m-%d %H:%M:%S') ==="
+echo
+
+echo "--- Version ---"
+opencode --version 2>/dev/null || echo "ERROR: opencode no responde"
+
+echo
+echo "--- MCPs vivos ---"
+pgrep -af "codegraph|engram|snapmcp|metronous|playwright|mcp-server|codebase-memory|herdr|lsp-daemon" 2>/dev/null | grep -v pgrep | head -20 || echo "ninguno detectado"
+
+echo
+echo "--- Errores del log (hoy) ---"
+if [ -f "$LOG_FILE" ]; then
+  grep -aE "level=(ERROR|WARN)" "$LOG_FILE" 2>/dev/null | grep -a "$TODAY" | tail -15 || echo "sin errores hoy"
+else
+  echo "log no existe: $LOG_FILE"
+fi
+
+echo
+echo "--- Stats de uso LLM (7 dias, top 6 modelos) ---"
+opencode stats --days 7 --models 6 2>&1 | tail -45 || echo "stats fallo"
+
+echo
+echo "--- Sesiones recientes ---"
+opencode session list 2>&1 | head -8
+
+echo
+echo "--- Telemetria eventos (hoy) ---"
+if [ -f "$TELE_DIR/$TODAY.jsonl" ]; then
+  total=$(wc -l < "$TELE_DIR/$TODAY.jsonl")
+  tools=$(grep -ac '"type":"tool"' "$TELE_DIR/$TODAY.jsonl" || true)
+  fails=$(grep -ac '"ok":false' "$TELE_DIR/$TODAY.jsonl" || true)
+  dels=$(grep -ac '"type":"delegation"' "$TELE_DIR/$TODAY.jsonl" || true)
+  echo "eventos=$total tools=$tools fallos_tool=$fails delegaciones=$dels"
+  echo "--- ultimos fallos/delegaciones ---"
+  grep -a '"ok":false\|"type":"delegation"' "$TELE_DIR/$TODAY.jsonl" 2>/dev/null | tail -6 || echo "sin fallos"
+else
+  echo "sin telemetria hoy ($TELE_DIR/$TODAY.jsonl no existe)"
+fi
+
+echo
+echo "--- Oracle / guard ---"
+grep -oE '"oracle":[[:space:]]*"[^"]+"' "$CONFIG_DIR/plugins/model-routing-guard.js" 2>/dev/null | head -1 || echo "guard no encontrado"
+
+if [ "${1:-}" = "--save" ]; then
+  mkdir -p "$SNAP_DIR"
+  SNAP="$SNAP_DIR/trace-$(date +%Y%m%d-%H%M%S).txt"
+  "$0" > "$SNAP" 2>&1
+  echo
+  echo "Snapshot guardado: $SNAP"
+fi

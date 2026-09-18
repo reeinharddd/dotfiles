@@ -1266,6 +1266,7 @@
   "plugin": [
     "oh-my-openagent@4.19.4",
     "./plugins/model-routing-guard.js",
+    "./plugins/opencode-telemetry.js",
     "./plugins/opencode-rtk.js",
     "./plugins/bodega-index.js",
     "./node_modules/@morphllm/opencode-morph-plugin/dist/index.js",
