@@ -1,25 +1,33 @@
 /**
- * opencode-rtk.js — RTK rewrite + read-path invariant
+ * opencode-rtk.js — read-path guard for bash (RTK rewrite is NOT possible here)
  *
- * Rewrites slow native git/gh calls into rtk (RTK: faster git/gh via hook-cached
- * runtimes; verifiable with `rtk gain`). Blocks bash-level read paths that
- * duplicate dedicated tools (read/grep/glob) per user rules.
+ * Enforces the user rule: bash must not be used for file reads
+ * (cat/ls/rg/grep/head/tail/sed/awk/find) — use read/grep/glob instead.
+ * Violations abort the tool call with a guiding error.
  *
- * Fail-open: any error in this plugin logs to .rtk-stats.jsonl and lets the
- * original tool call proceed untouched. Never blocks unless the rule matches.
+ * Why this file no longer rewrites git/gh -> rtk:
+ *   opencode 1.18.29 `tool.execute.before` can OBSERVE tool args, but its
+ *   mutations are ignored — neither `output.args.command = ...`, a full
+ *   `output.args = {...}` reassignment, nor `output.output = ...` changes what
+ *   executes (verified 2026-09-17 with an observable `echo` marker). The ONLY
+ *   mechanism that aborts a call is THROWING from the hook — which is what the
+ *   guard below does. Git/gh -> rtk rewriting must come from rtk's own shell
+ *   hook / PATH shim, NOT from this plugin.
  *
- * v2 (2026-09-17): fixed hook payload shape for opencode 1.18.29 — the hook
- * receives (input={tool,sessionID,callID}, output={args}); args live in
- * output.args, NOT input.input. v1 read input.input.command and silently
- * no-op'd every rewrite/block.
+ * Fail-open: unexpected errors are logged to .rtk-stats.jsonl and the call
+ * proceeds untouched. Only an explicit read-tool violation blocks.
  */
 
 import fs from "fs";
 
 const STATS_FILE = "/home/reeinharrrd/.config/opencode/.rtk-stats.jsonl";
 const READ_TOOLS = ["cat", "ls", "rg", "grep", "head", "tail", "sed", "awk", "find"];
-const GIT_PREFIX = /^(?:git\s+(?:status|diff|log|stash)\b)/;
-const GH_PREFIX = /^(?:gh\s+pr\s+(?:view|list|diff)\b)/;
+// opencode prepends `export VAR=... ...;` to some bash calls (semicolon-separated).
+const PREAMBLE = /^(export\s[\s\S]*?(?:;\s*|&&\s*))/;
+// Escape hatch: pipelines / redirections / heredocs / substitutions are allowed
+// (only plain `cat file`-style reads are blocked, so heredocs and pipes survive).
+const COMPLEX = /[|<>]|\$\(|`/;
+const TAG = "[opencode-rtk]";
 
 function log(entry) {
   try {
@@ -31,27 +39,30 @@ function log(entry) {
 
 export default async function opencodeRtk() {
   return {
-    // Rewrite git/gh -> rtk before execution
     "tool.execute.before": async (input, output) => {
       try {
         if (!input || input.tool !== "bash") return;
-        const cmd = output?.args?.command ?? "";
-        if (!cmd || typeof cmd !== "string") return;
+        const raw = output?.args?.command;
+        if (!raw || typeof raw !== "string") return;
 
-        if (GIT_PREFIX.test(cmd) || GH_PREFIX.test(cmd)) {
-          const rewritten = "rtk " + cmd;
-          log({ type: "rewrite", from: cmd, to: rewritten });
-          output.args.command = rewritten;
+        const m = raw.match(PREAMBLE);
+        const core = (m ? raw.slice(m[1].length) : raw).trim();
+        if (!core) return;
+
+        const first = core.split(/\s+/)[0] || "";
+        if (!READ_TOOLS.includes(first)) return;
+
+        if (COMPLEX.test(core)) {
+          log({ type: "allow_complex", command: core });
           return;
         }
 
-        const first = cmd.trim().split(/\s+/)[0] || "";
-        if (READ_TOOLS.includes(first)) {
-          log({ type: "block", command: cmd });
-          output.output = `[opencode-rtk] ${first} via bash bloqueado: usa read/grep/glob (reglas del usuario). Comando: ${cmd}`;
-          return; // setting output aborts execution and uses this as the tool result
-        }
+        log({ type: "block", command: core });
+        throw new Error(
+          `${TAG} bash "${first}" bloqueado: usa read/grep/glob (reglas del usuario). Comando: ${core}`,
+        );
       } catch (err) {
+        if (String(err?.message ?? err).includes(TAG)) throw err;
         log({ type: "error", message: String(err) });
       }
     },

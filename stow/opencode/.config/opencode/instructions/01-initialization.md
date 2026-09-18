@@ -40,7 +40,7 @@ Before starting ANY task:
 
 Always prefer in this order:
 - **Understanding code**: `codegraph_explore` > `codegraph_node` > `read` > `grep`
-- **Editing**: `morph_edit` (large/scattered) > `edit` (small/exact) > `write` (new)
-- **Searching**: `codegraph_search` > `warpgrep_codebase_search` > `grep` > bash grep
+- **Editing**: `edit` (small/exact) > `write` (new) > python3 in-place para symlinks/scattered (morph_edit MUERTO 402). Routing completo: `04-mcp-tools.md`
+- **Searching**: `codegraph_explore` > `warpgrep_codebase_search` > `grep` > `glob`
 - **Web**: `firecrawl_firecrawl_search` > `websearch` > `webfetch`
 - **Docs**: `context7_query-docs` > `firecrawl_firecrawl_scrape` > raw search

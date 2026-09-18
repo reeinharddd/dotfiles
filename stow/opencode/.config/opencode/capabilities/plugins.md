@@ -11,14 +11,16 @@
   caveman mode, rules engine, skills loader. Backbone of most automation.
 - **Author**: YeonGyu-Kim. License SUL-1.0.
 
-## 2. model-routing-guard.js `v10` (own, stow)
-- **Role**: The routing enforcer. Forces the all-free CASCADE on every agent/model request:
-  primary `opencode-zen/nemotron-3-ultra-free`, fallbacks `mimo-v2.5-free` /
-  `gemini-3.7-flash` / `mistral`. Multimodal-looker → `mistral/pixtral-12b-latest`.
-- **Note**: antigravity models are deliberately OUT of the cascade (see Routing Policy below).
+## 2. model-routing-guard.js `v18` (own, stow)
+- **Role**: Enrutador de resiliencia multi-proveedor free. Asigna modelos principales por agente
+  y previene errores 403 FreeTierError en delegaciones background forzando proveedores externos
+  (NVIDIA deepseek-v4-flash-0731, Mistral medium-latest, Google gemini-3.8/3.5-lite) para workers,
+  manteniendo OpenCode Zen para agentes interactivos de consola (smart, build, plan, vision).
 
-## 3. opencode-rtk.js (own, stow)
-- **Role**: Rewrites `git`/`gh` commands to `rtk git status/diff/log/stash` — the RTK layer.
+## 3. opencode-rtk.js `v5` (own, stow)
+- **Role**: Guard de read-path para bash. Bloquea llamadas directas a cat/ls/rg/grep/head/tail/sed/awk/find
+  vía throw para obligar a usar las tools nativas y económicas (read, grep, glob), protegiendo
+  el contexto de acumulaciones masivas. Registra estadísticas en `.rtk-stats.jsonl`.
 
 ## 4. bodega-index.js `1.0.0` (own, stow)
 - **Role**: The on-demand mechanism. Reads the 6 `bodega-*.json` manifests, dedups by name
@@ -27,9 +29,9 @@
   startup — invoked on demand.
 
 ## 5. @morphllm/opencode-morph-plugin `2.0.16`
-- **Role**: Morph SDK — `morph_edit` (fast partial-file apply) + WarpGrep codebase search.
-- **Use**: large/scattered edits (prefer `morph_edit` for 300+ line files or many changes);
-  WarpGrep for natural-language code search. Always-on instruction in `morph-tools.md`.
+- **Role**: Morph SDK — WarpGrep codebase search y utilidades de búsqueda en repos públicos.
+- **Nota**: `morph_edit` se encuentra inactivo (HTTP 402); la edición estándar usa `edit`,
+  creación usa `write` y symlinks/archivos dispersos usan python3 in-place o edición en stow.
 
 ## 6. opencode-yaml-hooks `2026.3.29`
 - **Role**: Loads `hooks.yaml` — global destructive-bash safety blocks (rm -rf, sudo rm, mkfs,

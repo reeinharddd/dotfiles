@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+# opencode-model-audit — valida modelos en config contra allowlist VERIFICADA (smoke live 2026-09-18).
+# tier1 (USO estricto): modelo global, agents[*].model, oh-my-openagent agents+categories model/fallback_models, CASCADE del guard -> permite solo ALLOWED (exit 1 si falla).
+# tier2 (INFO): inventario de models por provider en opencode.jsonc -> se listan, NO bloquean; requieren smoke test solo si se asignan a un agente.
+# Uso: opencode-model-audit [--quiet]
+import os, re, json, sys
+
+C = os.path.expanduser("~/.config/opencode")
+ALLOWED = {
+    "opencode-zen/nemotron-3-ultra-free", "opencode-zen/nemotron-3.5-lightning-free",
+    "opencode-zen/mimo-v2.5-free", "opencode-zen/big-pickle",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+    "google/gemini-3.8-flash", "google/gemini-3.7-flash", "google/gemini-3.5-flash-lite", "google/gemini-2.5-flash-lite", "google/gemini-2.5-flash",
+    "google/antigravity-claude-sonnet-4-6", "google/antigravity-gemini-3.8-flash",
+    "mistral/mistral-medium-latest", "mistral/ministral-8b-latest",
+    "openrouter/dots-studio/dots-3-note-preview:free",
+}
+
+def strip_jsonc(s):
+    out, i, n, instr, esc = [], 0, len(s), False, False
+    while i < n:
+        c = s[i]
+        if instr:
+            out.append(c)
+            if esc: esc = False
+            elif c == "\\": esc = True
+            elif c == '"': instr = False
+            i += 1
+            continue
+        if c == '"': instr = True; out.append(c); i += 1; continue
+        if c == "/" and i + 1 < n and s[i+1] == "/":
+            while i < n and s[i] != "\n": i += 1
+            continue
+        if c == "/" and i + 1 < n and s[i+1] == "*":
+            i += 2
+            while i + 1 < n and not (s[i] == "*" and s[i+1] == "/"): i += 1
+            i += 2
+            continue
+        out.append(c); i += 1
+    return "".join(out)
+
+def provider_models(prov):
+    m = prov.get("models")
+    out = []
+    if isinstance(m, dict): out = list(m.keys())
+    elif isinstance(m, list):
+        for item in m:
+            if isinstance(item, str): out.append(item)
+            elif isinstance(item, dict) and item.get("model"): out.append(item["model"])
+    return out
+
+quiet = len(sys.argv) > 1 and sys.argv[1] == "--quiet"
+tier1, tier2 = set(), set()
+
+def addm(t, m):
+    if isinstance(m, str): t.add(m)
+    elif isinstance(m, dict):
+        for k in ("model", "m"): addm(t, m.get(k))
+
+oma = json.load(open(os.path.join(C, "oh-my-openagent.json")))
+for section in ("agents", "categories"):
+    for a in oma.get(section, {}).values():
+        addm(tier1, a.get("model"))
+        for fb in a.get("fallback_models", []) or []: addm(tier1, fb)
+
+oc = json.loads(strip_jsonc(open(os.path.join(C, "opencode.jsonc")).read()))
+if oc.get("model"): tier1.add(oc["model"])
+for a in oc.get("agent", {}).values():
+    if a.get("model"): tier1.add(a["model"])
+for p in oc.get("provider", {}).values():
+    tier2 |= set(provider_models(p))
+
+g = open(os.path.join(C, "plugins", "model-routing-guard.js")).read()
+tier1 |= set(re.findall(r'"((?:opencode-zen|nvidia|google|mistral|openrouter|tokenrouter)/[^"]+)"', g))
+
+print("--- Model audit (allowlist 2026-09-18) ---")
+if not quiet:
+    print("TIER1 (uso estricto):")
+    for m in sorted(tier1): print("  ", m)
+bad = sorted(m for m in tier1 if m not in ALLOWED)
+if bad:
+    for m in bad: print("  NO VERIFICADO: " + m)
+    print(f"  {len(bad)} modelo(s) de USO fuera de allowlist. Verificar con: opencode run -m \"<m>\" \"di OK\"")
+    sys.exit(1)
+print("  OK: modelos de uso en allowlist")
+if not quiet:
+    extra = sorted(m for m in tier2 if m not in ALLOWED)
+    if extra:
+        print("TIER2 (inventario providers, NO bloquea; smoke test solo si se usan en agentes):")
+        for m in extra: print("  ", m)

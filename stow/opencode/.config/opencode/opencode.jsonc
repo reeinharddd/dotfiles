@@ -250,15 +250,7 @@
           },
           "tool_call": true
         },
-        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free": {
-          "name": "Nemotron Nano Omni Free (multimodal)",
-          "limit": {
-            "context": 256000,
-            "output": 65536
-          },
-          "tool_call": true,
-          "modalities": {"input": ["text","image","audio","video"], "output": ["text"]}
-        },
+
         "cohere/north-mini-code:free": {
           "name": "North Mini Code Free",
           "limit": {
@@ -737,15 +729,7 @@
           },
           "tool_call": true
         },
-        "gemini-robotics-er-2-preview": {
-          "name": "Gemini Robotics ER 2 (VLM)",
-          "limit": {
-            "context": 131072,
-            "output": 65536
-          },
-          "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
-        },
+
         "gemma-4-31b-it": {
           "name": "Gemma 4 31B",
           "limit": {
@@ -1288,8 +1272,7 @@
     "instructions/03-quality-gates.md",
     "instructions/04-mcp-tools.md",
     "instructions/05-yagni.md",
-    "instructions/06-opencode-ops.md",
-    "node_modules/@morphllm/opencode-morph-plugin/instructions/morph-tools.md"
+    "instructions/06-opencode-ops.md"
   ],
   "permission": {
     "external_directory": "ask",
@@ -1329,84 +1312,124 @@
     "lsp": "allow",
     "skill": "allow"
   },
-  "agent": {
-    "build": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "smart": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "fast": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3.5-lightning-free"},
-    "oracle": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "plan": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "code-reviewer": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "security-reviewer": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "explore": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "scout": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "docs-lookup": {
-      "mode": "primary",
-      "model": "google/gemini-3.8-flash"},
-    "tdd-guide": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "qa-enforcer": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "subagent-orchestrator": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "vision": {
-      "mode": "primary",
-      "model": "opencode-zen/mimo-v2.5-free"},
-    "multimodal-looker": {
-      "mode": "primary",
-      "model": "opencode-zen/mimo-v2.5-free"},
-    "librarian": {
-      "mode": "primary",
-      "model": "google/gemini-3.8-flash"},
-    "metis": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "momus": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free"},
-    "sisyphus-junior": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3.5-lightning-free"},
-    "consult": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free",
-      "description": "Read-only consultant de arquitectura y debugging duro (reemplazo seleccionable de oracle).",
-      "temperature": 0.1
-    },
-    "plan-critic": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free",
-      "description": "Crítico de planes (equivalente seleccionable de metis/momus)."
-    },
-    "senior-researcher": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free",
-      "description": "Investigación de librerías y contexto (equivalente seleccionable de librarian)."
-    },
-    "general": {
-      "mode": "all",
-      "model": "opencode-zen/nemotron-3-ultra-free"}
-  },
+        "agent": {
+          "build": {
+              "mode": "primary",
+              "model": "opencode-zen/nemotron-3-ultra-free",
+              "description": "Agente ejecutor de compilación, suites de tests y flujos de build multi-etapa en consola."
+          },
+          "smart": {
+              "mode": "primary",
+              "model": "opencode-zen/nemotron-3-ultra-free",
+              "description": "Agente orquestador interactivo principal para codificación, resolución de problemas y coordinación."
+          },
+          "fast": {
+              "mode": "primary",
+              "model": "google/gemini-3.5-flash-lite",
+              "description": "Agente ligero para tareas triviales, corrección de tipografías y modificaciones de un solo archivo."
+          },
+          "oracle": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Consultor de razonamiento profundo para decisiones de arquitectura, debugging complejo y tradeoffs (read-only)."
+          },
+          "plan": {
+              "mode": "primary",
+              "model": "opencode-zen/nemotron-3-ultra-free",
+              "description": "Especialista en arquitectura y diseño que descompone requisitos en planes de implementación atómicos."
+          },
+          "code-reviewer": {
+              "mode": "primary",
+              "model": "mistral/mistral-medium-latest",
+              "description": "Revisor de código para análisis de diffs, bugs de lógica, seguridad, estilo y adherencia a convenciones."
+          },
+          "security-reviewer": {
+              "mode": "primary",
+              "model": "mistral/mistral-medium-latest",
+              "description": "Especialista en investigación de seguridad, análisis de superficie de ataque, autenticación y validación de exploits."
+          },
+          "explore": {
+              "mode": "primary",
+              "model": "google/gemini-3.5-flash-lite",
+              "description": "Explorador rápido de codebase para búsqueda contextual y navegación de símbolos y dependencias."
+          },
+          "scout": {
+              "mode": "primary",
+              "model": "google/gemini-3.5-flash-lite",
+              "description": "Explorador ligero para mapeo rápido de estructuras de directorios, puntos de entrada y dependencias."
+          },
+          "docs-lookup": {
+              "mode": "primary",
+              "model": "google/gemini-3.8-flash",
+              "description": "Especialista en documentación de librerías y contratos de API mediante Context7."
+          },
+          "tdd-guide": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Guía de desarrollo guiado por pruebas que enforcea el ciclo red-green-refactor."
+          },
+          "qa-enforcer": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Verificador de quality gates, linters, diagnostics de LSP y cobertura de pruebas antes de cerrar tareas."
+          },
+          "subagent-orchestrator": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Coordinador para descomponer y lanzar subagentes paralelos en segundo plano."
+          },
+          "vision": {
+              "mode": "primary",
+              "model": "google/gemini-3.8-flash",
+              "description": "Inspector visual y multimodal para QA de interfaces, captura de pantallas y verificación de layouts."
+          },
+          "multimodal-looker": {
+              "mode": "primary",
+              "model": "google/gemini-3.8-flash",
+              "description": "Extractor de información visual a partir de diagramas, imágenes y mockups."
+          },
+          "librarian": {
+              "mode": "primary",
+              "model": "google/gemini-3.8-flash",
+              "description": "Investigador de referencias externas en documentación oficial, repositorios open-source y Context7."
+          },
+          "metis": {
+              "mode": "primary",
+              "model": "mistral/mistral-medium-latest",
+              "description": "Consultor de pre-planeación que detecta ambigüedades, suposiciones ocultas y posibles fallos."
+          },
+          "momus": {
+              "mode": "primary",
+              "model": "mistral/mistral-medium-latest",
+              "description": "Crítico adversarial de planes que audita completitud, claridad y verificabilidad antes de implementar."
+          },
+          "sisyphus-junior": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Ejecutor enfocado de tareas atómicas directas sin subdelegación."
+          },
+          "consult": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Read-only consultant de arquitectura y debugging duro (reemplazo seleccionable de oracle).",
+              "temperature": 0.1
+          },
+          "plan-critic": {
+              "mode": "primary",
+              "model": "mistral/mistral-medium-latest",
+              "description": "Crítico de planes (equivalente seleccionable de metis/momus)."
+          },
+          "senior-researcher": {
+              "mode": "primary",
+              "model": "google/gemini-3.8-flash",
+              "description": "Investigación de librerías y contexto (equivalente seleccionable de librarian)."
+          },
+          "general": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Agente de trabajo general resiliente para delegaciones en segundo plano."
+          }
+      },
   "references": {
     "dotfiles": "~/projects/personal/dotfiles"
   }

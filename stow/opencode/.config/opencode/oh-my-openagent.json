@@ -4,315 +4,358 @@
  "hashline_edit": true,
  "model_fallback": true,
  "auto_update": false,
- "disabled_providers": ["openai", "opencode-go", "minimax", "groq", "cerebras", "anthropic", "github-copilot", "fireworks", "deepinfra", "huggingface", "ollama-cloud", "together", "siliconflow", "novita", "anyapi"],
+ "disabled_providers": [
+  "openai",
+  "opencode-go",
+  "minimax",
+  "groq",
+  "cerebras",
+  "anthropic",
+  "github-copilot",
+  "fireworks",
+  "deepinfra",
+  "huggingface",
+  "ollama-cloud",
+  "together",
+  "siliconflow",
+  "novita",
+  "anyapi"
+ ],
  "default_run_agent": "smart",
  "disabled_agents": [],
  "agents": {
- "general": {
-    "model": "opencode-zen/nemotron-3-ultra-free",
-    "mode": "primary",
-    "fallback_models": [
-     "opencode-zen/mimo-v2.5-free",
-     "google/gemini-3.8-flash",
-     "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-     "mistral/mistral-medium-latest"
-    ]
-   },
-   "build": {
+  "general": {
+   "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+   "mode": "primary",
+   "description": "Agente de trabajo general resiliente para delegaciones en segundo plano.",
+   "fallback_models": [
+    "google/gemini-3.8-flash",
+    "mistral/mistral-medium-latest",
+    "openrouter/dots-studio/dots-3-note-preview:free"
+   ]
+  },
+  "build": {
    "model": "opencode-zen/nemotron-3-ultra-free",
    "mode": "primary",
+   "description": "Agente ejecutor de compilación, suites de tests y flujos de build multi-etapa en consola.",
    "fallback_models": [
-    "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-    "mistral/mistral-medium-latest"
+    "mistral/mistral-medium-latest",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731"
    ]
   },
   "smart": {
    "model": "opencode-zen/nemotron-3-ultra-free",
    "mode": "primary",
+   "description": "Agente orquestador interactivo principal para codificación, resolución de problemas y coordinación.",
    "fallback_models": [
-    "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-    "mistral/mistral-medium-latest"
+    "mistral/mistral-medium-latest",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731"
    ]
   },
   "fast": {
-   "model": "opencode-zen/nemotron-3.5-lightning-free",
+   "model": "google/gemini-3.5-flash-lite",
    "mode": "primary",
+   "description": "Agente ligero para tareas triviales, corrección de tipografías y modificaciones de un solo archivo.",
    "fallback_models": [
-    "opencode-zen/big-pickle",
-    "google/gemini-3.5-flash-lite",
-    "mistral/ministral-8b-latest"
+    "mistral/ministral-8b-latest",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+    "google/gemini-2.5-flash-lite"
    ]
   },
   "oracle": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
    "mode": "primary",
+   "description": "Consultor de razonamiento profundo para decisiones de arquitectura, debugging complejo y tradeoffs (read-only).",
    "fallback_models": [
-    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "google/antigravity-claude-sonnet-4-6",
-    "google/gemini-3.8-flash",
-    "opencode-zen/mimo-v2.5-free"
+    "mistral/mistral-medium-latest",
+    "google/gemini-3.8-flash"
    ]
   },
   "plan": {
    "model": "opencode-zen/nemotron-3-ultra-free",
    "mode": "primary",
+   "description": "Especialista en arquitectura y diseño que descompone requisitos en planes de implementación atómicos.",
    "fallback_models": [
-    "opencode-zen/mimo-v2.5-free",
+    "mistral/mistral-medium-latest",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-    "mistral/mistral-medium-latest"
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731"
    ]
   },
   "code-reviewer": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "mistral/mistral-medium-latest",
    "mode": "primary",
+   "description": "Revisor de código para análisis de diffs, bugs de lógica, seguridad, estilo y adherencia a convenciones.",
    "fallback_models": [
-    "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-    "mistral/mistral-medium-latest"
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731"
    ]
   },
   "security-reviewer": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "mistral/mistral-medium-latest",
    "mode": "primary",
+   "description": "Especialista en investigación de seguridad, análisis de superficie de ataque, autenticación y validación de exploits.",
    "fallback_models": [
-    "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-    "mistral/mistral-medium-latest"
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731"
    ]
   },
   "explore": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "google/gemini-3.5-flash-lite",
    "mode": "primary",
+   "description": "Explorador rápido de codebase para búsqueda contextual y navegación de símbolos y dependencias.",
    "fallback_models": [
-    "opencode-zen/nemotron-3.5-lightning-free",
-    "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.5-flash-lite",
-    "mistral/ministral-8b-latest"
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+    "mistral/ministral-8b-latest",
+    "google/gemini-3.8-flash"
    ]
   },
   "scout": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "google/gemini-3.5-flash-lite",
    "mode": "primary",
+   "description": "Explorador ligero para mapeo rápido de estructuras de directorios, puntos de entrada y dependencias.",
    "fallback_models": [
-    "opencode-zen/nemotron-3.5-lightning-free",
-    "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.5-flash-lite",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "mistral/ministral-8b-latest"
    ]
   },
   "docs-lookup": {
    "model": "google/gemini-3.8-flash",
    "mode": "primary",
+   "description": "Especialista en documentación de librerías y contratos de API mediante Context7.",
    "fallback_models": [
-    "opencode-zen/nemotron-3-ultra-free",
-    "opencode-zen/mimo-v2.5-free",
-    "mistral/mistral-medium-latest"
+    "mistral/mistral-medium-latest",
+    "openrouter/dots-studio/dots-3-note-preview:free"
    ]
   },
   "tdd-guide": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
    "mode": "primary",
+   "description": "Guía de desarrollo guiado por pruebas que enforcea el ciclo red-green-refactor.",
    "fallback_models": [
-    "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-    "mistral/mistral-medium-latest"
+    "mistral/mistral-medium-latest",
+    "google/gemini-3.8-flash"
    ]
   },
   "qa-enforcer": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
    "mode": "primary",
+   "description": "Verificador de quality gates, linters, diagnostics de LSP y cobertura de pruebas antes de cerrar tareas.",
    "fallback_models": [
-    "opencode-zen/mimo-v2.5-free",
-    "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-    "mistral/mistral-medium-latest"
+    "mistral/mistral-medium-latest",
+    "google/gemini-3.8-flash"
    ]
   },
   "subagent-orchestrator": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
    "mode": "primary",
+   "description": "Coordinador para descomponer y lanzar subagentes paralelos en segundo plano.",
    "fallback_models": [
-    "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
     "mistral/mistral-medium-latest"
    ]
   },
   "vision": {
-   "model": "opencode-zen/mimo-v2.5-free",
+   "model": "google/gemini-3.8-flash",
    "mode": "primary",
+   "description": "Inspector visual y multimodal para QA de interfaces, captura de pantallas y verificación de layouts.",
    "fallback_models": [
-    "google/gemini-3.8-flash",
     "google/antigravity-gemini-3.8-flash",
-    "mistral/mistral-medium-latest",
-    "google/gemini-robotics-er-2-preview"
+    "openrouter/dots-studio/dots-3-note-preview:free"
    ]
   },
   "multimodal-looker": {
-   "model": "opencode-zen/mimo-v2.5-free",
+   "model": "google/gemini-3.8-flash",
    "mode": "primary",
+   "description": "Extractor de información visual a partir de diagramas, imágenes y mockups.",
    "fallback_models": [
-    "google/gemini-3.8-flash",
     "google/antigravity-gemini-3.8-flash",
-    "mistral/mistral-medium-latest",
-    "google/gemini-robotics-er-2-preview"
+    "openrouter/dots-studio/dots-3-note-preview:free"
    ]
   },
   "librarian": {
    "model": "google/gemini-3.8-flash",
    "mode": "primary",
+   "description": "Investigador de referencias externas en documentación oficial, repositorios open-source y Context7.",
    "fallback_models": [
-    "opencode-zen/nemotron-3-ultra-free",
-    "opencode-zen/mimo-v2.5-free",
-    "mistral/mistral-medium-latest"
+    "mistral/mistral-medium-latest",
+    "openrouter/dots-studio/dots-3-note-preview:free",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731"
    ]
   },
   "metis": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "mistral/mistral-medium-latest",
    "mode": "primary",
+   "description": "Consultor de pre-planeación que detecta ambigüedades, suposiciones ocultas y posibles fallos.",
    "fallback_models": [
-    "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
     "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-    "mistral/mistral-medium-latest"
+    "google/antigravity-claude-sonnet-4-6"
    ]
   },
   "momus": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "mistral/mistral-medium-latest",
    "mode": "primary",
+   "description": "Crítico adversarial de planes que audita completitud, claridad y verificabilidad antes de implementar.",
    "fallback_models": [
-    "opencode-zen/mimo-v2.5-free",
     "google/gemini-3.8-flash",
     "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-    "mistral/mistral-medium-latest"
+    "google/antigravity-claude-sonnet-4-6"
    ]
   },
   "sisyphus-junior": {
-   "model": "opencode-zen/nemotron-3.5-lightning-free",
+   "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
    "mode": "primary",
+   "description": "Ejecutor enfocado de tareas atómicas directas sin subdelegación.",
    "fallback_models": [
-    "opencode-zen/big-pickle",
+    "mistral/ministral-8b-latest",
     "google/gemini-3.5-flash-lite",
-    "mistral/ministral-8b-latest"
+    "google/gemini-2.5-flash-lite"
+   ]
+  },
+  "consult": {
+   "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+   "mode": "primary",
+   "description": "Read-only consultant de arquitectura y debugging duro (reemplazo seleccionable de oracle).",
+   "fallback_models": [
+    "google/antigravity-claude-sonnet-4-6",
+    "mistral/mistral-medium-latest",
+    "google/gemini-3.8-flash",
+    "openrouter/dots-studio/dots-3-note-preview:free"
+   ]
+  },
+  "plan-critic": {
+   "model": "mistral/mistral-medium-latest",
+   "mode": "primary",
+   "description": "Crítico de planes (equivalente seleccionable de metis/momus).",
+   "fallback_models": [
+    "google/gemini-3.8-flash",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+    "google/antigravity-claude-sonnet-4-6",
+    "openrouter/dots-studio/dots-3-note-preview:free"
+   ]
+  },
+  "senior-researcher": {
+   "model": "google/gemini-3.8-flash",
+   "mode": "primary",
+   "description": "Investigación de librerías y contexto (equivalente seleccionable de librarian).",
+   "fallback_models": [
+    "mistral/mistral-medium-latest",
+    "openrouter/dots-studio/dots-3-note-preview:free",
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731"
    ]
   }
  },
  "categories": {
   "fast": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "google/gemini-3.5-flash-lite",
    "fallback_models": [
     {
-     "model": "opencode-zen/mimo-v2.5-free"
-    },
-    {
-     "model": "google/gemini-3.7-flash"
+     "model": "mistral/ministral-8b-latest"
     },
     {
      "model": "google/gemini-2.5-flash-lite"
+    },
+    {
+     "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731"
     }
    ]
   },
   "deep": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "google/gemini-3.8-flash",
    "fallback_models": [
     {
-     "model": "opencode-zen/mimo-v2.5-free"
-    },
-    {
-     "model": "google/gemini-3.7-flash"
-    },
-    {
      "model": "mistral/mistral-medium-latest"
+    },
+    {
+     "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731"
+    },
+    {
+     "model": "openrouter/dots-studio/dots-3-note-preview:free"
     }
    ]
   },
   "ultrabrain": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "mistral/mistral-medium-latest",
    "reasoningEffort": "high",
    "fallback_models": [
     {
-     "model": "opencode-zen/mimo-v2.5-free"
+     "model": "google/antigravity-claude-sonnet-4-6"
     },
     {
-     "model": "google/gemini-3.7-flash"
+     "model": "google/gemini-3.8-flash"
     },
     {
-     "model": "mistral/mistral-medium-latest"
+     "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731"
+    },
+    {
+     "model": "openrouter/dots-studio/dots-3-note-preview:free"
     }
    ]
   },
-  "vision": {
-   "model": "opencode-zen/mimo-v2.5-free",
-   "fallback_models": [
-    {
-     "model": "opencode-zen/mimo-v2.5-free"
-    },
-    {
-     "model": "google/gemini-3.7-flash"
-    },
-    {
-     "model": "mistral/mistral-medium-latest"
-    }
-   ]
-  },
+"vision": {
+    "model": "google/gemini-3.8-flash",
+    "fallback_models": [
+     {
+      "model": "google/antigravity-gemini-3.8-flash"
+     },
+     {
+      "model": "openrouter/dots-studio/dots-3-note-preview:free"
+     }
+    ]
+   },
   "writing": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "mistral/mistral-medium-latest",
    "fallback_models": [
     {
-     "model": "opencode-zen/mimo-v2.5-free"
+     "model": "google/gemini-3.8-flash"
     },
     {
-     "model": "google/gemini-3.7-flash"
+     "model": "openrouter/dots-studio/dots-3-note-preview:free"
     },
     {
-     "model": "mistral/mistral-medium-latest"
+     "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731"
     }
    ]
   },
   "business-logic": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
    "fallback_models": [
     {
-     "model": "opencode-zen/mimo-v2.5-free"
-    },
-    {
-     "model": "google/gemini-3.7-flash"
-    },
-    {
      "model": "mistral/mistral-medium-latest"
+    },
+    {
+     "model": "google/gemini-3.8-flash"
+    },
+    {
+     "model": "openrouter/dots-studio/dots-3-note-preview:free"
     }
    ]
   },
-  "visual-engineering": {
-   "model": "opencode-zen/mimo-v2.5-free",
-   "fallback_models": [
-    {
-     "model": "opencode-zen/mimo-v2.5-free"
-    },
-    {
-     "model": "google/gemini-3.7-flash"
-    },
-    {
-     "model": "mistral/mistral-medium-latest"
-    }
-   ]
-  },
+"visual-engineering": {
+    "model": "google/gemini-3.8-flash",
+    "fallback_models": [
+     {
+      "model": "google/antigravity-gemini-3.8-flash"
+     },
+     {
+      "model": "mistral/mistral-medium-latest"
+     },
+     {
+      "model": "openrouter/dots-studio/dots-3-note-preview:free"
+     }
+    ]
+   },
   "unspecified-low": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
    "fallback_models": [
     {
-     "model": "opencode-zen/mimo-v2.5-free"
+     "model": "google/gemini-3.5-flash-lite"
     },
     {
-     "model": "google/gemini-3.7-flash"
+     "model": "mistral/ministral-8b-latest"
     },
     {
      "model": "google/gemini-2.5-flash-lite"
@@ -320,41 +363,41 @@
    ]
   },
   "unspecified-high": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "google/gemini-3.8-flash",
    "fallback_models": [
     {
-     "model": "opencode-zen/mimo-v2.5-free"
-    },
-    {
-     "model": "google/gemini-3.7-flash"
-    },
-    {
      "model": "mistral/mistral-medium-latest"
+    },
+    {
+     "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731"
+    },
+    {
+     "model": "openrouter/dots-studio/dots-3-note-preview:free"
     }
    ]
   },
   "artistry": {
-   "model": "opencode-zen/mimo-v2.5-free",
+   "model": "google/gemini-3.8-flash",
    "fallback_models": [
     {
-     "model": "opencode-zen/mimo-v2.5-free"
-    },
-    {
-     "model": "google/gemini-3.7-flash"
-    },
-    {
      "model": "mistral/mistral-medium-latest"
+    },
+    {
+     "model": "openrouter/dots-studio/dots-3-note-preview:free"
+    },
+    {
+     "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731"
     }
    ]
   },
   "quick": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+   "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
    "fallback_models": [
     {
-     "model": "opencode-zen/mimo-v2.5-free"
+     "model": "mistral/ministral-8b-latest"
     },
     {
-     "model": "google/gemini-3.7-flash"
+     "model": "google/gemini-3.5-flash-lite"
     },
     {
      "model": "google/gemini-2.5-flash-lite"

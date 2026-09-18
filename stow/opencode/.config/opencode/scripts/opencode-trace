@@ -56,6 +56,9 @@ else
 fi
 
 echo
+echo "--- Model audit (allowlist) ---"
+"$CONFIG_DIR/scripts/opencode-model-audit" --quiet 2>/dev/null || echo "OFENSORES: modelos fuera de allowlist (correr opencode-model-audit)"
+
 echo "--- Oracle / guard ---"
 grep -oE '"oracle":[[:space:]]*"[^"]+"' "$CONFIG_DIR/plugins/model-routing-guard.js" 2>/dev/null | head -1 || echo "guard no encontrado"
 

@@ -69,20 +69,24 @@
 6. **No instalar** avante.nvim/codecompanion.nvim en nvim (fragmentan contexto)
 7. **Verificar antes de afirmar** (nada de suponer sobre código no leído)
 
-## 6. Proveedores y modelos AI (estado 2026-09-11 — SOLO FREE, auditado en vivo)
+## 6. Proveedores y modelos AI (estado 2026-09-18 — SOLO FREE, auditado en vivo)
 
-Providers en `opencode.jsonc` (enabled): `opencode-zen`, `tokenrouter`, `mistral`, `google`, `nvidia`, `openrouter` — 86 modelos verificados.
-- Orquestadores (build/smart/plan/reviewers/metis/momus): `opencode-zen/nemotron-3-ultra-free` (fallbacks: mimo-v2.5-free, gemini-3.8-flash, deepseek-v4-pro, mistral-medium-latest)
-- Deep reasoning (oracle): fallbacks deepseek-v4-pro → antigravity-claude-sonnet-4-6 → gemini-3.8-flash → mimo
-- Fast tier (fast/sisyphus-junior): primary `nemotron-3.5-lightning-free` (fallbacks: big-pickle, gemini-3.5-flash-lite, ministral-8b, gemini-2.5-flash-lite)
-- Vision: primary `mimo-v2.5-free` (pixtral MUERTO desde Sep 2026; fallbacks: gemini-3.8-flash, antigravity-gemini-3.8-flash, mistral-medium-latest, er-2-preview)
-- Docs/librarian: primary `google/gemini-3.8-flash`
-- Model global: `google/gemini-3.8-flash` | Small: `opencode-zen/nemotron-3-ultra-free`
-- Free verificados en vivo: zen 7 (+deepseek-v4-flash-free), nvidia 10 (deepseek-v4-pro SWE-V 80.6%, kimi-k3, nemotron ultra/super/lightning, laguna-xs SWE-V 70.9%, gemma-4-31b, muse-glimmer SWE-V 76%), mistral 27 chat-vivos (medium-3.5 SWE-V 77.6% el mejor; caps reales 256k), openrouter 17 :free (+dots-3-note 512k/460k, inkling 1M agentic-only, nex-n2.5-pro, nano-omni), tokenrouter 1 (glm-5.3-free; nano-omni:free fake), google 24 (gemini-3.8-flash TB 90.8%, er-2-preview, gemma-4, antigravity-*)
-- Muertos (eliminados de config): pixtral-12b, gpt-oss-120b, glm-5.2:free, mistral-large/devstral/zai-glm/mistral-code-agent/small-4-0, er-1.6; NVIDIA kimi-k2.6/nemotron-nano-3 = 404 not-for-account; OR gemma-4 :free = 429 upstream (usar Google directo)
-- Cascadas runtime: `plugins/model-routing-guard.js` v11 = fuente de verdad (sobrescribe opencode.jsonc + oh-my-openagent.json; mantener los 3 sincronizados)
-- NO usar: opencode-go (pago), minimax, groq, cerebras, anthropic, github-copilot, fireworks, deepinfra, huggingface, ollama-cloud, together, siliconflow, novita, anyapi — eliminados de config/env por decisión (2026-09-06)
-- Keys: `opencode.env` (9: MISTRAL, OPENCODE_ZEN, GITHUB, GOOGLE, MORPH, NVIDIA, MORPH_COMPACT, OPENROUTER, TOKENROUTER)
+Providers en `opencode.jsonc` (enabled): `opencode-zen`, `nvidia`, `mistral`, `google`, `openrouter` (tokenrouter en env). Estrategia balanceada multi-proveedor free sin dependencia exclusiva de Antigravity ni Zen.
+- Orquestadores interactivos consola (build/smart/plan): `opencode-zen/nemotron-3-ultra-free` (fallbacks: google/gemini-3.8-flash, mistral/mistral-medium-latest, nvidia/deepseek-v4-flash-0731).
+- Subagentes y tareas en background (RESILIENCIA TOTAL contra 403 FreeTierError de Zen):
+  - `general`, `sisyphus-junior`, `tdd-guide`, `qa-enforcer`, `subagent-orchestrator`: `nvidia/deepseek-ai/deepseek-v4-flash-0731` (fast, API normal, 0 fallos de consola).
+  - `oracle`, `consult`: `nvidia/deepseek-ai/deepseek-v4-flash-0731` (fallbacks: antigravity-claude-sonnet-4-6, mistral-medium-latest, gemini-3.8-flash).
+  - `metis`, `momus`, `plan-critic`, `code-reviewer`, `security-reviewer`: `mistral/mistral-medium-latest` (razonamiento independiente europeo, SWE-V 77.6%, sin bloqueo de background).
+  - `explore`, `scout`, `fast`: `google/gemini-3.5-flash-lite` (ligero, contexto masivo, alta cuota).
+  - `librarian`, `docs-lookup`, `senior-researcher`: `google/gemini-3.8-flash` (referencia externa y Context7).
+  - `vision`, `multimodal-looker`: `google/gemini-3.8-flash` (fallbacks: antigravity-gemini-3.8-flash, dots-3-note-preview).
+- Categorías de tareas en `oh-my-openagent.json`: 100% no-zen para ejecución background (`quick` -> nvidia, `ultrabrain` -> mistral, `deep` -> gemini-3.8, `writing` -> mistral, `visual-engineering` -> gemini-3.8).
+- Model global: `google/gemini-3.8-flash` | Small: `opencode-zen/nemotron-3-ultra-free`.
+- Modelos allowlist auditados live (exit 0): nvidia deepseek-v4-flash-0731; mistral medium/ministral-8b; google gemini 3.8/3.7/3.5-lite/2.5-lite/2.5-flash, antigravity sonnet-4-6/gemini-3.8; openrouter dots-3-note (512k); zen nemotron-3-ultra/lightning/mimo.
+- Descripciones y fallbacks completos: 23/23 agentes en `opencode.jsonc` y 23/23 en `oh-my-openagent.json` con `description` y cadenas escalonadas hasta red de emergencia (Dots-3-Note 512k / Gemini 2.5 Lite).
+- Cascadas runtime: `plugins/model-routing-guard.js` v18 = fuente de verdad (sobrescribe opencode.jsonc + oh-my-openagent.json; sincronizados al 100%).
+- NO usar: opencode-go (pago), minimax, groq, cerebras, anthropic, github-copilot, fireworks, deepinfra, huggingface, ollama-cloud, together, siliconflow, novita, anyapi — eliminados de config/env por decisión (2026-09-06).
+- Keys: `opencode.env` (9: MISTRAL, OPENCODE_ZEN, GITHUB, GOOGLE, MORPH, NVIDIA, MORPH_COMPACT, OPENROUTER, TOKENROUTER).
 
 ## 7. Proyectos activos
 

@@ -60,11 +60,9 @@ The layer the core adds during execution so the project doesn't lose execution t
   (no Kyma account). Local patch: FORMAT selector fixed for DASH-only YouTube videos.
   Skill: `watch-video`. Requires deno (mise) as yt-dlp JS runtime.
 
-## Hermes (asistente personal 24/7)
-- v0.20.5 at ~/.hermes. Provider `zen` → OpenCode Zen gateway (model `x-preview-f-free`),
-  key via OPENCODE_ZEN_API_KEY. Headless: `hermes -z "..."`. Command: `/hermes`.
-- Cron system functional (`hermes cron list/create`). Telegram/Discord gateway pending
-  BotFather token from user.
+## Hermes (REMOVIDO 2026-09-11)
+- Removido por decisión del usuario: Zen free-tier bloquea clientes externos sin contexto
+  de consola y no hay balance para paid. Backup persistido en `/var/tmp/opencode-trash/hermes/`.
 
 ## Rules
 - Automations are triggered by need, not loaded eagerly.
