@@ -7,6 +7,11 @@
  *
  * Fail-open: any error in this plugin logs to .rtk-stats.jsonl and lets the
  * original tool call proceed untouched. Never blocks unless the rule matches.
+ *
+ * v2 (2026-09-17): fixed hook payload shape for opencode 1.18.29 — the hook
+ * receives (input={tool,sessionID,callID}, output={args}); args live in
+ * output.args, NOT input.input. v1 read input.input.command and silently
+ * no-op'd every rewrite/block.
  */
 
 import fs from "fs";
@@ -30,13 +35,13 @@ export default async function opencodeRtk() {
     "tool.execute.before": async (input, output) => {
       try {
         if (!input || input.tool !== "bash") return;
-        const cmd = input.input?.command ?? "";
+        const cmd = output?.args?.command ?? "";
         if (!cmd || typeof cmd !== "string") return;
 
         if (GIT_PREFIX.test(cmd) || GH_PREFIX.test(cmd)) {
           const rewritten = "rtk " + cmd;
           log({ type: "rewrite", from: cmd, to: rewritten });
-          input.input.command = rewritten;
+          output.args.command = rewritten;
           return;
         }
 

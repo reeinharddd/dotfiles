@@ -1288,6 +1288,7 @@
     "instructions/03-quality-gates.md",
     "instructions/04-mcp-tools.md",
     "instructions/05-yagni.md",
+    "instructions/06-opencode-ops.md",
     "node_modules/@morphllm/opencode-morph-plugin/instructions/morph-tools.md"
   ],
   "permission": {
