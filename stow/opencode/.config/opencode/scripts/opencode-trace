@@ -10,6 +10,10 @@ LOG_FILE="$HOME/.local/share/opencode/log/opencode.log"
 TELE_DIR="$HOME/.local/share/opencode/telemetry/events"
 SNAP_DIR="$HOME/.local/share/opencode/telemetry/snapshots"
 TODAY="$(date +%Y-%m-%d)"
+TODAY_UTC="$(date -u +%Y-%m-%d)"
+TELE_FILE=""
+[ -f "$TELE_DIR/$TODAY.jsonl" ] && TELE_FILE="$TELE_DIR/$TODAY.jsonl"
+[ -z "$TELE_FILE" ] && [ -f "$TELE_DIR/$TODAY_UTC.jsonl" ] && TELE_FILE="$TELE_DIR/$TODAY_UTC.jsonl"
 
 echo "=== opencode-trace $(date '+%Y-%m-%d %H:%M:%S') ==="
 echo
@@ -19,7 +23,7 @@ opencode --version 2>/dev/null || echo "ERROR: opencode no responde"
 
 echo
 echo "--- MCPs vivos ---"
-pgrep -af "codegraph|engram|snapmcp|metronous|playwright|mcp-server|codebase-memory|herdr|lsp-daemon" 2>/dev/null | grep -v pgrep | head -20 || echo "ninguno detectado"
+pgrep -af "codegraph|engram|snapmcp|metronous|playwright|mcp-server|codebase-memory|herdr|lsp-daemon" 2>/dev/null | grep -v pgrep | awk '{print $1, $2, $3, $4}' | head -20 || echo "ninguno detectado"
 
 echo
 echo "--- Errores del log (hoy) ---"
@@ -38,15 +42,15 @@ echo "--- Sesiones recientes ---"
 opencode session list 2>&1 | head -8
 
 echo
-echo "--- Telemetria eventos (hoy) ---"
-if [ -f "$TELE_DIR/$TODAY.jsonl" ]; then
-  total=$(wc -l < "$TELE_DIR/$TODAY.jsonl")
-  tools=$(grep -ac '"type":"tool"' "$TELE_DIR/$TODAY.jsonl" || true)
-  fails=$(grep -ac '"ok":false' "$TELE_DIR/$TODAY.jsonl" || true)
-  dels=$(grep -ac '"type":"delegation"' "$TELE_DIR/$TODAY.jsonl" || true)
-  echo "eventos=$total tools=$tools fallos_tool=$fails delegaciones=$dels"
+echo "--- Telemetria eventos ---"
+if [ -n "$TELE_FILE" ]; then
+  total=$(wc -l < "$TELE_FILE")
+  tools=$(grep -ac '"type":"tool"' "$TELE_FILE" || true)
+  fails=$(grep -ac '"ok":false' "$TELE_FILE" || true)
+  dels=$(grep -ac '"type":"delegation"' "$TELE_FILE" || true)
+  echo "archivo=$(basename "$TELE_FILE") eventos=$total tools=$tools fallos_tool=$fails delegaciones=$dels"
   echo "--- ultimos fallos/delegaciones ---"
-  grep -a '"ok":false\|"type":"delegation"' "$TELE_DIR/$TODAY.jsonl" 2>/dev/null | tail -6 || echo "sin fallos"
+  grep -a '"ok":false\|"type":"delegation"' "$TELE_FILE" 2>/dev/null | tail -6 || echo "sin fallos"
 else
   echo "sin telemetria hoy ($TELE_DIR/$TODAY.jsonl no existe)"
 fi
