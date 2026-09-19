@@ -1,0 +1,115 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Opencode-DCP/opencode-dynamic-context-pruning/master/dcp.schema.json",
+  "enabled": true,
+  "autoUpdate": true,
+  "debug": false,
+  "pruneNotification": "minimal",
+  "pruneNotificationType": "chat",
+  "commands": {
+    "enabled": true,
+    "protectedTools": [
+      "extract"
+    ]
+  },
+  "manualMode": {
+    "enabled": false,
+    "automaticStrategies": true
+  },
+  "turnProtection": {
+    "enabled": true,
+    "turns": 4
+  },
+  "experimental": {
+    "allowSubAgents": true,
+    "customPrompts": false
+  },
+  "protectedFilePatterns": [
+    "**/.config/opencode/**",
+    "**/AGENTS.md",
+    "**/CLAUDE.md",
+    "**/.opencode/**",
+    "**/Justfile",
+    "**/docker-compose.yml",
+    "**/Dockerfile",
+    "**/stow/**",
+    "**/engram*/**"
+  ],
+  "compress": {
+    "mode": "range",
+    "permission": "allow",
+    "showCompression": true,
+    "summaryBuffer": true,
+    "maxContextLimit": 1000000,
+    "minContextLimit": 50000,
+    "modelMaxLimits": {
+      "opencode-zen/nemotron-3-ultra-free": 800000,
+      "opencode-zen/nemotron-3.5-lightning-free": 200000,
+      "opencode-zen/big-pickle": 160000,
+      "nvidia/deepseek-ai/deepseek-v4-flash-0731": 200000,
+      "google/gemini-3.8-flash": 800000,
+      "google/gemini-3.7-flash": 800000,
+      "google/gemini-3.5-flash-lite": 800000,
+      "google/gemini-2.5-flash-lite": 800000,
+      "google/gemini-2.5-flash": 800000,
+      "google/antigravity-claude-sonnet-4-6": 160000,
+      "google/antigravity-gemini-3.8-flash": 800000,
+      "mistral/mistral-medium-latest": 200000,
+      "mistral/ministral-8b-latest": 200000,
+      "openrouter/dots-studio/dots-3-note-preview:free": 400000
+    },
+    "modelMinLimits": {
+      "opencode-zen/nemotron-3-ultra-free": 400000,
+      "opencode-zen/nemotron-3.5-lightning-free": 80000,
+      "opencode-zen/big-pickle": 60000,
+      "nvidia/deepseek-ai/deepseek-v4-flash-0731": 80000,
+      "google/gemini-3.8-flash": 400000,
+      "google/gemini-3.7-flash": 400000,
+      "google/gemini-3.5-flash-lite": 400000,
+      "google/gemini-2.5-flash-lite": 400000,
+      "google/gemini-2.5-flash": 400000,
+      "google/antigravity-claude-sonnet-4-6": 80000,
+      "google/antigravity-gemini-3.8-flash": 400000,
+      "mistral/mistral-medium-latest": 80000,
+      "mistral/ministral-8b-latest": 80000,
+      "openrouter/dots-studio/dots-3-note-preview:free": 150000
+    },
+    "nudgeFrequency": 6,
+    "iterationNudgeThreshold": 10,
+    "nudgeForce": "strong",
+    "protectedTools": [
+      "task",
+      "skill",
+      "todowrite",
+      "todoread",
+      "edit",
+      "write",
+      "codegraph_explore",
+      "codegraph_node",
+      "extract"
+    ],
+    "protectTags": true,
+    "protectUserMessages": true
+  },
+  "strategies": {
+    "deduplication": {
+      "enabled": true,
+      "protectedTools": [
+        "task",
+        "skill",
+        "todowrite",
+        "todoread",
+        "edit"
+      ]
+    },
+    "purgeErrors": {
+      "enabled": true,
+      "turns": 3,
+      "protectedTools": [
+        "task",
+        "skill",
+        "todowrite",
+        "todoread"
+      ]
+    }
+  }
+}

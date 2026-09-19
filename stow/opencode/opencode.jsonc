@@ -1,0 +1,1436 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "shell": "/usr/bin/zsh",
+  "autoupdate": false,
+  "model": "google/gemini-3.8-flash",
+  "small_model": "opencode-zen/nemotron-3-ultra-free",
+  "default_agent": "smart",
+  "subagent_depth": 2,
+  "tool_output": {
+    "max_lines": 800,
+    "max_bytes": 20000
+  },
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "reserved": 20000,
+    "tail_turns": 5,
+    "preserve_recent_tokens": 30000
+  },
+  "attachment": {
+    "image": {
+      "auto_resize": true,
+      "max_width": 2000,
+      "max_height": 2000,
+      "max_base64_bytes": 5242880
+    }
+  },
+  "watcher": {
+    "globs": [
+      "**"
+    ],
+    "ignore": [
+      "node_modules/**",
+      ".git/**",
+      "dist/**",
+      "build/**",
+      "target/**",
+      ".next/**",
+      ".angular/**",
+      "__pycache__/**",
+      ".venv/**",
+      "venv/**",
+      ".cache/**",
+      "*.lock",
+      "**/*.log",
+      "coverage/**",
+      ".turbo/**",
+      "*.tsbuildinfo"
+    ]
+  },
+  "provider": {
+    "opencode-zen": {
+      "name": "OpenCode Zen",
+      "options": {
+        "apiKey": "{env:OPENCODE_ZEN_API_KEY}",
+        "baseURL": "https://opencode.ai/zen/v1"
+      },
+      "models": {
+        "big-pickle": {
+          "name": "Big Pickle",
+          "limit": {
+            "context": 200000,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "mimo-v2.5-free": {
+          "name": "MiMo V2.5 Free",
+          "limit": {
+            "context": 1048576,
+            "output": 131072
+          },
+          "tool_call": true,
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "nemotron-3-ultra-free": {
+          "name": "Nemotron 3 Ultra Free",
+          "limit": {
+            "context": 1048576,
+            "output": 131072
+          },
+          "tool_call": true
+        },
+        "nemotron-3.5-lightning-free": {
+          "name": "Nemotron 3.5 Lightning Free",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "ling-3.0-flash-fin-free": {
+          "name": "Ling 3.0 Flash Fin Free",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "union-alpha": {
+          "name": "Union Alpha Free",
+          "limit": {
+            "context": 200000,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "muse-spark-1.3-contributor-free": {
+          "name": "Muse Spark 1.3 Contributor Free",
+          "limit": {
+            "context": 262144,
+            "output": 65536
+          },
+          "tool_call": true
+        }
+      }
+    },
+    "nvidia": {
+      "name": "NVIDIA NIM",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://integrate.api.nvidia.com/v1"
+      },
+      "models": {
+        "deepseek-ai/deepseek-v4-flash-0731": {
+          "name": "DeepSeek V4 Flash",
+          "limit": {
+            "context": 262144,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "openai/gpt-oss-20b": {
+          "name": "GPT-OSS 20B",
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "moonshotai/kimi-k3": {
+          "name": "Kimi K3",
+          "limit": {
+            "context": 1000000,
+            "output": 131072
+          },
+          "tool_call": true
+        },
+        "nvidia/nemotron-3-ultra-550b-a55b": {
+          "name": "Nemotron 3 Ultra",
+          "limit": {
+            "context": 1000000,
+            "output": 131072
+          },
+          "tool_call": true
+        },
+        "nvidia/nemotron-3-super-120b-a12b": {
+          "name": "Nemotron 3 Super",
+          "limit": {
+            "context": 1000000,
+            "output": 131072
+          },
+          "tool_call": true
+        },
+        "nvidia/nemotron-3.5-lightning-30b-a3b": {
+          "name": "Nemotron 3.5 Lightning",
+          "limit": {
+            "context": 1000000,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "poolside/laguna-xs-2.1": {
+          "name": "Laguna XS 2.1",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "google/gemma-4-31b-it": {
+          "name": "Gemma 4 31B",
+          "limit": {
+            "context": 256000,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "meta/muse-glimmer-30b": {
+          "name": "Muse Glimmer 30B",
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "meta/llama-guard-4-12b": {
+          "name": "Llama Guard 4 12B (safety)",
+          "limit": {
+            "context": 131072,
+            "output": 8192
+          }
+        },
+        "google/diffusiongemma-26b-a4b-it": {
+          "name": "DiffusionGemma 26B A4B",
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          },
+          "tool_call": true
+        }
+      }
+    },
+    "openrouter": {
+      "name": "OpenRouter",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "https://openrouter.ai/api/v1"
+      },
+      "models": {
+        "openrouter/free": {
+          "name": "OpenRouter Free Router",
+          "limit": {
+            "context": 200000,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "nvidia/nemotron-3-ultra-550b-a55b:free": {
+          "name": "Nemotron 3 Ultra Free",
+          "limit": {
+            "context": 1000000,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "nvidia/nemotron-3.5-lightning:free": {
+          "name": "Nemotron 3.5 Lightning Free",
+          "limit": {
+            "context": 1000000,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "name": "Nemotron 3 Super Free",
+          "limit": {
+            "context": 262144,
+            "output": 235000
+          },
+          "tool_call": true
+        },
+
+        "cohere/north-mini-code:free": {
+          "name": "North Mini Code Free",
+          "limit": {
+            "context": 256000,
+            "output": 64000
+          },
+          "tool_call": true
+        },
+        "poolside/laguna-s-2.1:free": {
+          "name": "Laguna S 2.1 Free",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "poolside/laguna-xs-2.1:free": {
+          "name": "Laguna XS 2.1 Free",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "inclusionai/ling-3.0-flash-fin:free": {
+          "name": "Ling 3.0 Flash Fin Free",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "inclusionai/ling-3.0-flash-sante:free": {
+          "name": "Ling 3.0 Flash Sante Free",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "inclusionai/ling-3.0-flash-vl:free": {
+          "name": "Ling 3.0 Flash VL Free (vision)",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "nex-agi/nex-n2.5-pro:free": {
+          "name": "Nex N2.5 Pro Free (agentic)",
+          "limit": {
+            "context": 262144,
+            "output": 235000
+          },
+          "tool_call": true
+        },
+        "nex-agi/nex-n2.5-mini:free": {
+          "name": "Nex N2.5 Mini Free (agentic)",
+          "limit": {
+            "context": 262144,
+            "output": 235000
+          },
+          "tool_call": true
+        },
+        "dots-studio/dots-3-note-preview:free": {
+          "name": "Dots 3 Note Preview Free (multimodal)",
+          "limit": {
+            "context": 512000,
+            "output": 460000
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "thinkingmachines/inkling:free": {
+          "name": "Inkling Free (agentic-only, 1M)",
+          "limit": {
+            "context": 1000000,
+            "output": 262000
+          },
+          "tool_call": true
+        },
+        "thinkingmachines/inkling-small:free": {
+          "name": "Inkling Small Free (agentic-only)",
+          "limit": {
+            "context": 1000000,
+            "output": 262000
+          },
+          "tool_call": true
+        },
+        "liquid/lfm-2.5-2.6b:free": {
+          "name": "Liquid LFM 2.5 2.6B Free",
+          "limit": {
+            "context": 65536,
+            "output": 8192
+          },
+          "tool_call": true
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "name": "Gemma 4 26B A4B Free",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "google/gemma-4-31b-it:free": {
+          "name": "Gemma 4 31B Free",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "qwen/qwen3.8-27b:free": {
+          "name": "Qwen3.8 27B Free",
+          "limit": {
+            "context": 262144,
+            "output": 235929
+          },
+          "tool_call": true
+        },
+        "z-ai/glm-5.2:free": {
+          "name": "GLM 5.2 Free",
+          "limit": {
+            "context": 32768,
+            "output": 29491
+          },
+          "tool_call": true
+        }
+      }
+    },
+    "mistral": {
+      "name": "Mistral AI",
+      "options": {
+        "apiKey": "{env:MISTRAL_API_KEY}",
+        "baseURL": "https://api.mistral.ai/v1"
+      },
+      "models": {
+        "mistral-medium-latest": {
+          "name": "Mistral Medium 3.5",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "mistral-medium-3.5": {
+          "name": "Mistral Medium 3.5 (pinned)",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "mistral-medium-3-5": {
+          "name": "Mistral Medium 3.5 (alias)",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "mistral-medium-3": {
+          "name": "Mistral Medium 3",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "mistral-medium-2604": {
+          "name": "Mistral Medium 2604",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "mistral-medium": {
+          "name": "Mistral Medium",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "mistral-small-latest": {
+          "name": "Mistral Small 4",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "mistral-small-2603": {
+          "name": "Mistral Small 2603",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "magistral-medium-latest": {
+          "name": "Magistral Medium 1.2",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "magistral-small-latest": {
+          "name": "Magistral Small 1.2",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "codestral-latest": {
+          "name": "Codestral 25.08",
+          "limit": {
+            "context": 256000,
+            "output": 8192
+          },
+          "tool_call": true
+        },
+        "codestral-2508": {
+          "name": "Codestral 2508 (pinned)",
+          "limit": {
+            "context": 256000,
+            "output": 8192
+          },
+          "tool_call": true
+        },
+        "ministral-8b-latest": {
+          "name": "Ministral 3 8B",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "ministral-8b-2512": {
+          "name": "Ministral 3 8B 2512",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "ministral-14b-latest": {
+          "name": "Ministral 3 14B",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "ministral-14b-2512": {
+          "name": "Ministral 3 14B 2512",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "ministral-3b-latest": {
+          "name": "Ministral 3 3B",
+          "limit": {
+            "context": 131072,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "ministral-3b-2512": {
+          "name": "Ministral 3 3B 2512",
+          "limit": {
+            "context": 131072,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "mistral-vibe-cli-fast": {
+          "name": "Mistral Vibe CLI Fast",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true
+        },
+        "mistral-vibe-cli-latest": {
+          "name": "Mistral Vibe CLI",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true
+        },
+        "mistral-vibe-cli-with-tools": {
+          "name": "Mistral Vibe CLI With Tools",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true
+        },
+        "voxtral-small-latest": {
+          "name": "Voxtral Small (audio)",
+          "limit": {
+            "context": 32768,
+            "output": 8192
+          },
+          "tool_call": true
+        },
+        "mistral-code-latest": {
+          "name": "Mistral Code (Kimi-based)",
+          "limit": {
+            "context": 256000,
+            "output": 8192
+          },
+          "tool_call": true
+        },
+        "mistral-code-fim-latest": {
+          "name": "Mistral Code FIM",
+          "limit": {
+            "context": 256000,
+            "output": 8192
+          },
+          "tool_call": true
+        },
+        "labs-leanstral-1-5": {
+          "name": "Leanstral 1.5 (Labs)",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "labs-leanstral-1-5-1": {
+          "name": "Leanstral 1.5.1 (Labs)",
+          "limit": {
+            "context": 262144,
+            "output": 8192
+          },
+          "tool_call": true,
+          "modalities": {"input": ["text","image"], "output": ["text"]}
+        },
+        "voxtral-small-2507": {
+          "name": "Voxtral Small 2507",
+          "limit": {
+            "context": 32768,
+            "output": 8192
+          },
+          "tool_call": true
+        }
+      }
+    },
+    "google": {
+      "name": "Google",
+      "npm": "@ai-sdk/google",
+      "options": {
+        "apiKey": "{env:GOOGLE_API_KEY}"
+      },
+      "models": {
+        "gemini-3.8-flash": {
+          "name": "Gemini 3.8 Flash",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "gemini-3.7-flash": {
+          "name": "Gemini 3.7 Flash",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "gemini-3.6-flash": {
+          "name": "Gemini 3.6 Flash",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "gemini-3.5-flash": {
+          "name": "Gemini 3.5 Flash",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "gemini-3.5-flash-lite": {
+          "name": "Gemini 3.5 Flash Lite",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "gemini-3.1-flash-lite": {
+          "name": "Gemini 3.1 Flash Lite",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "gemini-2.5-flash-lite": {
+          "name": "Gemini 2.5 Flash Lite",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "gemini-2.5-pro": {
+          "name": "Gemini 2.5 Pro (trial)",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "gemini-flash-latest": {
+          "name": "Gemini Flash Latest",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "gemini-flash-lite-latest": {
+          "name": "Gemini Flash Lite Latest",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+        "gemini-omni-flash-preview": {
+          "name": "Gemini Omni Flash Preview",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "tool_call": true
+        },
+
+        "gemma-4-31b-it": {
+          "name": "Gemma 4 31B",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "gemma-4-26b-a4b-it": {
+          "name": "Gemma 4 26B A4B",
+          "limit": {
+            "context": 262144,
+            "output": 32768
+          },
+          "tool_call": true
+        },
+        "gemini-embedding-001": {
+          "name": "Gemini Embedding 001",
+          "limit": {
+            "context": 2048,
+            "output": 3072
+          }
+        },
+        "gemini-embedding-2": {
+          "name": "Gemini Embedding 2",
+          "limit": {
+            "context": 8192,
+            "output": 3072
+          }
+        },
+        "antigravity-gemini-3.8-flash": {
+          "name": "Gemini 3.8 Flash (Antigravity)",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "low": {
+              "thinkingLevel": "low"
+            },
+            "medium": {
+              "thinkingLevel": "medium"
+            },
+            "high": {
+              "thinkingLevel": "high"
+            }
+          }
+        },
+        "antigravity-gemini-3.7-flash": {
+          "name": "Gemini 3.7 Flash (Antigravity)",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "low": {
+              "thinkingLevel": "low"
+            },
+            "medium": {
+              "thinkingLevel": "medium"
+            },
+            "high": {
+              "thinkingLevel": "high"
+            }
+          }
+        },
+        "antigravity-gemini-3.6-flash": {
+          "name": "Gemini 3.6 Flash (Antigravity)",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "low": {
+              "thinkingLevel": "low"
+            },
+            "medium": {
+              "thinkingLevel": "medium"
+            },
+            "high": {
+              "thinkingLevel": "high"
+            }
+          }
+        },
+        "antigravity-gemini-3.5-flash": {
+          "name": "Gemini 3.5 Flash (Antigravity)",
+          "limit": {
+            "context": 1048576,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "minimal": {
+              "thinkingLevel": "minimal"
+            },
+            "low": {
+              "thinkingLevel": "low"
+            },
+            "medium": {
+              "thinkingLevel": "medium"
+            },
+            "high": {
+              "thinkingLevel": "high"
+            }
+          }
+        },
+        "antigravity-gemini-3.1-pro": {
+          "name": "Gemini 3.1 Pro (Antigravity)",
+          "limit": {
+            "context": 1048576,
+            "output": 65535
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "low": {
+              "thinkingLevel": "low"
+            },
+            "high": {
+              "thinkingLevel": "high"
+            }
+          }
+        },
+        "antigravity-claude-sonnet-4-6": {
+          "name": "Claude Sonnet 4.6 (Antigravity)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "antigravity-claude-opus-4-6-thinking": {
+          "name": "Claude Opus 4.6 Thinking (Antigravity)",
+          "limit": {
+            "context": 200000,
+            "output": 64000
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image",
+              "pdf"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "variants": {
+            "low": {
+              "thinkingConfig": {
+                "thinkingBudget": 8192
+              }
+            },
+            "medium": {
+              "thinkingConfig": {
+                "thinkingBudget": 16384
+              }
+            },
+            "max": {
+              "thinkingConfig": {
+                "thinkingBudget": 32768
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "enabled_providers": [
+    "opencode-zen",
+    "mistral",
+    "google",
+    "nvidia",
+    "openrouter"
+  ],
+  "disabled_providers": [
+    "opencode"
+  ],
+  "lsp": {
+    "bash": {
+      "command": [
+        "bash-language-server",
+        "start"
+      ],
+      "extensions": [
+        ".sh",
+        ".bash",
+        ".zsh"
+      ]
+    },
+    "dockerfile": {
+      "command": [
+        "docker-langserver",
+        "--stdio"
+      ],
+      "extensions": [
+        "Dockerfile"
+      ]
+    },
+    "go": {
+      "command": [
+        "gopls"
+      ],
+      "extensions": [
+        ".go"
+      ]
+    },
+    "javascript": {
+      "command": [
+        "typescript-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".cjs",
+        ".ts",
+        ".tsx"
+      ]
+    },
+    "json": {
+      "command": [
+        "vscode-json-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".json",
+        ".jsonc"
+      ]
+    },
+    "markdown": {
+      "command": [
+        "marksman"
+      ],
+      "extensions": [
+        ".md"
+      ]
+    },
+    "python": {
+      "command": [
+        "pyright-langserver",
+        "--stdio"
+      ],
+      "extensions": [
+        ".py"
+      ]
+    },
+    "rust": {
+      "command": [
+        "rust-analyzer"
+      ],
+      "extensions": [
+        ".rs"
+      ]
+    },
+    "toml": {
+      "command": [
+        "taplo",
+        "lsp",
+        "--stdio"
+      ],
+      "extensions": [
+        ".toml"
+      ]
+    },
+    "yaml": {
+      "command": [
+        "yaml-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".yaml",
+        ".yml"
+      ]
+    },
+    "sql": {
+      "command": [
+        "sql-language-server",
+        "up",
+        "--method",
+        "stdio"
+      ],
+      "extensions": [
+        ".sql",
+        ".pgsql"
+      ]
+    }
+  },
+  "formatter": {
+    "python": {
+      "command": [
+        "ruff",
+        "format",
+        "-"
+      ],
+      "extensions": [
+        ".py"
+      ]
+    },
+    "shell": {
+      "command": [
+        "shfmt",
+        "-"
+      ],
+      "extensions": [
+        ".sh",
+        ".bash",
+        ".zsh"
+      ]
+    },
+    "javascript": {
+      "command": [
+        "prettier",
+        "--stdin-filepath",
+        "{path}"
+      ],
+      "extensions": [
+        ".js",
+        ".jsx",
+        ".mjs",
+        ".cjs",
+        ".ts",
+        ".tsx"
+      ]
+    },
+    "json": {
+      "command": [
+        "prettier",
+        "--stdin-filepath",
+        "{path}"
+      ],
+      "extensions": [
+        ".json",
+        ".jsonc"
+      ]
+    },
+    "markdown": {
+      "command": [
+        "prettier",
+        "--stdin-filepath",
+        "{path}"
+      ],
+      "extensions": [
+        ".md"
+      ]
+    },
+    "yaml": {
+      "command": [
+        "prettier",
+        "--stdin-filepath",
+        "{path}"
+      ],
+      "extensions": [
+        ".yaml",
+        ".yml"
+      ]
+    },
+    "go": {
+      "command": [
+        "gofmt"
+      ],
+      "extensions": [
+        ".go"
+      ]
+    },
+    "rust": {
+      "command": [
+        "rustfmt"
+      ],
+      "extensions": [
+        ".rs"
+      ]
+    }
+  },
+  "experimental": {
+    "batch_tool": true
+  },
+  "mcp": {
+    "context7": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "engram": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "engram",
+        "mcp",
+        "--tools=agent"
+      ]
+    },
+    "firecrawl": {
+      "enabled": true,
+      "type": "remote",
+      "url": "https://mcp.firecrawl.dev/fc-412aba2a43ba47daabae244cb8a72af9/v2/mcp"
+    },
+    "snapmcp": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "snapmcp"
+      ]
+    },
+    "sequential-thinking": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking@2026.7.4"
+      ]
+    },
+    "metronous": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "/home/reeinharrrd/.local/bin/metronous",
+        "mcp"
+      ],
+      "_note": "telemetría + benchmarks semanales + calibración de modelos"
+    },
+    "github": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github@2025.4.8"
+      ],
+      "_note": "core: PRs, issues, repos en cualquier proyecto"
+    },
+    "playwright": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@playwright/mcp@0.0.79",
+        "--headless",
+        "--isolated",
+        "--block-service-workers",
+        "--output-dir",
+        "/tmp/opencode/playwright"
+      ],
+      "_note": "browser global aislado (headless/isolated/sin service workers); navegación web habilitada para research y visual QA"
+    },
+    "filesystem": {
+      "enabled": true,
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem@2026.7.10"
+      ],
+      "_note": "core: acceso multi-repo"
+    }
+  },
+  "plugin": [
+    "oh-my-openagent@4.19.4",
+    "./plugins/model-routing-guard.js",
+    "./plugins/opencode-telemetry.js",
+    "./plugins/opencode-rtk.js",
+    "./plugins/bodega-index.js",
+    "./node_modules/@morphllm/opencode-morph-plugin/dist/index.js",
+    "./node_modules/opencode-yaml-hooks/dist/index.js",
+    "opencode-notify",
+    "opencode-background-agents",
+    "./plugins/opencode-dcp/dist/index.js",
+    "./plugins/caveman/plugin.js",
+    "./plugins/superpowers.js",
+    "./plugins/metronous.ts",
+    "opencode-vibeguard@0.1.0",
+    "./plugins/opencode-antigravity-auth/dist/index.js"
+  ],
+  "instructions": [
+    "PERSONAL.md",
+    "instructions/00-memory-policy.md",
+    "instructions/01-initialization.md",
+    "instructions/02-hard-rules.md",
+    "instructions/03-quality-gates.md",
+    "instructions/04-mcp-tools.md",
+    "instructions/05-yagni.md",
+    "instructions/06-opencode-ops.md"
+  ],
+  "permission": {
+    "external_directory": "ask",
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "opencode.env": "deny",
+      "vault-key": "deny"
+    },
+    "edit": "allow",
+    "glob": "allow",
+    "grep": "allow",
+    "list": "allow",
+    "bash": {
+      "*": "allow",
+      "rm -rf*": "deny",
+      "git reset --hard*": "deny",
+      "git clean*": "deny",
+      "git push --force*": "deny",
+      "git push*": "ask",
+      "sudo*": "ask",
+      "wp db reset*": "deny",
+      "wp db import*": "ask",
+      "wp plugin delete*": "ask",
+      "wp theme delete*": "ask",
+      "source*opencode.env*": "ask",
+      "cat*opencode.env*": "ask",
+      "printenv*": "ask",
+      "env*": "ask"
+    },
+    "task": "allow",
+    "todowrite": "allow",
+    "question": "allow",
+    "webfetch": "allow",
+    "websearch": "allow",
+    "lsp": "allow",
+    "skill": "allow"
+  },
+        "agent": {
+          "build": {
+              "mode": "primary",
+              "model": "opencode-zen/nemotron-3-ultra-free",
+              "description": "Agente ejecutor de compilación, suites de tests y flujos de build multi-etapa en consola."
+          },
+          "smart": {
+              "mode": "primary",
+              "model": "opencode-zen/nemotron-3-ultra-free",
+              "description": "Agente orquestador interactivo principal para codificación, resolución de problemas y coordinación."
+          },
+          "fast": {
+              "mode": "primary",
+              "model": "google/gemini-3.5-flash-lite",
+              "description": "Agente ligero para tareas triviales, corrección de tipografías y modificaciones de un solo archivo."
+          },
+          "oracle": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Consultor de razonamiento profundo para decisiones de arquitectura, debugging complejo y tradeoffs (read-only)."
+          },
+          "plan": {
+              "mode": "primary",
+              "model": "opencode-zen/nemotron-3-ultra-free",
+              "description": "Especialista en arquitectura y diseño que descompone requisitos en planes de implementación atómicos."
+          },
+          "code-reviewer": {
+              "mode": "primary",
+              "model": "mistral/mistral-medium-latest",
+              "description": "Revisor de código para análisis de diffs, bugs de lógica, seguridad, estilo y adherencia a convenciones."
+          },
+          "security-reviewer": {
+              "mode": "primary",
+              "model": "mistral/mistral-medium-latest",
+              "description": "Especialista en investigación de seguridad, análisis de superficie de ataque, autenticación y validación de exploits."
+          },
+          "explore": {
+              "mode": "primary",
+              "model": "google/gemini-3.5-flash-lite",
+              "description": "Explorador rápido de codebase para búsqueda contextual y navegación de símbolos y dependencias."
+          },
+          "scout": {
+              "mode": "primary",
+              "model": "google/gemini-3.5-flash-lite",
+              "description": "Explorador ligero para mapeo rápido de estructuras de directorios, puntos de entrada y dependencias."
+          },
+          "docs-lookup": {
+              "mode": "primary",
+              "model": "google/gemini-3.8-flash",
+              "description": "Especialista en documentación de librerías y contratos de API mediante Context7."
+          },
+          "tdd-guide": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Guía de desarrollo guiado por pruebas que enforcea el ciclo red-green-refactor."
+          },
+          "qa-enforcer": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Verificador de quality gates, linters, diagnostics de LSP y cobertura de pruebas antes de cerrar tareas."
+          },
+          "subagent-orchestrator": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Coordinador para descomponer y lanzar subagentes paralelos en segundo plano."
+          },
+          "vision": {
+              "mode": "primary",
+              "model": "google/gemini-3.8-flash",
+              "description": "Inspector visual y multimodal para QA de interfaces, captura de pantallas y verificación de layouts."
+          },
+          "multimodal-looker": {
+              "mode": "primary",
+              "model": "google/gemini-3.8-flash",
+              "description": "Extractor de información visual a partir de diagramas, imágenes y mockups."
+          },
+          "librarian": {
+              "mode": "primary",
+              "model": "google/gemini-3.8-flash",
+              "description": "Investigador de referencias externas en documentación oficial, repositorios open-source y Context7."
+          },
+          "metis": {
+              "mode": "primary",
+              "model": "mistral/mistral-medium-latest",
+              "description": "Consultor de pre-planeación que detecta ambigüedades, suposiciones ocultas y posibles fallos."
+          },
+          "momus": {
+              "mode": "primary",
+              "model": "mistral/mistral-medium-latest",
+              "description": "Crítico adversarial de planes que audita completitud, claridad y verificabilidad antes de implementar."
+          },
+          "sisyphus-junior": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Ejecutor enfocado de tareas atómicas directas sin subdelegación."
+          },
+          "consult": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Read-only consultant de arquitectura y debugging duro (reemplazo seleccionable de oracle).",
+              "temperature": 0.1
+          },
+          "plan-critic": {
+              "mode": "primary",
+              "model": "mistral/mistral-medium-latest",
+              "description": "Crítico de planes (equivalente seleccionable de metis/momus)."
+          },
+          "senior-researcher": {
+              "mode": "primary",
+              "model": "google/gemini-3.8-flash",
+              "description": "Investigación de librerías y contexto (equivalente seleccionable de librarian)."
+          },
+          "general": {
+              "mode": "primary",
+              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+              "description": "Agente de trabajo general resiliente para delegaciones en segundo plano."
+          }
+      },
+  "references": {
+    "dotfiles": "~/projects/personal/dotfiles"
+  }
+}
