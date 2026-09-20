@@ -1,0 +1,126 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "shell": "/usr/bin/zsh",
+  "autoupdate": false,
+  "model": "google/gemini-3.8-flash",
+  "small_model": "opencode-zen/nemotron-3-ultra-free",
+  "default_agent": "smart",
+  "subagent_depth": 2,
+  "experimental": {
+    "openTelemetry": true
+  },
+  "permission": {
+    "bash": {
+      "default": "ask",
+      "allow": ["mise", "git", "stow", "npm", "cargo", "python3", "node", "gh", "docker", "systemctl", "journalctl"]
+    },
+    "webfetch": {
+      "default": "ask"
+    }
+  },
+  "provider": {
+    "litellm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM",
+      "options": {
+        "baseURL": "http://localhost:4000/v1"
+      },
+      "models": {
+        "claude-3-5-sonnet": {
+          "name": "Claude 3.5 Sonnet",
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "gemini-2-5-pro": {
+          "name": "Gemini 2.5 Pro",
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "deepseek-r1": {
+          "name": "DeepSeek R1"
+        }
+      }
+    },
+    "opencode-zen": {
+      "name": "OpenCode Zen",
+      "options": {
+        "apiKey": "{env:OPENCODE_ZEN_API_KEY}",
+        "baseURL": "https://opencode.ai/zen/v1"
+      },
+      "models": {
+        "nemotron-3-ultra-free": {
+          "name": "Nemotron 3 Ultra Free",
+          "limit": { "context": 1048576, "output": 131072 },
+          "tool_call": true
+        }
+      }
+    },
+    "nvidia": {
+      "name": "NVIDIA NIM",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": { "baseURL": "https://integrate.api.nvidia.com/v1" },
+      "models": {
+        "deepseek-ai/deepseek-v4-flash-0731": {
+          "name": "DeepSeek V4 Flash",
+          "limit": { "context": 262144, "output": 65536 },
+          "tool_call": true
+        }
+      }
+    },
+    "openrouter": {
+      "name": "OpenRouter",
+      "npm": "@ai-sdk/openai-compatible",
+      "options": { "baseURL": "https://openrouter.ai/api/v1" },
+      "models": {
+        "openrouter/free": {
+          "name": "OpenRouter Free Router",
+          "limit": { "context": 200000, "output": 32768 },
+          "tool_call": true
+        }
+      }
+    },
+    "google": {
+      "name": "Google",
+      "npm": "@ai-sdk/google",
+      "options": {
+        "apiKey": "{env:GOOGLE_API_KEY}"
+      },
+      "models": {
+        "gemini-3.8-flash": {
+          "name": "Gemini 3.8 Flash",
+          "limit": { "context": 1048576, "output": 65536 },
+          "tool_call": true
+        }
+      }
+    },
+    "mistral": {
+      "name": "Mistral AI",
+      "options": {
+        "apiKey": "{env:MISTRAL_API_KEY}",
+        "baseURL": "https://api.mistral.ai/v1"
+      },
+      "models": {
+        "mistral-medium-latest": {
+          "name": "Mistral Medium 3.5",
+          "limit": { "context": 262144, "output": 8192 },
+          "tool_call": true,
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        }
+      }
+    }
+  },
+  "plugin": [
+    "@langfuse/opencode-observability-plugin@latest",
+    "envsitter-guard@latest"
+  ],
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "enabled": true,
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "firecrawl": {
+      "type": "remote",
+      "enabled": true,
+      "url": "https://mcp.firecrawl.dev/{env:FIRECRAWL_API_KEY}/v2/mcp"
+    }
+  }
+}

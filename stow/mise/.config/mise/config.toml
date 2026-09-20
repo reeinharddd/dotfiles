@@ -63,6 +63,7 @@ deno = "latest"
 "cargo:procs" = "latest"
 "cargo:onefetch" = "latest"
 rtk = "latest"
+sops = "3.13.3"
 
 [settings]
 always_keep_download = false

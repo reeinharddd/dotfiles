@@ -156,6 +156,14 @@ setup_dotfiles() {
     cd "$OLDPWD"
   fi
   ok "OpenCode plugins built"
+
+  log "Decrypting sops secrets..."
+  if command -v sops &>/dev/null && [ -f "$DOTFILES_DIR/.env.sops" ]; then
+    sops -d "$DOTFILES_DIR/.env.sops" > "$HOME/.env" 2>/dev/null && ok "Decrypted .env from sops" || warn "Failed to decrypt .env.sops (need age key in ~/.config/sops/age/keys.txt)"
+  fi
+  if command -v sops &>/dev/null && [ -f "$DOTFILES_DIR/stow/taskman/.config/task/secrets.conf.sops" ]; then
+    sops -d "$DOTFILES_DIR/stow/taskman/.config/task/secrets.conf.sops" > "$HOME/.config/task/secrets.conf" 2>/dev/null && ok "Decrypted Taskwarrior secrets" || warn "Failed to decrypt Taskwarrior secrets"
+  fi
 }
 
 # ── Shell ───────────────────────────────────────────────────

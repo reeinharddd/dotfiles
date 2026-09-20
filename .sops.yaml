@@ -1,0 +1,3 @@
+creation_rules:
+  - path_regex: \.sops\.(yaml|yml|json|env)$
+    age: age1amvy0n3pruw5ndwhd9pkpn2667tykde9dleh5xzt498xy9d52d0strz8uv

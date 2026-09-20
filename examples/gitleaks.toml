@@ -1,0 +1,22 @@
+# Gitleaks config
+title = "Dotfiles Gitleaks Config"
+
+[allowlist]
+description = "Allowlist for gitleaks"
+paths = [
+  "(?i)^examples/",                           # Example configs (sanitized)
+  "(?i)^stow/opencode/.config/opencode/opencode\.json$",  # Generated mirror
+]
+
+# Custom rules for tokens in URLs (Firecrawl, etc.)
+[[rules]]
+id = "firecrawl-url-token"
+description = "Detect Firecrawl API tokens in URLs"
+regex = '''https?://[^/\s]+/[A-Za-z0-9_-]{28,}/'''
+tags = ["api-key", "url"]
+
+[[rules]]
+id = "generic-url-token"
+description = "Detect generic tokens in URLs"
+regex = '''https?://[^/\s]+/[A-Za-z0-9_-]{32,}/'''
+tags = ["api-key", "url"]
