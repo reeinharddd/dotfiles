@@ -1,0 +1,49 @@
+# Perfil Client — Datos sensibles, modelos locales/de pago
+# Uso: ai client [args...]
+
+# Provider precedence (local/pay models, no training data)
+PROVIDER_PRIORITY=(
+    "local/qwen2.5-coder"                    # Primary local coding model
+    "local/llama3.1"                         # General purpose
+    "google/gemini-3.8-flash"                # Pay tier if available (no training)
+    "mistral/mistral-medium-latest"          # Pay tier (no training)
+)
+
+# Model routing
+FREE_ONLY=false
+LOCAL_FIRST=true
+NO_ANTIGRAVITY=true  # Never use antigravity for client work
+
+# Data policy
+NO_TRAINING_DATA=true
+DATA_RESIDENCY=local
+ENCRYPTION_REQUIRED=true
+
+# Telemetry (local only, no external)
+TELEMETRY_ENABLED=true
+METRONOUS_ENABLED=true
+LANGFUSE_ENABLED=false
+LANGFUSE_HOST=http://localhost:3000  # Local instance only
+
+# Budget
+MAX_TOKENS_PER_SESSION=50000
+MAX_COST_USD=5.00  # Pay tier budget
+
+# Antigravity policy (DISABLED for client)
+ANTIGRAVITY_ENABLED=false
+ANTIGRAVITY_ACCOUNT_TYPE=none
+
+# MCP servers (restricted for client data)
+MCP_CONTEXT7=true
+MCP_ENGRAM=true
+MCP_FIRECRAWL=false  # External scraping not allowed
+MCP_PLAYWRIGHT=true  # Local browser only
+MCP_FILESYSTEM=true  # Restricted to project dir via sandbox
+
+# Context budget
+CONTEXT_BUDGET_KB=10  # Stricter for client data
+
+# Sandbox (mandatory for client)
+SANDBOX_PROFILE=client
+SANDBOX_NETWORK=restricted  # Allowlist only
+EOF

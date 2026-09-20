@@ -1,0 +1,41 @@
+# Perfil Personal — Modelos gratuitos, telemetría completa
+# Uso: ai personal [args...]
+
+# Provider precedence (free-only, no zen in background)
+PROVIDER_PRIORITY=(
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731"    # General, plan, oracle, tdd, qa
+    "google/gemini-3.8-flash"                       # Deep, vision, deepseek fallback
+    "mistral/mistral-medium-latest"                 # Code review, security, ultrabrain
+    "google/gemini-3.5-flash-lite"                  # Fast, explore, scout
+    "nvidia/nemotron-3-ultra-550b-a55b:free"       # Backup via openrouter
+)
+
+# Model routing guard (enforced by model-routing-guard.js)
+FREE_ONLY=true
+NO_ZEN_IN_BACKGROUND=true
+VISION_PROVIDER=google/gemini-3.8-flash
+
+# Telemetry
+TELEMETRY_ENABLED=true
+METRONOUS_ENABLED=true
+LANGFUSE_ENABLED=false  # Set to true if Langfuse instance available
+
+# Budget
+MAX_TOKENS_PER_SESSION=100000
+MAX_COST_USD=0.00  # Free tier only
+
+# Antigravity policy
+ANTIGRAVITY_ENABLED=true
+ANTIGRAVITY_ACCOUNT_TYPE=disposable  # Use throwaway account only
+ANTIGRAVITY_KILL_SWITCH=true         # Disable with ANTIGRAVITY_ENABLED=false
+
+# MCP servers
+MCP_CONTEXT7=true
+MCP_ENGRAM=true
+MCP_FIRECRAWL=true
+MCP_PLAYWRIGHT=true
+MCP_FILESYSTEM=true
+
+# Context budget
+CONTEXT_BUDGET_KB=15
+EOF

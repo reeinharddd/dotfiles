@@ -1,0 +1,1 @@
+Implement a circuit breaker pattern in Python: tracks failures, opens circuit after threshold, auto-recovers after timeout.

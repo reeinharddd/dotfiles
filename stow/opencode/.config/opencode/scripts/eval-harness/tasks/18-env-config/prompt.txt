@@ -1,0 +1,1 @@
+Write a Python configuration loader that reads from multiple sources (env vars, .env file, config file, defaults) with proper precedence and validation.

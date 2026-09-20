@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# ctx-budget — Check context budget for always-injected files
+# Usage: ctx-budget [--limit KB]
+
+set -euo pipefail
+
+LIMIT_KB="${1:-15}"
+DOTFILES_DIR="/home/reeinharrrd/projects/personal/dotfiles"
+
+# Files always injected at session start
+FILES=(
+    "stow/opencode/.config/opencode/AGENTS.md"
+    "stow/opencode/.config/opencode/PERSONAL.md"
+    "stow/opencode/.config/opencode/instructions/00-memory-policy.md"
+    "stow/opencode/.config/opencode/instructions/01-initialization.md"
+    "stow/opencode/.config/opencode/instructions/02-hard-rules.md"
+    "stow/opencode/.config/opencode/instructions/03-quality-gates.md"
+    "stow/opencode/.config/opencode/instructions/04-mcp-tools.md"
+    "stow/opencode/.config/opencode/instructions/05-yagni.md"
+    "stow/opencode/.config/opencode/instructions/06-opencode-ops.md"
+)
+
+total_bytes=0
+echo "Context Budget Analysis (limit: ${LIMIT_KB} KB = $((LIMIT_KB * 1024)) bytes)"
+echo "================================================================="
+
+for file in "${FILES[@]}"; do
+    path="$DOTFILES_DIR/$file"
+    if [[ -f "$path" ]]; then
+        size=$(wc -c < "$path")
+        size_kb=$((size / 1024))
+        total_bytes=$((total_bytes + size))
+        printf "%-60s %6d bytes (%3d KB)\n" "$file" "$size" "$size_kb"
+    else
+        echo "MISSING: $file"
+    fi
+done
+
+total_kb=$((total_bytes / 1024))
+echo "================================================================="
+printf "%-60s %6d bytes (%3d KB)\n" "TOTAL" "$total_bytes" "$total_kb"
+
+limit_bytes=$((LIMIT_KB * 1024))
+if [[ $total_bytes -gt $limit_bytes ]]; then
+    over=$((total_bytes - limit_bytes))
+    over_kb=$((over / 1024))
+    echo "⚠️  OVER BUDGET by $over bytes ($over_kb KB) - exceeds ${LIMIT_KB} KB limit"
+    exit 1
+else
+    under=$((limit_bytes - total_bytes))
+    under_kb=$((under / 1024))
+    echo "✅ Within budget: $under_kb KB remaining"
+    exit 0
+fi

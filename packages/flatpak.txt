@@ -1,0 +1,16 @@
+# Flatpak applications (user-level)
+# Generated: 2026-09-20
+# Run: flatpak list --app --columns=application > packages/flatpak.txt
+# Policy D6: Desktop apps via flatpak when available
+
+# No flatpak apps currently installed (flatpak not installed)
+# Add here when installing:
+# com.brave.Browser
+# org.mozilla.firefox
+# com.discordapp.Discord
+# com.obsproject.Studio
+# org.videolan.VLC
+# md.obsidian.Obsidian
+# com.github.tchx84.Flatseal
+# org.gimp.GIMP
+# org.inkscape.Inkscape

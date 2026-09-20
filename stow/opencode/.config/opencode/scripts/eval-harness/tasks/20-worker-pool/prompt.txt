@@ -1,0 +1,1 @@
+Implement a worker pool pattern in Python that processes tasks from a queue with configurable concurrency, timeout, and result collection.

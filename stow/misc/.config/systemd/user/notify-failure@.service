@@ -1,0 +1,6 @@
+[Unit]
+Description=Notificar fallo de %i
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/notify.sh "FALLÓ: %i"

@@ -1,0 +1,1 @@
+Implement a metrics collector that tracks counters, histograms, and gauges with labels, and exports to Prometheus format.

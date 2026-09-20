@@ -1,46 +1,30 @@
-# Session Initialization Protocol
+# 01-initialization.md — Session Init Protocol (condensed)
 
-> ALWAYS LOADED — runs at every session start before any tool use.
+> ALWAYS LOADED — runs at EVERY session start.
 
 ## First Message Protocol
-
-Upon receiving ANY user message (first message or continuation):
-
-1. **Check memory**: call `engram mem_context` immediately — this is NOT optional
-2. **Detect project**: call `engram mem_current_project` to identify the current project
-3. **Check session state**:
-   - If FIRST ACTION REQUIRED banner → call `engram mem_session_summary` IMMEDIATELY
-   - Then call `engram mem_context` to recover context
-4. **Load project rules**: check for `AGENTS.md`, `CLAUDE.md`, `.opencode/PROJECT_CONTEXT.md`
-5. **Verify codegraph**: if `.codegraph/` is missing, offer to init (never force)
-6. **Run global read-only checks**:
-   - `~/.config/opencode/scripts/opencode-capability-doctor`
-   - `~/.config/opencode/scripts/opencode-project-audit "$PWD"`
-7. **Provision safely**: if the audit finds missing artifacts, generate a proposal first;
-   never overwrite project instructions, dirty files, credentials, or existing manifests silently.
-8. **Open the task packet**: if `.opencode/state/task.json` exists, read it before acting. For
-   non-trivial work without a packet, initialize one with `opencode-task init` or `/task-init`.
+1. `engram mem_context` — recover context (NOT optional)
+2. `engram mem_current_project` — detect project
+3. If FIRST ACTION REQUIRED → `engram mem_session_summary` → `mem_context`
+4. Load project rules: `AGENTS.md`, `CLAUDE.md`, `.opencode/PROJECT_CONTEXT.md`
+5. Verify codegraph: if missing → offer `npx codegraph init`
+6. Run read-only checks: capability-doctor, project-audit
+7. Provision safely: propose first, never overwrite silently
+8. Read `.opencode/state/task.json` or init with `/task-init`
 
 ## After Compaction
+1. `engram mem_session_summary` (what was accomplished)
+2. `engram mem_context` → continue
 
-If compaction message seen:
-1. Call `engram mem_session_summary` with what was accomplished
-2. Call `engram mem_context` to recover
-3. Continue working
+## Pre-Task Gate (before ANY task)
+1. Verify target files exist (ls/glob/codegraph_node)
+2. Check `lsp_diagnostics` on target
+3. `engram mem_search` for similar past work
+4. If >3 files → Plan mode first
 
-## Pre-Task Gate (before ANY task execution)
-
-Before starting ANY task:
-1. Verify the target files exist (use `ls`, `glob`, or `codegraph_node`)
-2. Check `lsp_diagnostics` for the target file(s)
-3. Search engram for similar past work: `engram mem_search query="<keywords>"`
-4. If the task is >3 files: use Plan mode first
-
-## Tool Ordering
-
-Always prefer in this order:
-- **Understanding code**: `codegraph_explore` > `codegraph_node` > `read` > `grep`
-- **Editing**: `edit` (small/exact) > `write` (new) > python3 in-place para symlinks/scattered (morph_edit MUERTO 402). Routing completo: `04-mcp-tools.md`
-- **Searching**: `codegraph_explore` > `warpgrep_codebase_search` > `grep` > `glob`
-- **Web**: `firecrawl_firecrawl_search` > `websearch` > `webfetch`
-- **Docs**: `context7_query-docs` > `firecrawl_firecrawl_scrape` > raw search
+## Tool Ordering (ALWAYS)
+- Code: `codegraph_explore` > `codegraph_node` > `read` > `grep`
+- Edit: `edit` (small) > `write` (new) > python3 for scattered
+- Search: `codegraph_explore` > `warpgrep` > `grep` > `glob`
+- Web: `firecrawl_search` > `websearch` > `webfetch`
+- Docs: `context7` > `firecrawl_scrape` > raw search

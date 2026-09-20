@@ -1,8 +1,13 @@
 [Unit]
 Description=Restic backup service
 After=network-online.target
+OnFailure=notify-failure@%n.service
 
 [Service]
 Type=oneshot
 ExecStart=%h/.local/bin/backup-restic.sh
 Nice=10
+IOSchedulingClass=idle
+
+[Install]
+WantedBy=default.target

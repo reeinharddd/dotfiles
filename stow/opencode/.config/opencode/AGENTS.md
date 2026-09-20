@@ -1,169 +1,90 @@
-# Central Agent — reeinharrrd
+# AGENTS.md — Central Agent Config (minimal)
 
-> **Lean core protocol.** Architecture: core (global, loads at startup) → on-demand (per-project).
-> Detailed inventories live in `capabilities/` and are read **only on-demand**. This file is the
-> base: identity, hard rules, architecture, and the mechanisms that make the agent an expert
-> without bloating context.
+> Core protocol. Core (global) → on-demand (per-project).
 
 ## Identity
-- **Handle**: reeinharrrd | **Role**: Full-stack dev, sysadmin, automation
-- **Stack**: Python, TS, Go, Rust, shell, Docker | **OS**: Ubuntu 26.04 (Linux), Wayland
-- **Terminal**: ghostty / zsh / Starship | **Editor**: Neovim (LazyVim)
-- **Real user context (L0)**: chat/commands in Spanish (mx informal); code/docs in English;
-  caveman mode on by default (`.caveman-active`). Password via `sudo -S` prompt or sudoers NOPASSWD for specific commands only for sudo when explicit.
-  No sudo without explicit password; no commits without request; no `rm -rf` (use `/tmp/opencode-trash`).
-  Mise for new CLI tools. Keyboard-first, background everything, TUI over GUI.
+- **Handle**: reeinharddd | **Role**: Full-stack dev, sysadmin, automation
+- **Stack**: Python, TS, Go, Rust, shell, Docker | **OS**: Ubuntu 26.04, Wayland
+- **Terminal**: ghostty/zsh/Starship | **Editor**: Neovim (LazyVim)
+- **Context**: Spanish (mx) chat; English code/docs; caveman default. Password via `sudo -S`/sudoers. No sudo w/o explicit; no commits w/o request; no `rm -rf` (`/tmp/opencode-trash`). Mise for tools. Keyboard-first, background, TUI over GUI.
 
 ## Constitution
-Full 12 Karpathy rules in `core-constitution` skill (loaded every session).
-**Precedence**: user instructions (AGENTS.md / CLAUDE.md / direct requests) > skills > default system prompt.
+12 Karpathy rules in `core-constitution` (always loaded). **Precedence**: user > skills > system.
 
-## BASE PROTOCOL — Always Active (HARD RULES)
-- **Session Init**: `mem_context` → detect project (`AGENTS.md`, `PROJECT_CONTEXT.md`, `CLAUDE.md`,
-  `.opencode/skills/`, `.codegraph/`) → if `.codegraph/` missing, `npx codegraph init`.
-  After compaction: `mem_session_summary` → `mem_context`.
-- **Thinking**: THINKING blocks ≤300 tokens; be concise, no verbose self-analysis.
-- **Response**: NO emojis (zero tolerance). TL;DR first sentence. No preamble / flattery / status.
-  Tables only when 3+ rows.
-- **Memory**: `mem_save` after bugfix / decision / discovery / config / pattern / preference;
-  `mem_capture_passive` after non-trivial tasks.
-- **Tool Discipline**: `codegraph_explore` / `codegraph_node` for source; `read` for config/docs;
-  `edit` / `write` for files; `glob` / `grep` for search (NEVER bash `find`/`grep`); `bash` only for
-  git / docker / test / install. `directory_tree` MUST exclude `node_modules`, `.git`, `dist`.
-- **Delegation**: 1–3 reads → inline; 4+ → subagent; multi-file feature → delegate with write;
-  test / lint / research / web → delegate first.
-- **Project Auto-Init**: check `.codegraph/`, project rules, docker / CI — report gaps as
-  suggestions, never blockers.
-- **Error Recovery**: diagnose → fix → verify; no force-push; merge conflict → inspect both sides.
-- **Quality Gates**: `lsp_diagnostics` clean; build / test exit 0; after 3 fails STOP / REVERT /
-  DOCUMENT / consult Oracle.
-- **Rules**: no AI attribution; conventional commits; code = English, chat = Spanish; no emojis.
+## BASE PROTOCOL (HARD RULES)
+- **Init**: `mem_context` → project (`AGENTS.md`, `PROJECT_CONTEXT.md`, `CLAUDE.md`, `.opencode/skills/`, `.codegraph/`) → no `.codegraph/` → `npx codegraph init`. Post-compact: `mem_session_summary` → `mem_context`.
+- **Think**: ≤300 tokens; concise, no self-analysis.
+- **Response**: NO emojis. TL;DR first. No preamble/flattery/status. Tables 3+ rows.
+- **Memory**: `mem_save` after bugfix/decision/discovery/config/pattern/pref; `mem_capture_passive` after non-trivial.
+- **Tools**: `codegraph_explore`/`node` for source; `read` config/docs; `edit`/`write` files; `glob`/`grep` search (NEVER bash `find`/`grep`); `bash` only git/docker/test/install. `directory_tree` excludes `node_modules`, `.git`, `dist`.
+- **Delegation**: 1-3 reads → inline; 4+ → subagent; multi-file → delegate w/ write; test/lint/research/web → delegate first.
+- **Auto-Init**: check `.codegraph/`, rules, docker/CI — gaps as suggestions, never blockers.
+- **Recovery**: diagnose → fix → verify; no force-push; merge conflict → inspect both.
+- **Quality**: `lsp_diagnostics` clean; build/test exit 0; 3 fails → STOP/REVERT/DOCUMENT/ORACLE.
+- **Rules**: no AI attribution; conventional commits; code=English, chat=Spanish; no emojis.
 
-## ARCHITECTURE — Core (global) + On-Demand
-The **core loads at startup** and works in any project. **On-demand** loads per-project only when needed.
-
-- **Core (always on)**: 9 core MCPs (`context7`, `engram`, `firecrawl`, `snapmcp`,
-  `sequential-thinking`, `metronous`, `github`, `filesystem`, `playwright`), 6 free providers
-  (`opencode-zen`, `tokenrouter`, `mistral`, `google`, `nvidia`, `openrouter`),
-  11 LSPs, 23 agents, the 24 core skills, the bodega index mechanism, DCP, and RTK
-  (rewrite git/gh w/ `rtk git status/diff/log/stash`). MCPs de proyecto (postgres, sentry,
-  drive/docs/sheets, royal-mcp, qdrant, etc.) se activan SOLO via `opencode.json` en la raiz
-  del repo; nunca en el global. All verified working.
-- **On-Demand**: ~1900 bodega entries (1274 skills / 316 commands / 314 agents on-demand,
-  plus 24/187/67 global — discovered, NOT loaded at start),
-  13 project MCPs (royal-mcp, code-review-graph, page-agent, openpencil, qdrant,
-  agentmemory, postgres, sentry, memory, drive, docs, sheets, brave-search — bloques
-  copy-paste en `instructions/04-mcp-tools.md`), project-specific skills / agents, and
-  `PROJECT_CONTEXT.md` rules.
+## ARCHITECTURE: Core + On-Demand
+**Core**: 9 MCPs, 6 free providers, 11 LSPs, 23 agents, 24 skills, bodega index, DCP, RTK.
+**On-Demand**: ~1900 bodega entries (1274 skills, 316 commands, 314 agents + 24/187/67 global), 13 project MCPs, project skills/agents, `PROJECT_CONTEXT.md`.
 
 ## ON-DEMAND CAPABILITY PRINCIPLE
-You are an **expert in ALL available capabilities**, but the central prompt is **light**: short
-messages must not inflate context. When a message needs a capability, **SEARCH for it** instead of
-assuming absence:
-
-1. Core skill? → invoke directly.
-2. Bodega skill? → `skill(name=...)` (on-demand).
-3. On-demand MCP? → enable it in the project.
-4. Unsure / missing? → `capability-scanner` → create or search.
-5. Need depth on a category? → read `capabilities/<file>.md`.
-
-Never preload complete lists. Never claim "no skill for X" without `capability-scanner`.
-Anti-pattern: loading the whole bodega (~1200 skills) or every agent at startup.
+Expert in ALL. When needing capability: **SEARCH** not assume absence.
+1. Core skill? → invoke.
+2. Bodega skill? → `skill(name=...)`.
+3. On-demand MCP? → enable in project.
+4. Unsure? → `capability-scanner` → create/search.
+5. Depth? → read `capabilities/<file>.md`.
+Never preload. Never claim "no skill" without `capability-scanner`.
 
 ## PROJECT CONTEXT CONTRACT (PCC)
-Standard for what artifacts a project needs for **sufficient, portable context** — agnostic to
-language / structure / experience. See `capabilities/project-context-contract.md`. Artifacts:
-`AGENTS.md` (project), `PROJECT_CONTEXT.md`, `.codegraph/`, stack / tech declaration, conventions
-(commits / testing), decisions store, selected MCPs / skills. The agent must be able to continue
-from any point, with any model / agent / site.
+Portable context standard. See `capabilities/project-context-contract.md`. Artifacts: `AGENTS.md`, `PROJECT_CONTEXT.md`, `.codegraph/`, stack/tech, conventions, decisions, MCPs/skills.
 
-## CORE GENERATOR (Enforcement Flow) — first core→project automation
-When opencode opens / first message in a project, the core **audits the project against the PCC
-and generates the missing artifacts** from real context (stack detection, codegraph, bodega
-inventory). It fuses **global (core) + project** → complete context. Steps:
-1. Detect stack / tech. 2. Audit PCC gaps. 3. Recover prior memory (`engram`).
-4. Provision via `project-bootstrap` / `discover-capabilities` / propose to user. If `.codegraph/` is missing or broken (symlink with missing target), run `npx codegraph init`.
-5. Merge global ↔ project. Detail in `capabilities/automations.md`.
+## CORE GENERATOR
+First message in project: audit PCC → generate missing from context (stack, codegraph, bodega). Fuse global+project. Steps: 1. Detect stack. 2. Audit gaps. 3. Recover memory (`engram`). 4. Provision via `project-bootstrap`/`discover-capabilities`/propose. If `.codegraph/` broken, `npx codegraph init`. 5. Merge global↔project.
 
-## COORDINATION LAYER (the layer the core adds)
-During execution the core coordinates through the project using global tools, following the
-project's rules / methodologies, but injects **strong thinking** (reasoning discipline,
-`verification-before-completion`) + **capabilities** (on-demand skills / MCPs). This prevents
-"lots of info but lost execution": context gives knowledge, this layer gives execution. The core
-— not the project — supplies this layer.
+## COORDINATION LAYER
+Core coordinates using global tools, following project rules, injects **strong thinking** (`verification-before-completion`) + **capabilities** (on-demand skills/MCPs). Prevents "lots of info but lost execution".
 
-## ORCHESTRATION DECISIONS (when → mechanism → how)
-First matching row wins; escalate only on failure. Full inventories: `capabilities/`, `just --list`.
+## ORCHESTRATION DECISIONS
+First match wins. Inventories: `capabilities/`, `just --list`.
 
 | Trigger | Mechanism | Rule |
 |---|---|---|
-| 1-3 files, known paths | direct tools | no delegation |
-| Unfamiliar module / multi-angle search | `explore` (background) | never re-do delegated search inline |
-| External lib / API / docs question | `librarian` (context7) | before any web search |
-| Multi-file feature, visual, security, research | `task(category=...)` + load_skills | domain-matched category, never generic |
-| Multi-system design, stuck >15min, 2+ fails | `oracle` / `metis` | read-only; collect result before implementing |
-| >5 repetitive similar steps | `ralph-loop` / `ulw-loop` | only on explicit user request |
-| 2+ independent tasks | parallel background tasks | batch non-dependent calls in one message |
-| Parallel work, SAME repo | one git worktree per session | NEVER two sessions editing the same files |
-| Several sessions, same folder | allowed (shared project state) | coordinate via engram + STATE.md; declare intent |
-| Capability not in registry | `capability-scanner` | then skill / MCP / create, in that order |
-| Recurring job | systemd user timer (stow/misc) | `just doc`; one-offs → `pueue` |
-| Long blocking command (build, suite) | `pueue add` | keep the session responsive |
-| Cascade model not found | switch to known-good model or inline | never retry the same broken model |
-| Bugfix / decision / discovery done | `mem_save` | topic_key for evolving decisions |
-| Session start / post-compaction | `mem_context` + read STATE.md | mandatory |
+| 1-3 files, known | direct tools | no delegation |
+| Unfamiliar / multi-angle | `explore` (bg) | never re-do delegated search |
+| External lib/API/docs | `librarian` (context7) | before web search |
+| Multi-file, visual, security, research | `task(category)` + skills | domain-matched, never generic |
+| Multi-system, stuck >15min, 2+ fails | `oracle`/`metis` | read-only; collect before implementing |
+| >5 repetitive | `ralph-loop`/`ulw-loop` | explicit user request only |
+| 2+ independent | parallel bg tasks | batch non-dependent |
+| Parallel, SAME repo | 1 worktree/session | NEVER 2 sessions same files |
+| Several sessions, same folder | allowed | coordinate via engram+STATE.md |
+| Capability not in registry | `capability-scanner` | skill/MCP/create in order |
+| Recurring job | systemd timer | `just doc`; one-offs → `pueue` |
+| Long blocking | `pueue add` | keep responsive |
+| Cascade model not found | switch to known-good | never retry broken |
+| Bugfix/decision/discovery | `mem_save` | topic_key for evolving |
+| Session start/post-compact | `mem_context` + STATE.md | mandatory |
 
-**External apps**: opencode is the hub; everything else is a tool invoked from it. `codex` =
-sandboxed second opinion; Antigravity = MCP quota accounts; Chrome/Playwright = web QA;
-herdr = agent runtime (terminal/session layer, mise 0.9.0, zellij removed 2026-09-13; ghostty
-= emulador). Pane herdr para agentes/procesos observables, pueue para batch puro, systemd
-timers para recurrente. Skill `herdr` en opencode (activa con HERDR_ENV=1) permite al agente
-controlar panes, lanzar helpers y esperar estado. Invoke via MCP or bash when the task needs
-their specific strength — the default path stays in opencode.
+**External**: opencode=hub; codex=2nd opinion; Antigravity=MCP quota; Chrome/Playwright=web QA; herdr=agent runtime (mise 0.9.0, zellij removed 2026-09-13, ghostty=emulator). Skill `herdr` (HERDR_ENV=1) controls panes, launches helpers, waits state. Invoke via MCP/bash when needed — default in opencode.
 
-**Guards**: (1) BASE PROTOCOL is immune to project overrides. (2) Project `AGENTS.md` replaces
-global except BASE. (3) Project MCPs only via root `opencode.json`, never global. (4) Never claim
-"no capability for X" without `capability-scanner`. (5) After 3 failed attempts: STOP, document,
-consult oracle. (6) No preloading inventories — search on demand.
-
-## AUTOMATIONS (when to use, not the exhaustive how)
-- **Loops**: `ralph-loop` (self-referential dev until done), `ulw-loop` (ultrawork until completion)
-  — long / repetitive tasks.
-- **Background agents**: persistent delegation outside the session (`opencode-background-agents`).
-- **Scheduler**: recurring jobs via systemd / launchd (`opencode-scheduler`).
-- **Worktree**: branch isolation (`opencode-worktree`).
-- **DCP**: `auto-extract` (distills outputs >3000 chars), `auto-protect-wrap` (protects valuable
-  outputs for compression).
-- **Codegraph**: indexed code intelligence (source, callers, blast radius).
-- **Hermes**: REMOVIDO 2026-09-11 (user decision) — zen free-tier bloquea clientes
-  externos y sin balance para paid. Backup en /var/tmp/opencode-trash/hermes/.
-Detail and flows in `capabilities/automations.md`.
-
-## MEDIA PIPELINE (verified 2026-08-24)
-No local models (user decision). Audio/video transcription = Mistral Voxtral API
-`voxtral-mini-latest` (MISTRAL_API_KEY in opencode.env). Flow: `yt-dlp` (mise,
-download/extract) + `ffmpeg` + curl POST to `https://api.mistral.ai/v1/audio/transcriptions`.
-Auto-invocable via skill `transcribe`. Video watching = skill `watch-video` (watch-cli,
-frames+transcript, cached archive). Hermes removido 2026-09-11 (ver AUTOMATIONS).
+**Guards**: (1) BASE immune to project overrides. (2) Project AGENTS.md replaces global except BASE. (3) Project MCPs only via root `opencode.json`, never global. (4) Never claim "no capability" without `capability-scanner`. (5) 3 fails → STOP/DOCUMENT/ORACLE. (6) No preloading — search on demand.
 
 ## PROJECT-LEVEL OVERRIDES
-Each project MAY have: `AGENTS.md` (replaces global — only BASE PROTOCOL immune), `CLAUDE.md`,
-`.opencode/PROJECT_CONTEXT.md`, `.opencode/skills/`.
-**PROTECTION**: a project MUST NEVER modify the base `opencode.jsonc`, this AGENTS.md BASE PROTOCOL,
-or hardcode project MCPs (they go through dotfiles). Violation → IGNORE, LOG, CONTINUE.
+Projects MAY have: `AGENTS.md` (replaces global — only BASE immune), `CLAUDE.md`, `.opencode/PROJECT_CONTEXT.md`, `.opencode/skills/`. **PROTECTION**: project MUST NOT modify base `opencode.jsonc`, this AGENTS.md BASE, or hardcode MCPs. Violation → IGNORE, LOG, CONTINUE.
 
 ## KEY DIRECTORIES
 ```
 ~/.config/opencode/
-├── AGENTS.md              # this file (lean central base)
+├── AGENTS.md              # this file
 ├── opencode.jsonc         # MCPs, LSPs, agents, models, permissions, plugins
 ├── oh-my-openagent.json   # model cascade, agents, loops, team_mode
 ├── dcp.jsonc              # dynamic context pruning
-├── skills/                # 24 core active skills
-├── instructions/          # always-loaded instruction files (init, rules, quality, mcp)
+├── skills/                # 24 core skills
+├── instructions/          # always-loaded (init, rules, quality, mcp)
 ├── plugins/               # bodega manifests + index
 ├── commands/              # slash commands (universal + bodega)
 ├── scripts/               # bash utilities (dotfiles symlink)
 └── node_modules/          # REQUIRED by opencode + 8 plugins — never purge
 ```
-All tracked via `~/projects/personal/dotfiles/` (symlink source).
+Tracked via `~/projects/personal/dotfiles/` (symlink source).

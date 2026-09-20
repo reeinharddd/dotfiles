@@ -303,3 +303,19 @@ ntfy-setup topic:
     @chmod 600 ~/.config/ntfy/topic
     @echo "Topic configurado. Instala ntfy app en el telefono y subscribe."
     @echo "Test: ntfy publish $$(cat ~/.config/ntfy/topic) 'Hola desde CLI'"
+
+# ─── AI Profiles ────────────────────────────────────────────────
+
+ai-personal args:
+    @ai personal {{args}}
+
+ai-client args:
+    @ai client {{args}}
+
+# ─── Eval Harness ──────────────────────────────────────────────
+
+eval task="":
+    @/home/reeinharrrd/projects/personal/dotfiles/stow/opencode/.config/opencode/scripts/eval-harness/run-eval.sh {{task}}
+
+eval-all:
+    @/home/reeinharrrd/projects/personal/dotfiles/stow/opencode/.config/opencode/scripts/eval-harness/run-eval.sh --all

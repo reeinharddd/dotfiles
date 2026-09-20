@@ -1,0 +1,1 @@
+Write pytest unit tests for a function that validates email addresses. Test valid emails, invalid formats, edge cases.

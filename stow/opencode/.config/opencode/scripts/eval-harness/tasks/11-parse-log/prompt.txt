@@ -1,0 +1,1 @@
+Write a Python function that parses nginx access logs in combined format and extracts: IP, method, path, status code, response time.

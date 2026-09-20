@@ -1,0 +1,1 @@
+Write a Python function that parses a JSON string, validates it has required fields (id, name, email), and returns a cleaned dict. Handle missing fields gracefully.

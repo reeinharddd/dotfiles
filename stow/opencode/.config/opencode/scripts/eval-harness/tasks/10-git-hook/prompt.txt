@@ -1,0 +1,1 @@
+Write a pre-commit git hook that runs gitleaks, shellcheck, and prevents commits with TODO/FIXME comments in production code paths.

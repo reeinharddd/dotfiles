@@ -1,0 +1,1 @@
+Write a secure Dockerfile for a Python app: non-root user, minimal base, proper caching, health check.

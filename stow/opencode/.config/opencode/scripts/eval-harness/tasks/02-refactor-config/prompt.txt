@@ -1,0 +1,12 @@
+Refactor this configuration file to use environment variables instead of hardcoded values:
+
+```yaml
+database:
+  host: localhost
+  port: 5432
+  user: admin
+  password: secret123
+  name: myapp
+```
+
+Replace hardcoded values with environment variable references (e.g., ${DB_HOST}).

@@ -1,0 +1,13 @@
+Fix the bug in this Python function that calculates fibonacci numbers:
+
+```python
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+# Bug: exponential time complexity, should use memoization or iterative approach
+# Fix it to be O(n) time and O(1) space
+```
+
+The function should handle n up to 1000000 efficiently.

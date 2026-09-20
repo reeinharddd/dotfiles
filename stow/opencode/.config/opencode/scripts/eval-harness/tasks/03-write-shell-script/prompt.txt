@@ -1,0 +1,1 @@
+Write a bash script that finds all .py files in a directory, counts lines of code (excluding comments and blank lines), and outputs a summary.

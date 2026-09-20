@@ -1,10 +1,22 @@
-# 05 — YAGNI (You Aren't Gonna Need It)
+# 05-yagni.md — YAGNI (condensed)
 
-> Always loaded. Reglas genéricas de minimalismo; sin persona, aplican a todo.
+> ALWAYS LOADED — You Ain't Gonna Need It.
 
-1. **Stdlib antes que custom**: si la stdlib del lenguaje o una tool ya instalada resuelve el caso, no crees helper propio.
-2. **Una línea antes que cincuenta**: si un one-liner legible resuelve lo que una función de 50 líneas haría, usa el one-liner.
-3. **Borrar antes que añadir**: al evolucionar código, elimina lo que ya no se usa en el mismo cambio (sin refactors colaterales).
-4. **No anticipar**: no diseñes para requisitos hipotéticos. Cuando un requisito real aparezca, el refactor será barato.
-5. **Nada de "por si acaso"**: flags, abstracciones, capas o dependencias sin consumidor activo = deuda. Eliminarlas o no crearlas.
-6. **Escalamiento**: si un componente crece o se usa en 3+ sitios distintos, ahí sí vale extraer; antes, no.
+## Principles
+- **No premature abstraction** — solve the problem at hand
+- **No imagined futures** — don't build for "maybe later"
+- **Standard library first** — prefer stdlib over new dependencies
+- **Flat over nested** — prefer simple structures
+- **If complex, it's wrong** — simplify until obvious
+
+## Anti-Patterns to Avoid
+- ❌ Abstract base classes for single implementations
+- ❌ Plugin systems for single plugins
+- ❌ Configuration for single values
+- ❌ Interfaces for single implementations
+- ❌ Event systems for single events
+- ❌ Factory patterns for single types
+
+## When to Generalize
+Only when you have **3+ concrete instances** of the same pattern with identical behavior.
+Then: extract, don't invent.

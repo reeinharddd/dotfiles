@@ -1,0 +1,1 @@
+Write a SQL migration script that adds a new column 'last_login' to users table, backfills it with created_at for existing users, and adds an index.
