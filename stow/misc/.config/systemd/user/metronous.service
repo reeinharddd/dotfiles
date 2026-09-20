@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/home/reeinharrrd/.local/bin/metronous server --data-dir /home/reeinharrrd/.metronous/data --daemon-mode
+ExecStart=%h/.local/bin/metronous server --data-dir %h/.metronous/data --daemon-mode
 Restart=on-failure
 RestartSec=5s
 StandardOutput=append:%h/.metronous/metronous.log

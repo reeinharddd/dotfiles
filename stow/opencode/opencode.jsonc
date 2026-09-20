@@ -1206,7 +1206,7 @@
       "enabled": true,
       "type": "local",
       "command": [
-        "/home/reeinharrrd/.local/bin/metronous",
+        "$HOME/.local/bin/metronous",
         "mcp"
       ],
       "_note": "telemetría + benchmarks semanales + calibración de modelos"
@@ -1383,12 +1383,22 @@
               "model": "google/gemini-3.8-flash",
               "description": "Inspector visual y multimodal para QA de interfaces, captura de pantallas y verificación de layouts."
           },
-          "multimodal-looker": {
-              "mode": "primary",
-              "model": "google/gemini-3.8-flash",
-              "description": "Extractor de información visual a partir de diagramas, imágenes y mockups."
-          },
-          "librarian": {
+"multimodal-looker": {
+               "mode": "primary",
+               "model": "google/gemini-3.8-flash",
+               "description": "Extractor de información visual a partir de diagramas, imágenes y mockups."
+           },
+           "prometheus": {
+               "mode": "primary",
+               "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+               "description": "Prometheus - Plan Builder: agente coordinador de modo plan para .omo/*.md only. Usa delegate-task para tareas read-only."
+           },
+           "atlas": {
+               "mode": "primary",
+               "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+               "description": "Atlas (Plan Executor): agente read-only para ejecución de planes autorizados (team_mode)."
+           },
+           "librarian": {
               "mode": "primary",
               "model": "google/gemini-3.8-flash",
               "description": "Investigador de referencias externas en documentación oficial, repositorios open-source y Context7."

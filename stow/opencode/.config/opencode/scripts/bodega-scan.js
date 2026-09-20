@@ -26,8 +26,8 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 
-const TOOLS = "/home/reeinharrrd/tools";
-const PLUGINS = "/home/reeinharrrd/.config/opencode/plugins";
+const TOOLS = process.env.HOME + "/tools";
+const PLUGINS = process.env.HOME + "/.config/opencode/plugins";
 
 const isLegacy = (p) => /legacy-command-shims/.test(p);
 

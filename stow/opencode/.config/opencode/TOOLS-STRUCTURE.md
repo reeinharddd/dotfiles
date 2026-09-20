@@ -1,6 +1,6 @@
 # Tools Structure — Convenciones de carga
 
-Reglas para integrar la bodega (`/home/reeinharrrd/tools/`) en OpenCode sin
+Reglas para integrar la bodega (`$HOME/tools/`) en OpenCode sin
 sobrecargar el contexto global. Toda pieza se activa por ARTEFACTO, no por repo.
 
 ## 1. Skills / Agents / Commands — core + bodega (on-demand)
@@ -48,7 +48,7 @@ Para activar algo: leer el manifest del repo, tomar el artefacto concreto,
 aplicar su activation mode (symlink / declarar mcp / plugin / run-binary).
 
 Inventario de manifests:
-  find /home/reeinharrrd/tools -name MANIFEST.md -path '*/.opencode/*'
+  find $HOME/tools -name MANIFEST.md -path '*/.opencode/*'
 
 ## 7. Activacion por alcance (resumen)
   - Global:      skills/ agents/ commands/ base + MCPs core en opencode.jsonc + plugins globales

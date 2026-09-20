@@ -7,13 +7,13 @@ highlight: true
 indent_character: '|'
 journals:
   default:
-    journal: /home/reeinharrrd/.local/share/jrnl/journal.txt
+    journal: $HOME/.local/share/jrnl/journal.txt
   health:
-    journal: /home/reeinharrrd/.local/share/jrnl/health.txt
+    journal: $HOME/.local/share/jrnl/health.txt
   ideas:
-    journal: /home/reeinharrrd/.local/share/jrnl/ideas.txt
+    journal: $HOME/.local/share/jrnl/ideas.txt
   work:
-    journal: /home/reeinharrrd/.local/share/jrnl/work.txt
+    journal: $HOME/.local/share/jrnl/work.txt
 line_length: 110
 linewrap: 79
 tagsymbols: '@'

@@ -80,6 +80,9 @@ Providers en `opencode.jsonc` (enabled): `opencode-zen`, `nvidia`, `mistral`, `g
   - `explore`, `scout`, `fast`: `google/gemini-3.5-flash-lite` (ligero, contexto masivo, alta cuota).
   - `librarian`, `docs-lookup`, `senior-researcher`: `google/gemini-3.8-flash` (referencia externa y Context7).
   - `vision`, `multimodal-looker`: `google/gemini-3.8-flash` (fallbacks: antigravity-gemini-3.8-flash, dots-3-note-preview).
+  - `prometheus`: `nvidia/deepseek-ai/deepseek-v4-flash-0731` (Plan Builder, modo plan-only)
+  - `atlas`: `nvidia/deepseek-ai/deepseek-v4-flash-0731` (Plan Executor, modo read-only)
+  - `plan`: `nvidia/deepseek-ai/deepseek-v4-flash-0731` (Especialista arquitectura, design)
 - Categorías de tareas en `oh-my-openagent.json`: 100% no-zen para ejecución background (`quick` -> nvidia, `ultrabrain` -> mistral, `deep` -> gemini-3.8, `writing` -> mistral, `visual-engineering` -> gemini-3.8).
 - Model global: `google/gemini-3.8-flash` | Small: `opencode-zen/nemotron-3-ultra-free`.
 - Modelos allowlist auditados live (exit 0): nvidia deepseek-v4-flash-0731; mistral medium/ministral-8b; google gemini 3.8/3.7/3.5-lite/2.5-lite/2.5-flash, antigravity sonnet-4-6/gemini-3.8; openrouter dots-3-note (512k); zen nemotron-3-ultra/lightning/mimo.
@@ -104,12 +107,9 @@ Providers en `opencode.jsonc` (enabled): `opencode-zen`, `nvidia`, `mistral`, `g
 
 - `~/Procesamiento_de_Datos.md` (210 líneas)
 - `~/Introduccion_Analisis_Datos_resumen.md` (43 líneas)
-- `~/MASTER-INDEX.md` (68 líneas)
 - `~/propuesta-utt-modernizacion.md` (311 líneas)
-- `~/CONFIG-CHANGES.md` (237 líneas)
 - `~/models_complete_analysis.md` (201 líneas)
 - `~/models_final_analysis.md` (250 líneas)
-- `~/MCP-INVENTORY.md` (71 líneas)
 - `~/AGENTS.md` (98 líneas)
 - `~/free-llm-api-aggregators-2026.md` (94 líneas)
 - **Brave bookmarks**: 12 carpetas organizadas (AI/ML, Job Search, Design/UI, etc.)

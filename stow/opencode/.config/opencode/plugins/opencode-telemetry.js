@@ -1,10 +1,10 @@
 /**
- * opencode-telemetry.js — event ledger for observability (v1, 2026-09-17)
+ * opencode-telemetry.js — event ledger for observability (v2, 2026-09-17)
  *
  * Records structured events to ~/.local/share/opencode/telemetry/events/YYYY-MM-DD.jsonl
- * so failures, delegations, and tool activity are debuggable after the fact.
- * Events: boot (plugin load), tool (tool.execute.before with result status),
- * delegation (delegate/task calls incl. run_in_background flag), session.idle.
+ * (LOCAL date) so failures, delegations, and tool activity are debuggable after the fact.
+ * Events: boot (plugin load + cwd + agent count), tool (name, args, ok/fail),
+ * delegation (delegate/task calls incl. run_in_background), session.idle, plugin_error.
  *
  * Fail-open: any error is swallowed; never blocks or alters tool execution.
  * Hooks verified against opencode 1.18.29: config, tool.execute.before, session.idle.
@@ -19,28 +19,37 @@ const TELEMETRY_DIR = path.join(
   "events"
 );
 
+function localDay() {
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
 function log(entry) {
   try {
     fs.mkdirSync(TELEMETRY_DIR, { recursive: true });
-    const day = new Date().toISOString().slice(0, 10);
-    const file = path.join(TELEMETRY_DIR, day + ".jsonl");
+    const file = path.join(TELEMETRY_DIR, localDay() + ".jsonl");
     fs.appendFileSync(file, JSON.stringify({ ts: new Date().toISOString(), ...entry }) + "\n");
   } catch {
     /* telemetry is best-effort, never break the flow */
   }
 }
 
+function truncate(value, max = 400) {
+  try {
+    const s = typeof value === "string" ? value : JSON.stringify(value);
+    return s && s.length > max ? s.slice(0, max) + "…" : value;
+  } catch {
+    return undefined;
+  }
+}
+
 function summarizeArgs(input) {
   try {
-    if (!input || typeof input !== "object") return {};
-    const copy = { ...input };
-    for (const [k, v] of Object.entries(copy)) {
-      const s = typeof v === "string" ? v : JSON.stringify(v);
-      copy[k] = s && s.length > 300 ? s.slice(0, 300) + "…" : v;
-    }
-    return copy;
+    const args = input?.args ?? input?.input ?? input?.parameters ?? {};
+    return truncate(args);
   } catch {
-    return {};
+    return undefined;
   }
 }
 
@@ -51,7 +60,7 @@ export default async function opencodeTelemetry() {
       log({
         type: "boot",
         plugin: "opencode-telemetry",
-        version: config?.version ?? "unknown",
+        cwd: process.cwd(),
         agentCount: config?.agent ? Object.keys(config.agent).length : undefined,
       });
     },
@@ -60,23 +69,33 @@ export default async function opencodeTelemetry() {
     "tool.execute.before": async (input, output) => {
       try {
         if (!input || typeof input.tool !== "string") return;
+        if (process.env.OPENCODE_TELEMETRY_DUMP === "1") {
+          log({
+            type: "dump",
+            input: truncate(input, 800),
+            output: truncate(output, 800),
+          });
+        }
         const ok = !output || !output.isError;
         const entry = {
           type: "tool",
           tool: input.tool,
+          sessionID: input.sessionID,
+          callID: input.callID,
           ok,
-          args: summarizeArgs(input.input),
+          args: summarizeArgs(output),
         };
         if (!ok && output?.error) entry.error = String(output.error).slice(0, 500);
         log(entry);
 
         // Delegation visibility: flag run_in_background for post-hoc debugging
         if (input.tool === "delegate" || input.tool === "task") {
+          const a = output?.args ?? output?.input ?? {};
           log({
             type: "delegation",
             tool: input.tool,
-            background: Boolean(input.input?.run_in_background),
-            agent: input.input?.agent ?? input.input?.subagent_type ?? null,
+            background: Boolean(a.run_in_background),
+            agent: a.agent ?? a.subagent_type ?? null,
             ok,
           });
         }

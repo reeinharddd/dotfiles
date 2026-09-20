@@ -42,10 +42,10 @@
   "github.copilot.chat.codeGeneration.useInstructionFiles": true,
   "github.copilot.chat.codeGeneration.instructions": [
     {
-      "file": "/home/reeinharrrd/.config/Code/User/prompts/global.instructions.md"
+      "file": "$HOME/.config/Code/User/prompts/global.instructions.md"
     },
     {
-      "file": "/home/reeinharrrd/.config/Code/User/prompts/environment.instructions.md"
+      "file": "$HOME/.config/Code/User/prompts/environment.instructions.md"
     }
   ],
   "github.copilot.chat.alternateGeminiModelFPrompt.enabled": true,
@@ -67,18 +67,18 @@
   "chat.agent.maxRequests": 100,
   "github.copilot.chat.reviewSelection.instructions": [
     {
-      "file": "/home/reeinharrrd/.config/Code/User/prompts/global.instructions.md"
+      "file": "$HOME/.config/Code/User/prompts/global.instructions.md"
     },
     {
-      "file": "/home/reeinharrrd/.config/Code/User/prompts/environment.instructions.md"
+      "file": "$HOME/.config/Code/User/prompts/environment.instructions.md"
     }
   ],
   "github.copilot.chat.testGeneration.instructions": [
     {
-      "file": "/home/reeinharrrd/.config/Code/User/prompts/tests.instructions.md"
+      "file": "$HOME/.config/Code/User/prompts/tests.instructions.md"
     },
     {
-      "file": "/home/reeinharrrd/.config/Code/User/prompts/global.instructions.md"
+      "file": "$HOME/.config/Code/User/prompts/global.instructions.md"
     }
   ],
   "github.copilot.chat.commitMessageGeneration.instructions": [
@@ -169,7 +169,7 @@
   "chat.agent.sandbox.fileSystem.linux": {
     "allowWrite": [
       "/**",
-      "/home/reeinharrrd/**",
+      "$HOME/**",
       "/tmp/**",
       "/var/tmp/**",
       "/root/**"
@@ -266,13 +266,13 @@
   },
   "workbench.colorTheme": "One Dark Pro Darker",
   "yaml.schemas": {
-    "file:///home/reeinharrrd/.vscode/extensions/continue.continue-1.2.22-linux-x64/config-yaml-schema.json": [
+    "file://$HOME/.vscode/extensions/continue.continue-1.2.22-linux-x64/config-yaml-schema.json": [
       ".continue/**/*.yaml"
     ],
-    "file:///home/reeinharrrd/.vscode/extensions/continue.continue-1.2.24-linux-x64/config-yaml-schema.json": [
+    "file://$HOME/.vscode/extensions/continue.continue-1.2.24-linux-x64/config-yaml-schema.json": [
       ".continue/**/*.yaml"
     ],
-    "file:///home/reeinharrrd/.vscode/extensions/continue.continue-2.0.0-linux-x64/config-yaml-schema.json": [
+    "file://$HOME/.vscode/extensions/continue.continue-2.0.0-linux-x64/config-yaml-schema.json": [
       ".continue/**/*.yaml"
     ]
   },

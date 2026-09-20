@@ -21,7 +21,7 @@ const CASCADE = {
   "build":            "opencode-zen/nemotron-3-ultra-free",
   "smart":            "opencode-zen/nemotron-3-ultra-free",
   "general":          "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-  "plan":             "opencode-zen/nemotron-3-ultra-free",
+  "plan":             "nvidia/deepseek-ai/deepseek-v4-flash-0731",
   "oracle":           "nvidia/deepseek-ai/deepseek-v4-flash-0731",
   "tdd-guide":        "nvidia/deepseek-ai/deepseek-v4-flash-0731",
   "qa-enforcer":      "nvidia/deepseek-ai/deepseek-v4-flash-0731",
@@ -41,6 +41,8 @@ const CASCADE = {
   "librarian":        "google/gemini-3.8-flash",
   "vision":           "google/gemini-3.8-flash",
   "multimodal-looker": "google/gemini-3.8-flash",
+  "prometheus":       "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+  "atlas":            "nvidia/deepseek-ai/deepseek-v4-flash-0731",
 };
 const MODE = {};
 export default async function modelRoutingGuard(){

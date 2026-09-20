@@ -4,7 +4,7 @@ After=graphical-session.target
 
 [Service]
 Type=simple
-ExecStart=/home/reeinharrrd/.local/bin/pueued
+ExecStart=%h/.local/bin/pueued
 Restart=on-failure
 RestartSec=3
 

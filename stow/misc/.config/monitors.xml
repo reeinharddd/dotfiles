@@ -4,96 +4,20 @@
     <logicalmonitor>
       <x>0</x>
       <y>0</y>
-      <scale>1.25</scale>
-      <primary>yes</primary>
-      <monitor>
-        <monitorspec>
-          <connector>eDP-1</connector>
-          <vendor>LEN</vendor>
-          <product>0x403d</product>
-          <serial>0x00000000</serial>
-        </monitorspec>
-        <mode>
-          <width>1920</width>
-          <height>1200</height>
-          <rate>60.001</rate>
-        </mode>
-      </monitor>
-    </logicalmonitor>
-  </configuration>
-  <configuration>
-    <layoutmode>logical</layoutmode>
-    <logicalmonitor>
-      <x>0</x>
-      <y>0</y>
       <scale>1</scale>
       <primary>yes</primary>
       <monitor>
         <monitorspec>
-          <connector>HDMI-1</connector>
-          <vendor>HWP</vendor>
-          <product>HP 22er</product>
-          <serial>3CM638112D   </serial>
+          <connector>eDP-1</connector>
+          <vendor>DISPLAY</vendor>
+          <product>0x0000</product>
+          <serial>0x00000000</serial>
         </monitorspec>
         <mode>
           <width>1920</width>
           <height>1080</height>
           <rate>60.000</rate>
         </mode>
-      </monitor>
-    </logicalmonitor>
-    <logicalmonitor>
-      <x>1920</x>
-      <y>0</y>
-      <scale>1.25</scale>
-      <monitor>
-        <monitorspec>
-          <connector>eDP-1</connector>
-          <vendor>LEN</vendor>
-          <product>0x403d</product>
-          <serial>0x00000000</serial>
-        </monitorspec>
-        <mode>
-          <width>1920</width>
-          <height>1200</height>
-          <rate>60.001</rate>
-        </mode>
-      </monitor>
-    </logicalmonitor>
-  </configuration>
-  <configuration>
-    <layoutmode>logical</layoutmode>
-    <logicalmonitor>
-      <x>0</x>
-      <y>0</y>
-      <scale>1</scale>
-      <primary>yes</primary>
-      <monitor>
-        <monitorspec>
-          <connector>eDP-1</connector>
-          <vendor>LEN</vendor>
-          <product>0x403d</product>
-          <serial>0x00000000</serial>
-        </monitorspec>
-        <mode>
-          <width>1920</width>
-          <height>1200</height>
-          <rate>60.001</rate>
-        </mode>
-      </monitor>
-      <monitor>
-        <monitorspec>
-          <connector>HDMI-1</connector>
-          <vendor>ELE</vendor>
-          <product>element TV</product>
-          <serial>0x01010101</serial>
-        </monitorspec>
-        <mode>
-          <width>1920</width>
-          <height>1200</height>
-          <rate>59.950</rate>
-        </mode>
-        <underscanning>yes</underscanning>
       </monitor>
     </logicalmonitor>
   </configuration>

@@ -4,7 +4,7 @@ After=graphical-session.target
 
 [Service]
 Type=simple
-ExecStart=/home/reeinharrrd/.local/bin/cliphist store
+ExecStart=%h/.local/bin/cliphist store
 Restart=on-failure
 RestartSec=3
 

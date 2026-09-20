@@ -1,6 +1,15 @@
 # Backup directory (created by deploy.sh)
 .local/share/dotfiles-backup/
 
+# Runtime artifacts & cache
+.atl/
+.omo/
+.code-review-graph/
+.superpowers/
+
+# Generated bodega manifests (runtime)
+stow/opencode/.config/opencode/plugins/bodega-*.json
+
 # macOS
 .DS_Store
 

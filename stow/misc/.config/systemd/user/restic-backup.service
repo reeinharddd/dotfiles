@@ -4,5 +4,5 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/home/reeinharrrd/projects/personal/dotfiles/scripts/backup-restic.sh
+ExecStart=%h/.local/bin/backup-restic.sh
 Nice=10

@@ -1,6 +1,6 @@
 [user]
-	name = Erik Alfonso Beltran Ramirez
-	email = beltraberik@gmail.com
+	name = Your Name
+	email = your.email@example.com
 	signingkey = ~/.ssh/id_ed25519.pub
 [init]
 	defaultBranch = main
@@ -31,6 +31,3 @@
 [gpg "ssh"]
 	program = /usr/bin/ssh-keygen
 	allowedSignersFile = ~/.ssh/allowed_signers
-[safe]
-	directory = /var/www/wordpress-project
-	directory = /home/reeinharrrd/School/servease-wordpress

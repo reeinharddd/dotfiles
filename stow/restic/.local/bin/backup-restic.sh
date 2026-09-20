@@ -34,14 +34,14 @@ restic backup \
 	--exclude-caches \
 	--exclude-file="$EXCLUDE_FILE" \
 	--one-file-system \
-	/home/reeinharrrd/Documents \
-	/home/reeinharrrd/Pictures \
-	/home/reeinharrrd/projects \
-	/home/reeinharrrd/.config \
-	/home/reeinharrrd/.local/bin \
-	/home/reeinharrrd/.zsh_history \
-	/home/reeinharrrd/.ssh \
-	/home/reeinharrrd/.gnupg
+	$HOME/Documents \
+	$HOME/Pictures \
+	$HOME/projects \
+	$HOME/.config \
+	$HOME/.local/bin \
+	$HOME/.zsh_history \
+	$HOME/.ssh \
+	$HOME/.gnupg
 
 echo "==> Backup terminado: $(date)"
 

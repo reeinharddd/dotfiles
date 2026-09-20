@@ -74,14 +74,34 @@
     "google/gemini-3.8-flash"
    ]
   },
-  "plan": {
-   "model": "opencode-zen/nemotron-3-ultra-free",
+"plan": {
+    "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+    "mode": "primary",
+    "description": "Especialista en arquitectura y diseño que descompone requisitos en planes de implementación atómicos.",
+    "fallback_models": [
+     "mistral/mistral-medium-latest",
+     "google/gemini-3.8-flash",
+     "openrouter/dots-studio/dots-3-note-preview:free"
+    ]
+   },
+  "prometheus": {
+   "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
    "mode": "primary",
-   "description": "Especialista en arquitectura y diseño que descompone requisitos en planes de implementación atómicos.",
+   "description": "Prometheus - Plan Builder: agente coordinador de modo plan para .omo/*.md only. Usa delegate-task para tareas read-only.",
    "fallback_models": [
     "mistral/mistral-medium-latest",
     "google/gemini-3.8-flash",
-    "nvidia/deepseek-ai/deepseek-v4-flash-0731"
+    "openrouter/dots-studio/dots-3-note-preview:free"
+   ]
+  },
+  "atlas": {
+   "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+   "mode": "primary",
+   "description": "Atlas (Plan Executor): agente read-only para ejecución de planes autorizados (team_mode).",
+   "fallback_models": [
+    "mistral/mistral-medium-latest",
+    "google/gemini-3.8-flash",
+    "openrouter/dots-studio/dots-3-note-preview:free"
    ]
   },
   "code-reviewer": {
