@@ -64,6 +64,7 @@ deno = "latest"
 "cargo:onefetch" = "latest"
 rtk = "latest"
 sops = "3.13.3"
+gitleaks = "latest"
 
 [settings]
 always_keep_download = false

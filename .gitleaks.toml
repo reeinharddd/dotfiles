@@ -1,24 +1,30 @@
-# Gitleaks config
-title = "Dotfiles Gitleaks Config"
+title = "dotfiles"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "url-embedded-token"
+description = "Token en la ruta de una URL (p. ej. MCP remotos)"
+regex = '''https?://(?:mcp|api)\.[A-Za-z0-9.-]+/[A-Za-z0-9_-]{24,}(?:/|\b)'''
+tags = ["url", "token"]
+
+[[rules]]
+id = "inline-password"
+description = "Contraseña escrita en línea en docs/instrucciones (p. ej. reglas de agente)"
+regex = '''(?i)\bpass(?:word|wd)\b\s*[:=]?\s*`[^`\s]{4,}`'''
+tags = ["password"]
+
+[[rules]]
+id = "sudo-stdin-password"
+description = "echo <pw> | sudo -S"
+regex = '''(?i)echo\s+['"]?[^\s|'"`<]{4,}['"]?\s*\|\s*sudo\s+-S'''
+tags = ["password", "sudo"]
 
 [allowlist]
-description = "Allowlist for gitleaks"
+description = "Falsos positivos conocidos"
 paths = [
-  "(?i)^stow/opencode/.config/opencode/opencode\\.json$",  # Generated mirror, gitignored
+  '''(^|/)package-lock\.json$''',
+  '''(^|/)\.env\.sops$''',
+  '''(^|/)\.sops\.yaml$''',
 ]
-
-# Custom rules for tokens in URLs (Firecrawl, etc.)
-[[rules]]
-id = "firecrawl-url-token"
-description = "Detect Firecrawl API tokens in URLs"
-regex = '''https?://[^/\s]+/[A-Za-z0-9_-]{28,}/'''
-tags = ["api-key", "url"]
-
-[[rules]]
-id = "generic-url-token"
-description = "Detect generic tokens in URLs"
-regex = '''https?://[^/\s]+/[A-Za-z0-9_-]{32,}/'''
-tags = ["api-key", "url"]
-
-# Standard gitleaks rules (enabled by default)
-# To disable a rule, add it here with `enabled = false`

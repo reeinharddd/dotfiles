@@ -4,19 +4,51 @@
 echo "🔍 Verifying Job Search Setup"
 echo "=============================="
 
+DOTFILES_DIR="$HOME/projects/personal/dotfiles"
+ECC_DIR="$HOME/tools/ECC"
+CV_DIR="$HOME/cv"
+JOBS_DIR="$HOME/jobs"
+JOB_TRACKER_DIR="$HOME/job-tracker"
+JOB_SEARCH_RESULTS_DIR="$HOME/job-search-results"
+
 # 1. Check opencode config
 echo ""
 echo "1. OpenCode Configuration:"
-if [ -f "/home/reeinharrrd/projects/dotfiles/opencode.json" ]; then
-    mcp_count=$(python3 -c "import json; d=json.load(open('/home/reeinharrrd/projects/dotfiles/opencode.json')); print(len(d.get('mcp', {})))" 2>/dev/null || echo "0")
-    agent_count=$(python3 -c "import json; d=json.load(open('/home/reeinharrrd/projects/dotfiles/opencode.json')); print(len(d.get('agent', {})))" 2>/dev/null || echo "0")
-    cmd_count=$(python3 -c "import json; d=json.load(open('/home/reeinharrrd/projects/dotfiles/opencode.json')); print(len(d.get('command', {})))" 2>/dev/null || echo "0")
-    echo "   ✅ opencode.json exists"
+OPENCODE_CONFIG="$DOTFILES_DIR/stow/opencode/.config/opencode/opencode.jsonc"
+if [ -f "$OPENCODE_CONFIG" ]; then
+    mcp_count=$(python3 -c "
+import json, re
+with open('$OPENCODE_CONFIG') as f:
+    content = f.read()
+content = re.sub(r'//.*', '', content)
+content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+d = json.loads(content)
+print(len(d.get('mcp', {})))
+" 2>/dev/null || echo "0")
+    agent_count=$(python3 -c "
+import json, re
+with open('$OPENCODE_CONFIG') as f:
+    content = f.read()
+content = re.sub(r'//.*', '', content)
+content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+d = json.loads(content)
+print(len(d.get('agent', {})))
+" 2>/dev/null || echo "0")
+    cmd_count=$(python3 -c "
+import json, re
+with open('$OPENCODE_CONFIG') as f:
+    content = f.read()
+content = re.sub(r'//.*', '', content)
+content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+d = json.loads(content)
+print(len(d.get('command', {})))
+" 2>/dev/null || echo "0")
+    echo "   ✅ opencode.jsonc exists"
     echo "   📦 MCP Servers: $mcp_count"
     echo "   🤖 Agents: $agent_count"
     echo "   ⚡ Commands: $cmd_count"
 else
-    echo "   ❌ opencode.json not found"
+    echo "   ❌ opencode.jsonc not found at $OPENCODE_CONFIG"
 fi
 
 # 2. Check prompt files
@@ -29,8 +61,8 @@ prompts=(
     "interview-prep.txt"
 )
 for prompt in "${prompts[@]}"; do
-    if [ -f "/home/reeinharrrd/ECC/.opencode/prompts/agents/$prompt" ]; then
-        lines=$(wc -l < "/home/reeinharrrd/ECC/.opencode/prompts/agents/$prompt")
+    if [ -f "$ECC_DIR/.opencode/prompts/agents/$prompt" ]; then
+        lines=$(wc -l < "$ECC_DIR/.opencode/prompts/agents/$prompt")
         echo "   ✅ $prompt ($lines lines)"
     else
         echo "   ❌ $prompt missing"
@@ -48,8 +80,8 @@ commands=(
     "job-track.md"
 )
 for cmd in "${commands[@]}"; do
-    if [ -f "/home/reeinharrrd/ECC/.opencode/commands/$cmd" ]; then
-        lines=$(wc -l < "/home/reeinharrrd/ECC/.opencode/commands/$cmd")
+    if [ -f "$ECC_DIR/.opencode/commands/$cmd" ]; then
+        lines=$(wc -l < "$ECC_DIR/.opencode/commands/$cmd")
         echo "   ✅ $cmd ($lines lines)"
     else
         echo "   ❌ $cmd missing"
@@ -60,11 +92,11 @@ done
 echo ""
 echo "4. CV & Directories:"
 dirs=(
-    "/home/reeinharrrd/cv/master"
-    "/home/reeinharrrd/cv/tailored"
-    "/home/reeinharrrd/jobs"
-    "/home/reeinharrrd/job-tracker"
-    "/home/reeinharrrd/job-search-results"
+    "$CV_DIR/master"
+    "$CV_DIR/tailored"
+    "$JOBS_DIR"
+    "$JOB_TRACKER_DIR"
+    "$JOB_SEARCH_RESULTS_DIR"
 )
 for dir in "${dirs[@]}"; do
     if [ -d "$dir" ]; then
@@ -74,8 +106,8 @@ for dir in "${dirs[@]}"; do
     fi
 done
 
-if [ -f "/home/reeinharrrd/cv/master/master-cv.md" ]; then
-    lines=$(wc -l < "/home/reeinharrrd/cv/master/master-cv.md")
+if [ -f "$CV_DIR/master/master-cv.md" ]; then
+    lines=$(wc -l < "$CV_DIR/master/master-cv.md")
     echo "   ✅ master-cv.md ($lines lines)"
 else
     echo "   ❌ master-cv.md missing"
@@ -89,7 +121,7 @@ scripts=(
     "test-mcps.sh"
 )
 for script in "${scripts[@]}"; do
-    if [ -f "/home/reeinharrrd/projects/dotfiles/scripts/$script" ]; then
+    if [ -f "$DOTFILES_DIR/scripts/$script" ]; then
         echo "   ✅ $script"
     else
         echo "   ❌ $script missing"

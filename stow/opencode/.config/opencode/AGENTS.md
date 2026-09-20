@@ -10,7 +10,7 @@
 - **Stack**: Python, TS, Go, Rust, shell, Docker | **OS**: Ubuntu 26.04 (Linux), Wayland
 - **Terminal**: ghostty / zsh / Starship | **Editor**: Neovim (LazyVim)
 - **Real user context (L0)**: chat/commands in Spanish (mx informal); code/docs in English;
-  caveman mode on by default (`.caveman-active`). Password `270922` only for sudo when explicit.
+  caveman mode on by default (`.caveman-active`). Password via `sudo -S` prompt or sudoers NOPASSWD for specific commands only for sudo when explicit.
   No sudo without explicit password; no commits without request; no `rm -rf` (use `/tmp/opencode-trash`).
   Mise for new CLI tools. Keyboard-first, background everything, TUI over GUI.
 

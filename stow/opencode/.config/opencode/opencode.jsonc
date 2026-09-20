@@ -48,7 +48,61 @@
       "*.tsbuildinfo"
     ]
   },
+  "permission": {
+    "*": "ask",
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*/.ssh/*": "deny",
+      "*/sops/*": "deny",
+      "*auth.json": "deny"
+    },
+    "edit": {
+      "*": "allow",
+      "*opencode.jsonc": "ask",
+      "*/.github/workflows/*": "ask",
+      "*/.git/hooks/*": "deny"
+    },
+    "bash": {
+      "*": "ask",
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "ls *": "allow",
+      "rg *": "allow",
+      "git push*": "ask",
+      "curl *": "ask",
+      "rm *": "deny",
+      "sudo *": "deny"
+    },
+    "webfetch": "ask",
+    "external_directory": "ask"
+  },
+  "experimental": {
+    "openTelemetry": true
+  },
   "provider": {
+    "litellm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM",
+      "options": {
+        "baseURL": "http://localhost:4000/v1"
+      },
+      "models": {
+        "claude-3-5-sonnet": {
+          "name": "Claude 3.5 Sonnet",
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "gemini-2-5-pro": {
+          "name": "Gemini 2.5 Pro",
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
+        "deepseek-r1": {
+          "name": "DeepSeek R1"
+        }
+      }
+    },
     "opencode-zen": {
       "name": "OpenCode Zen",
       "options": {
@@ -808,40 +862,8 @@
           },
           "tool_call": true
         },
-        "gemini-3.7-flash": {
-          "name": "Gemini 3.7 Flash",
-          "limit": {
-            "context": 1048576,
-            "output": 65536
-          },
-          "tool_call": true
-        },
-        "gemini-3.6-flash": {
-          "name": "Gemini 3.6 Flash",
-          "limit": {
-            "context": 1048576,
-            "output": 65536
-          },
-          "tool_call": true
-        },
-        "gemini-3.5-flash": {
-          "name": "Gemini 3.5 Flash",
-          "limit": {
-            "context": 1048576,
-            "output": 65536
-          },
-          "tool_call": true
-        },
-        "gemini-3.5-flash-lite": {
-          "name": "Gemini 3.5 Flash Lite",
-          "limit": {
-            "context": 1048576,
-            "output": 65536
-          },
-          "tool_call": true
-        },
-        "gemini-3.1-flash-lite": {
-          "name": "Gemini 3.1 Flash Lite",
+        "gemini-2.5-pro": {
+          "name": "Gemini 2.5 Pro",
           "limit": {
             "context": 1048576,
             "output": 65536
@@ -864,513 +886,41 @@
           },
           "tool_call": true
         },
-        "gemini-2.5-pro": {
-          "name": "Gemini 2.5 Pro (trial)",
+        "gemini-2.5-flash-lite-preview-06-17": {
+          "name": "Gemini 2.5 Flash Lite Preview 06-17",
           "limit": {
             "context": 1048576,
             "output": 65536
           },
           "tool_call": true
         },
-        "gemini-flash-latest": {
-          "name": "Gemini Flash Latest",
+        "gemini-3.8-flash-lite": {
+          "name": "Gemini 3.8 Flash Lite",
           "limit": {
             "context": 1048576,
             "output": 65536
           },
           "tool_call": true
         },
-        "gemini-flash-lite-latest": {
-          "name": "Gemini Flash Lite Latest",
+        "gemini-2.5-flash-lite-preview": {
+          "name": "Gemini 2.5 Flash Lite Preview",
           "limit": {
             "context": 1048576,
             "output": 65536
           },
           "tool_call": true
-        },
-        "gemini-omni-flash-preview": {
-          "name": "Gemini Omni Flash Preview",
-          "limit": {
-            "context": 1048576,
-            "output": 65536
-          },
-          "tool_call": true
-        },
-        "gemma-4-31b-it": {
-          "name": "Gemma 4 31B",
-          "limit": {
-            "context": 262144,
-            "output": 32768
-          },
-          "tool_call": true
-        },
-        "gemma-4-26b-a4b-it": {
-          "name": "Gemma 4 26B A4B",
-          "limit": {
-            "context": 262144,
-            "output": 32768
-          },
-          "tool_call": true
-        },
-        "gemini-embedding-001": {
-          "name": "Gemini Embedding 001",
-          "limit": {
-            "context": 2048,
-            "output": 3072
-          }
-        },
-        "gemini-embedding-2": {
-          "name": "Gemini Embedding 2",
-          "limit": {
-            "context": 8192,
-            "output": 3072
-          }
-        },
-        "antigravity-gemini-3.8-flash": {
-          "name": "Gemini 3.8 Flash (Antigravity)",
-          "limit": {
-            "context": 1048576,
-            "output": 65536
-          },
-          "modalities": {
-            "input": [
-              "text",
-              "image",
-              "pdf"
-            ],
-            "output": [
-              "text"
-            ]
-          },
-          "variants": {
-            "low": {
-              "thinkingLevel": "low"
-            },
-            "medium": {
-              "thinkingLevel": "medium"
-            },
-            "high": {
-              "thinkingLevel": "high"
-            }
-          }
-        },
-        "antigravity-gemini-3.7-flash": {
-          "name": "Gemini 3.7 Flash (Antigravity)",
-          "limit": {
-            "context": 1048576,
-            "output": 65536
-          },
-          "modalities": {
-            "input": [
-              "text",
-              "image",
-              "pdf"
-            ],
-            "output": [
-              "text"
-            ]
-          },
-          "variants": {
-            "low": {
-              "thinkingLevel": "low"
-            },
-            "medium": {
-              "thinkingLevel": "medium"
-            },
-            "high": {
-              "thinkingLevel": "high"
-            }
-          }
-        },
-        "antigravity-gemini-3.6-flash": {
-          "name": "Gemini 3.6 Flash (Antigravity)",
-          "limit": {
-            "context": 1048576,
-            "output": 65536
-          },
-          "modalities": {
-            "input": [
-              "text",
-              "image",
-              "pdf"
-            ],
-            "output": [
-              "text"
-            ]
-          },
-          "variants": {
-            "low": {
-              "thinkingLevel": "low"
-            },
-            "medium": {
-              "thinkingLevel": "medium"
-            },
-            "high": {
-              "thinkingLevel": "high"
-            }
-          }
-        },
-        "antigravity-gemini-3.5-flash": {
-          "name": "Gemini 3.5 Flash (Antigravity)",
-          "limit": {
-            "context": 1048576,
-            "output": 65536
-          },
-          "modalities": {
-            "input": [
-              "text",
-              "image",
-              "pdf"
-            ],
-            "output": [
-              "text"
-            ]
-          },
-          "variants": {
-            "minimal": {
-              "thinkingLevel": "minimal"
-            },
-            "low": {
-              "thinkingLevel": "low"
-            },
-            "medium": {
-              "thinkingLevel": "medium"
-            },
-            "high": {
-              "thinkingLevel": "high"
-            }
-          }
-        },
-        "antigravity-gemini-3.1-pro": {
-          "name": "Gemini 3.1 Pro (Antigravity)",
-          "limit": {
-            "context": 1048576,
-            "output": 65535
-          },
-          "modalities": {
-            "input": [
-              "text",
-              "image",
-              "pdf"
-            ],
-            "output": [
-              "text"
-            ]
-          },
-          "variants": {
-            "low": {
-              "thinkingLevel": "low"
-            },
-            "high": {
-              "thinkingLevel": "high"
-            }
-          }
-        },
-        "antigravity-claude-sonnet-4-6": {
-          "name": "Claude Sonnet 4.6 (Antigravity)",
-          "limit": {
-            "context": 200000,
-            "output": 64000
-          },
-          "modalities": {
-            "input": [
-              "text",
-              "image",
-              "pdf"
-            ],
-            "output": [
-              "text"
-            ]
-          }
-        },
-        "antigravity-claude-opus-4-6-thinking": {
-          "name": "Claude Opus 4.6 Thinking (Antigravity)",
-          "limit": {
-            "context": 200000,
-            "output": 64000
-          },
-          "modalities": {
-            "input": [
-              "text",
-              "image",
-              "pdf"
-            ],
-            "output": [
-              "text"
-            ]
-          },
-          "variants": {
-            "low": {
-              "thinkingConfig": {
-                "thinkingBudget": 8192
-              }
-            },
-            "medium": {
-              "thinkingConfig": {
-                "thinkingBudget": 16384
-              }
-            },
-            "max": {
-              "thinkingConfig": {
-                "thinkingBudget": 32768
-              }
-            }
-          }
-        }
-      }
-    },
-    "litellm": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "LiteLLM",
-      "options": {
-        "baseURL": "http://localhost:4000/v1"
-      },
-      "models": {
-        "claude-3-5-sonnet": {
-          "name": "Claude 3.5 Sonnet",
-          "modalities": {
-            "input": [
-              "text",
-              "image"
-            ],
-            "output": [
-              "text"
-            ]
-          }
-        },
-        "gemini-2-5-pro": {
-          "name": "Gemini 2.5 Pro",
-          "modalities": {
-            "input": [
-              "text",
-              "image"
-            ],
-            "output": [
-              "text"
-            ]
-          }
-        },
-        "deepseek-r1": {
-          "name": "DeepSeek R1"
         }
       }
     }
   },
-  "enabled_providers": [
-    "opencode-zen",
-    "mistral",
-    "google",
-    "nvidia",
-    "openrouter"
+  "plugin": [
+    "@langfuse/opencode-observability-plugin@latest",
+    "envsitter-guard@latest"
   ],
-  "disabled_providers": [
-    "opencode"
-  ],
-  "lsp": {
-    "bash": {
-      "command": [
-        "bash-language-server",
-        "start"
-      ],
-      "extensions": [
-        ".sh",
-        ".bash",
-        ".zsh"
-      ]
-    },
-    "dockerfile": {
-      "command": [
-        "docker-langserver",
-        "--stdio"
-      ],
-      "extensions": [
-        "Dockerfile"
-      ]
-    },
-    "go": {
-      "command": [
-        "gopls"
-      ],
-      "extensions": [
-        ".go"
-      ]
-    },
-    "javascript": {
-      "command": [
-        "typescript-language-server",
-        "--stdio"
-      ],
-      "extensions": [
-        ".js",
-        ".jsx",
-        ".mjs",
-        ".cjs",
-        ".ts",
-        ".tsx"
-      ]
-    },
-    "json": {
-      "command": [
-        "vscode-json-language-server",
-        "--stdio"
-      ],
-      "extensions": [
-        ".json",
-        ".jsonc"
-      ]
-    },
-    "markdown": {
-      "command": [
-        "marksman"
-      ],
-      "extensions": [
-        ".md"
-      ]
-    },
-    "python": {
-      "command": [
-        "pyright-langserver",
-        "--stdio"
-      ],
-      "extensions": [
-        ".py"
-      ]
-    },
-    "rust": {
-      "command": [
-        "rust-analyzer"
-      ],
-      "extensions": [
-        ".rs"
-      ]
-    },
-    "toml": {
-      "command": [
-        "taplo",
-        "lsp",
-        "--stdio"
-      ],
-      "extensions": [
-        ".toml"
-      ]
-    },
-    "yaml": {
-      "command": [
-        "yaml-language-server",
-        "--stdio"
-      ],
-      "extensions": [
-        ".yaml",
-        ".yml"
-      ]
-    },
-    "sql": {
-      "command": [
-        "sql-language-server",
-        "up",
-        "--method",
-        "stdio"
-      ],
-      "extensions": [
-        ".sql",
-        ".pgsql"
-      ]
-    }
-  },
-  "formatter": {
-    "python": {
-      "command": [
-        "ruff",
-        "format",
-        "-"
-      ],
-      "extensions": [
-        ".py"
-      ]
-    },
-    "shell": {
-      "command": [
-        "shfmt",
-        "-"
-      ],
-      "extensions": [
-        ".sh",
-        ".bash",
-        ".zsh"
-      ]
-    },
-    "javascript": {
-      "command": [
-        "prettier",
-        "--stdin-filepath",
-        "{path}"
-      ],
-      "extensions": [
-        ".js",
-        ".jsx",
-        ".mjs",
-        ".cjs",
-        ".ts",
-        ".tsx"
-      ]
-    },
-    "json": {
-      "command": [
-        "prettier",
-        "--stdin-filepath",
-        "{path}"
-      ],
-      "extensions": [
-        ".json",
-        ".jsonc"
-      ]
-    },
-    "markdown": {
-      "command": [
-        "prettier",
-        "--stdin-filepath",
-        "{path}"
-      ],
-      "extensions": [
-        ".md"
-      ]
-    },
-    "yaml": {
-      "command": [
-        "prettier",
-        "--stdin-filepath",
-        "{path}"
-      ],
-      "extensions": [
-        ".yaml",
-        ".yml"
-      ]
-    },
-    "go": {
-      "command": [
-        "gofmt"
-      ],
-      "extensions": [
-        ".go"
-      ]
-    },
-    "rust": {
-      "command": [
-        "rustfmt"
-      ],
-      "extensions": [
-        ".rs"
-      ]
-    }
-  },
-  "experimental": {
-    "batch_tool": true,
-    "openTelemetry": true
-  },
   "mcp": {
     "context7": {
-      "enabled": true,
       "type": "remote",
+      "enabled": true,
       "url": "https://mcp.context7.com/mcp"
     },
     "engram": {
@@ -1383,8 +933,8 @@
       ]
     },
     "firecrawl": {
-      "enabled": true,
       "type": "remote",
+      "enabled": true,
       "url": "https://mcp.firecrawl.dev/{env:FIRECRAWL_API_KEY}/v2/mcp"
     },
     "snapmcp": {
@@ -1402,17 +952,17 @@
       "command": [
         "npx",
         "-y",
-        "@modelcontextprotocol/server-sequential-thinking@2026.7.4"
+        "@modelcontextprotocol/server-sequential-thinking"
       ]
     },
     "metronous": {
       "enabled": true,
       "type": "local",
       "command": [
-        "/home/reeinharrrd/.local/bin/metronous",
-        "mcp"
-      ],
-      "_note": "telemetr\u00eda + benchmarks semanales + calibraci\u00f3n de modelos"
+        "engram",
+        "mcp",
+        "--tools=metronous"
+      ]
     },
     "github": {
       "enabled": true,
@@ -1420,9 +970,8 @@
       "command": [
         "npx",
         "-y",
-        "@modelcontextprotocol/server-github@2025.4.8"
-      ],
-      "_note": "core: PRs, issues, repos en cualquier proyecto"
+        "@modelcontextprotocol/server-github"
+      ]
     },
     "playwright": {
       "enabled": true,
@@ -1430,14 +979,8 @@
       "command": [
         "npx",
         "-y",
-        "@playwright/mcp@0.0.79",
-        "--headless",
-        "--isolated",
-        "--block-service-workers",
-        "--output-dir",
-        "/tmp/opencode/playwright"
-      ],
-      "_note": "browser global aislado (headless/isolated/sin service workers); navegaci\u00f3n web habilitada para research y visual QA"
+        "@playwright/mcp"
+      ]
     },
     "filesystem": {
       "enabled": true,
@@ -1445,208 +988,9 @@
       "command": [
         "npx",
         "-y",
-        "@modelcontextprotocol/server-filesystem@2026.7.10"
-      ],
-      "_note": "core: acceso multi-repo"
-    }
-  },
-  "plugin": [
-    "oh-my-openagent@4.19.4",
-    "./plugins/model-routing-guard.js",
-    "./plugins/opencode-telemetry.js",
-    "./plugins/opencode-rtk.js",
-    "./plugins/bodega-index.js",
-    "./node_modules/@morphllm/opencode-morph-plugin/dist/index.js",
-    "./node_modules/opencode-yaml-hooks/dist/index.js",
-    "opencode-notify",
-    "opencode-background-agents",
-    "./plugins/opencode-dcp/dist/index.js",
-    "./plugins/caveman/plugin.js",
-    "./plugins/superpowers.js",
-    "./plugins/metronous.ts",
-    "opencode-vibeguard@0.1.0",
-    "./plugins/opencode-antigravity-auth/dist/index.js",
-    "@langfuse/opencode-observability-plugin@latest",
-    "envsitter-guard@latest"
-  ],
-  "instructions": [
-    "PERSONAL.md",
-    "instructions/00-memory-policy.md",
-    "instructions/01-initialization.md",
-    "instructions/02-hard-rules.md",
-    "instructions/03-quality-gates.md",
-    "instructions/04-mcp-tools.md",
-    "instructions/05-yagni.md",
-    "instructions/06-opencode-ops.md"
-  ],
-  "permission": {
-    "external_directory": "ask",
-    "read": {
-      "*": "allow",
-      "*.env": "deny",
-      "*.env.*": "deny",
-      "opencode.env": "deny",
-      "vault-key": "deny"
-    },
-    "edit": "allow",
-    "glob": "allow",
-    "grep": "allow",
-    "list": "allow",
-    "bash": {
-      "default": "ask",
-      "allow": [
-        "mise",
-        "git",
-        "stow",
-        "npm",
-        "cargo",
-        "python3",
-        "node",
-        "gh",
-        "docker",
-        "systemctl",
-        "journalctl"
+        "@modelcontextprotocol/server-filesystem",
+        "$HOME/projects"
       ]
-    },
-    "task": "allow",
-    "todowrite": "allow",
-    "question": "allow",
-    "webfetch": {
-      "default": "ask"
-    },
-    "websearch": "allow",
-    "lsp": "allow",
-    "skill": "allow"
-  },
-  "agent": {
-    "build": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free",
-      "description": "Agente ejecutor de compilaci\u00f3n, suites de tests y flujos de build multi-etapa en consola."
-    },
-    "smart": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free",
-      "description": "Agente orquestador interactivo principal para codificaci\u00f3n, resoluci\u00f3n de problemas y coordinaci\u00f3n."
-    },
-    "fast": {
-      "mode": "primary",
-      "model": "google/gemini-3.5-flash-lite",
-      "description": "Agente ligero para tareas triviales, correcci\u00f3n de tipograf\u00edas y modificaciones de un solo archivo."
-    },
-    "oracle": {
-      "mode": "primary",
-      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-      "description": "Consultor de razonamiento profundo para decisiones de arquitectura, debugging complejo y tradeoffs (read-only)."
-    },
-    "plan": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free",
-      "description": "Especialista en arquitectura y dise\u00f1o que descompone requisitos en planes de implementaci\u00f3n at\u00f3micos."
-    },
-    "code-reviewer": {
-      "mode": "primary",
-      "model": "mistral/mistral-medium-latest",
-      "description": "Revisor de c\u00f3digo para an\u00e1lisis de diffs, bugs de l\u00f3gica, seguridad, estilo y adherencia a convenciones."
-    },
-    "security-reviewer": {
-      "mode": "primary",
-      "model": "mistral/mistral-medium-latest",
-      "description": "Especialista en investigaci\u00f3n de seguridad, an\u00e1lisis de superficie de ataque, autenticaci\u00f3n y validaci\u00f3n de exploits."
-    },
-    "explore": {
-      "mode": "primary",
-      "model": "google/gemini-3.5-flash-lite",
-      "description": "Explorador r\u00e1pido de codebase para b\u00fasqueda contextual y navegaci\u00f3n de s\u00edmbolos y dependencias."
-    },
-    "scout": {
-      "mode": "primary",
-      "model": "google/gemini-3.5-flash-lite",
-      "description": "Explorador ligero para mapeo r\u00e1pido de estructuras de directorios, puntos de entrada y dependencias."
-    },
-    "docs-lookup": {
-      "mode": "primary",
-      "model": "google/gemini-3.8-flash",
-      "description": "Especialista en documentaci\u00f3n de librer\u00edas y contratos de API mediante Context7."
-    },
-    "tdd-guide": {
-      "mode": "primary",
-      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-      "description": "Gu\u00eda de desarrollo guiado por pruebas que enforcea el ciclo red-green-refactor."
-    },
-    "qa-enforcer": {
-      "mode": "primary",
-      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-      "description": "Verificador de quality gates, linters, diagnostics de LSP y cobertura de pruebas antes de cerrar tareas."
-    },
-    "subagent-orchestrator": {
-      "mode": "primary",
-      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-      "description": "Coordinador para descomponer y lanzar subagentes paralelos en segundo plano."
-    },
-    "vision": {
-      "mode": "primary",
-      "model": "google/gemini-3.8-flash",
-      "description": "Inspector visual y multimodal para QA de interfaces, captura de pantallas y verificaci\u00f3n de layouts."
-    },
-    "multimodal-looker": {
-      "mode": "primary",
-      "model": "google/gemini-3.8-flash",
-      "description": "Extractor de informaci\u00f3n visual a partir de diagramas, im\u00e1genes y mockups."
-    },
-    "prometheus": {
-      "mode": "primary",
-      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-      "description": "Prometheus - Plan Builder: agente coordinador de modo plan para .omo/*.md only. Usa delegate-task para tareas read-only."
-    },
-    "atlas": {
-      "mode": "primary",
-      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-      "description": "Atlas (Plan Executor): agente read-only para ejecuci\u00f3n de planes autorizados (team_mode)."
-    },
-    "librarian": {
-      "mode": "primary",
-      "model": "google/gemini-3.8-flash",
-      "description": "Investigador de referencias externas en documentaci\u00f3n oficial, repositorios open-source y Context7."
-    },
-    "metis": {
-      "mode": "primary",
-      "model": "mistral/mistral-medium-latest",
-      "description": "Consultor de pre-planeaci\u00f3n que detecta ambig\u00fcedades, suposiciones ocultas y posibles fallos."
-    },
-    "momus": {
-      "mode": "primary",
-      "model": "mistral/mistral-medium-latest",
-      "description": "Cr\u00edtico adversarial de planes que audita completitud, claridad y verificabilidad antes de implementar."
-    },
-    "sisyphus-junior": {
-      "mode": "primary",
-      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-      "description": "Ejecutor enfocado de tareas at\u00f3micas directas sin subdelegaci\u00f3n."
-    },
-    "consult": {
-      "mode": "primary",
-      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-      "description": "Read-only consultant de arquitectura y debugging duro (reemplazo seleccionable de oracle).",
-      "temperature": 0.1
-    },
-    "plan-critic": {
-      "mode": "primary",
-      "model": "mistral/mistral-medium-latest",
-      "description": "Cr\u00edtico de planes (equivalente seleccionable de metis/momus)."
-    },
-    "senior-researcher": {
-      "mode": "primary",
-      "model": "google/gemini-3.8-flash",
-      "description": "Investigaci\u00f3n de librer\u00edas y contexto (equivalente seleccionable de librarian)."
-    },
-    "general": {
-      "mode": "primary",
-      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-      "description": "Agente de trabajo general resiliente para delegaciones en segundo plano."
     }
-  },
-  "references": {
-    "dotfiles": "~/projects/personal/dotfiles"
   }
 }

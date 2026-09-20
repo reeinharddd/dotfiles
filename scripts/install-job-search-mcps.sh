@@ -74,16 +74,25 @@ uvx mcp-server-git --help 2>/dev/null || true
 # Verify opencode config
 echo ""
 echo "⚙️  Verifying opencode configuration..."
-if [ -f "/home/reeinharrrd/projects/dotfiles/opencode.json" ]; then
-    echo -e "${GREEN}✓${NC} opencode.json exists"
-    # Validate JSON
-    if python3 -m json.tool /home/reeinharrrd/projects/dotfiles/opencode.json > /dev/null 2>&1; then
-        echo -e "${GREEN}✓${NC} opencode.json valid JSON"
+OPENCODE_CONFIG="$HOME/projects/personal/dotfiles/stow/opencode/.config/opencode/opencode.jsonc"
+if [ -f "$OPENCODE_CONFIG" ]; then
+    echo -e "${GREEN}✓${NC} opencode.jsonc exists"
+    # Validate JSONC (strip comments first)
+    if python3 -c "
+import json, re
+with open('$OPENCODE_CONFIG') as f:
+    content = f.read()
+content = re.sub(r'//.*', '', content)
+content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
+json.loads(content)
+print('valid')
+" 2>/dev/null | grep -q valid; then
+        echo -e "${GREEN}✓${NC} opencode.jsonc valid JSON"
     else
-        echo -e "${RED}✗${NC} opencode.json invalid JSON"
+        echo -e "${RED}✗${NC} opencode.jsonc invalid JSON"
     fi
 else
-    echo -e "${RED}✗${NC} opencode.json not found"
+    echo -e "${RED}✗${NC} opencode.jsonc not found at $OPENCODE_CONFIG"
 fi
 
 # Check for required environment variables
@@ -109,7 +118,7 @@ done
 # Create .env template
 echo ""
 echo "📝 Creating .env template..."
-cat > /home/reeinharrrd/.env.job-search.template << 'EOF'
+cat > "$HOME/.env.job-search.template" << 'EOF'
 # Job Search MCP Environment Variables
 # Copy to ~/.env and fill in your values
 # Then: source ~/.env
