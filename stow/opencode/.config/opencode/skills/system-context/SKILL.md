@@ -24,7 +24,7 @@ Do NOT use for one-off version checks — run the command directly instead.
 - Output language: Spanish for chat, English for code/docs (matches user preferences)
 - Never suggest installing tools already listed in context
 - Never ask if tools are available — if context loaded, you know
-- Password `270922` only for sudo when explicitly needed (PAM fprintd disabled)
+- Password via `sudo -S` prompt or sudoers NOPASSWD for specific commands (PAM fprintd disabled)
 
 ## Data Sources
 

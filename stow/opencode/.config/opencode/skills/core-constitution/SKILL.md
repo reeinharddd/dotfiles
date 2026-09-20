@@ -67,7 +67,7 @@ These apply to every session, every project, every task:
 - **Verify before stating** — if you haven't checked, you don't know
 - **Engram after every bug fix** — save what broke, why, and how it was fixed
 - **No shotgun debugging** — random changes hoping something works is forbidden
-- **Password `270922` only for sudo when the user explicitly asks**
+- **Password via `sudo -S` prompt or sudoers NOPASSWD for specific commands when the user explicitly asks**
 
 ## References
 

@@ -1,0 +1,27 @@
+[Unit]
+Description=LiteLLM Proxy
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+ExecStart=docker run --rm --name litellm-proxy \
+  -p 127.0.0.1:4000:4000 \
+  -v %h/.config/litellm:/app/config \
+  -e LITELLM_MASTER_KEY \
+  -e OPENROUTER_API_KEY \
+  -e GOOGLE_API_KEY \
+  -e LANGFUSE_PUBLIC_KEY \
+  -e LANGFUSE_SECRET_KEY \
+  -e LANGFUSE_HOST \
+  ghcr.io/berriai/litellm:main-v1.83.0 \
+  --config /app/config/config.yaml \
+  --host 0.0.0.0 \
+  --port 4000
+Restart=on-failure
+RestartSec=10
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Install]
+WantedBy=default.target

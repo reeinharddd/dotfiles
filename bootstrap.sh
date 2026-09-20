@@ -2,14 +2,19 @@
 # ============================================================
 # bootstrap.sh — reproducible dotfiles setup for Ubuntu/Debian
 # Idempotent: safe to run multiple times.
-# Usage: curl -fsSL https://raw.githubusercontent.com/reeinharrrd/dotfiles/main/bootstrap.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/reeinharddd/dotfiles/main/bootstrap.sh | bash
 # ============================================================
 set -euo pipefail
 
-DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/reeinharrrd/dotfiles.git}"
+DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/reeinharddd/dotfiles.git}"
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/projects/personal/dotfiles}"
 MISE_VERSION="${MISE_VERSION:-v2025.10.6}"
 GHOSTTY_VERSION="${GHOSTTY_VERSION:-1.3.0}"
+
+# Checksums for pinned downloads
+GHOSTTY_SHA256="a1b2c3d4e5f67890..."  # TODO: update with actual sha256
+MISE_INSTALL_SCRIPT_SHA256="sha256:..."  # TODO: update with actual sha256
+LAZYDOCKER_INSTALL_SCRIPT_SHA256="sha256:..."  # TODO: update with actual sha256
 
 # Colors
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
@@ -18,6 +23,16 @@ log()  { echo -e "${CYAN}[bootstrap]${NC} $*"; }
 ok()   { echo -e "${GREEN}  ok${NC} $*"; }
 warn() { echo -e "${YELLOW}  !!${NC} $*"; }
 fail() { echo -e "${RED}  XX${NC} $*"; exit 1; }
+
+verify_checksum() {
+  local file="$1"
+  local expected="$2"
+  local actual
+  actual=$(sha256sum "$file" | cut -d' ' -f1)
+  if [ "$actual" != "$expected" ]; then
+    fail "Checksum mismatch for $file: expected $expected, got $actual"
+  fi
+}
 
 # ── Preflight ───────────────────────────────────────────────
 preflight() {
@@ -51,6 +66,7 @@ install_ghostty() {
   local deb="ghostty_${GHOSTTY_VERSION}_amd64.deb"
   local url="https://release.files.ghostty.org/${GHOSTTY_VERSION}/${deb}"
   wget -q "$url" -O "/tmp/$deb"
+  # verify_checksum "/tmp/$deb" "$GHOSTTY_SHA256"
   sudo dpkg -i "/tmp/$deb"
   rm -f "/tmp/$deb"
   ok "Ghostty $GHOSTTY_VERSION installed"
@@ -64,7 +80,11 @@ install_mise() {
     return
   fi
   log "Installing mise..."
-  curl -fsSL https://mise.run | MISE_VERSION="$MISE_VERSION" bash
+  local mise_script="/tmp/mise_install.sh"
+  curl -fsSL https://mise.run -o "$mise_script"
+  # verify_checksum "$mise_script" "$MISE_INSTALL_SCRIPT_SHA256"
+  MISE_VERSION="$MISE_VERSION" bash "$mise_script"
+  rm -f "$mise_script"
   ok "mise $MISE_VERSION installed"
 }
 
@@ -102,7 +122,11 @@ install_extra_tools() {
     ok "lazydocker already installed"
   else
     log "Installing lazydocker..."
-    curl -sS https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash 2>&1 | sed 's/^/  /'
+    local lazydocker_script="/tmp/lazydocker_install.sh"
+    curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh -o "$lazydocker_script"
+    # verify_checksum "$lazydocker_script" "$LAZYDOCKER_INSTALL_SCRIPT_SHA256"
+    bash "$lazydocker_script" 2>&1 | sed 's/^/  /'
+    rm -f "$lazydocker_script"
     ok "lazydocker installed"
   fi
 }
@@ -111,21 +135,27 @@ install_extra_tools() {
 setup_dotfiles() {
   if [ -d "$DOTFILES_DIR/.git" ]; then
     ok "Dotfiles already cloned at $DOTFILES_DIR"
-    return
+  else
+    log "Cloning dotfiles..."
+    mkdir -p "$(dirname "$DOTFILES_DIR")"
+    git clone "$DOTFILES_REPO" "$DOTFILES_DIR"
+    ok "Dotfiles cloned"
   fi
-  log "Cloning dotfiles..."
-  mkdir -p "$(dirname "$DOTFILES_DIR")"
-  git clone "$DOTFILES_REPO" "$DOTFILES_DIR"
-  ok "Dotfiles cloned"
 
   log "Symlinking configs via stow..."
   cd "$DOTFILES_DIR"
-  for dir in stow/*/; do
-    pkg=$(basename "$dir")
-    stow -R -d stow -t "$HOME" "$pkg" 2>/dev/null || warn "stow $pkg failed"
-  done
+  ./scripts/stow-sync.sh
   cd "$OLDPWD"
   ok "Config symlinks created"
+
+  log "Building opencode plugins..."
+  if [ -f "$DOTFILES_DIR/stow/opencode/.config/opencode/package.json" ]; then
+    cd "$DOTFILES_DIR/stow/opencode/.config/opencode"
+    npm ci 2>&1 | sed 's/^/  /'
+    npm run build 2>&1 | sed 's/^/  /' || warn "Plugin build failed"
+    cd "$OLDPWD"
+  fi
+  ok "OpenCode plugins built"
 }
 
 # ── Shell ───────────────────────────────────────────────────
@@ -178,7 +208,7 @@ summary() {
 main() {
   echo ""
   echo "+------------------------------------------+"
-  echo "| reeinharrrd's dotfiles bootstrap         |"
+  echo "| reeinharddd's dotfiles bootstrap         |"
   echo "+------------------------------------------+"
   echo ""
 

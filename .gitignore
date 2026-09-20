@@ -28,6 +28,7 @@ antigravity-logs/
 # Never-commit sensitive files
 .env.providers
 opencode.env
+stow/taskman/.config/task/secrets.conf
 # Generated strict-JSON mirror of opencode.jsonc for metronous agent-model lookup
 stow/opencode/.config/opencode/opencode.json
 

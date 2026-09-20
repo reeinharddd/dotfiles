@@ -39,7 +39,7 @@ Precedencia: user instructions (AGENTS.md/CLAUDE.md/direct requests) > skills > 
 
 ## Constraints
 
-1. **No sudo** sin password explícito (270922 via `echo "270922" | sudo -S`)
+1. **No sudo** sin password explícito (use `sudo -S` with password prompt, or configure sudoers NOPASSWD for specific commands)
 2. **No commits** sin user request
 3. **No type suppression** (`as any`, `@ts-ignore`)
 4. **No rm -rf** (bloqueado, usar `mv <path> /tmp/`)

@@ -1,7 +1,8 @@
 [Unit]
-Description=Auto backup dotfiles to GitHub
+Description=Auto backup dotfiles to private GitHub repo
 
 [Service]
 Type=oneshot
 ExecStart=%h/projects/personal/dotfiles/scripts/backup-dotfiles.sh
 Environment=TERM=xterm-ghostty
+Environment=DOTFILES_BACKUP_REMOTE=git@github.com:reeinharddd/dotfiles-private.git

@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  bootstrap:
+    name: Bootstrap & Verify
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          apt-get update -qq && apt-get install -y -qq \
+            curl wget git stow zsh build-essential \
+            unzip xz-utils ca-certificates jq \
+            zsh-syntax-highlighting zsh-autosuggestions \
+            python3 python3-pip shellcheck
+
+      - name: Run bootstrap (dry-run)
+        run: |
+          chmod +x bootstrap.sh
+          MISE_VERSION=v2025.10.6 ./bootstrap.sh --dry-run || true
+
+      - name: Simulate stow
+        run: |
+          ./scripts/stow-sync.sh --dry-run
+
+      - name: Shellcheck scripts
+        run: |
+          shellcheck scripts/*.sh
+
+  gitleaks:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  validate-json:
+    name: Validate JSON Configs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate opencode.jsonc
+        run: |
+          python3 -c "
+import json
+with open('stow/opencode/.config/opencode/opencode.jsonc') as f:
+    content = f.read().replace('__VG_CREDENTIAL_', '\"__VG_CREDENTIAL_')
+json.loads(content)
+print('opencode.jsonc valid')
+"
+
+      - name: Validate oh-my-openagent.json
+        run: |
+          python3 -c "
+import json
+with open('stow/opencode/.config/opencode/oh-my-openagent.json') as f:
+    json.load(f)
+print('oh-my-openagent.json valid')
+"
+
+  check-duplicates:
+    name: Check Duplicate Configs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compare opencode.jsonc files
+        run: |
+          diff -u stow/opencode/.config/opencode/opencode.jsonc stow/opencode/opencode.jsonc || {
+            echo "ERROR: Duplicate configs differ!"
+            exit 1
+          }

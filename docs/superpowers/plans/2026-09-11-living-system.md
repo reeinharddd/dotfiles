@@ -11,7 +11,7 @@
 ## Global Constraints
 
 - Editar SIEMPRE `stow/` primero, nunca `~/.config/` directo (regla del repo).
-- sudo solo con `echo "270922" | sudo -S` en el MISMO comando.
+- sudo solo con `sudo -S` (password prompt) o sudoers NOPASSWD para comandos específicos en el MISMO comando.
 - No `rm -rf`; mover a `/var/tmp/opencode-trash/` si hay que descartar.
 - NO tocar: 3 sesiones opencode activas, wedo, qdrant, taskchampion-sync, mikedb, ProjectZomboid, Antigravity.
 - Commits conventional: `feat|fix|docs|chore(scope): descripción`. El push va al remote `ssh://github.com/reeinharddd/dotfiles` (URL rewrite .gitconfig lo maneja: `git push` directo funciona).

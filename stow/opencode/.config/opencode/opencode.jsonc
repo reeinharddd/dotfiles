@@ -71,7 +71,15 @@
             "output": 131072
           },
           "tool_call": true,
-          "modalities": { "input": ["text", "image"], "output": ["text"] }
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "nemotron-3-ultra-free": {
           "name": "Nemotron 3 Ultra Free",
@@ -250,7 +258,6 @@
           },
           "tool_call": true
         },
-
         "cohere/north-mini-code:free": {
           "name": "North Mini Code Free",
           "limit": {
@@ -298,7 +305,15 @@
             "output": 32768
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "nex-agi/nex-n2.5-pro:free": {
           "name": "Nex N2.5 Pro Free (agentic)",
@@ -323,7 +338,15 @@
             "output": 460000
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "thinkingmachines/inkling:free": {
           "name": "Inkling Free (agentic-only, 1M)",
@@ -397,7 +420,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "mistral-medium-3.5": {
           "name": "Mistral Medium 3.5 (pinned)",
@@ -406,7 +437,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "mistral-medium-3-5": {
           "name": "Mistral Medium 3.5 (alias)",
@@ -415,7 +454,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "mistral-medium-3": {
           "name": "Mistral Medium 3",
@@ -424,7 +471,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "mistral-medium-2604": {
           "name": "Mistral Medium 2604",
@@ -433,7 +488,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "mistral-medium": {
           "name": "Mistral Medium",
@@ -442,7 +505,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "mistral-small-latest": {
           "name": "Mistral Small 4",
@@ -451,7 +522,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "mistral-small-2603": {
           "name": "Mistral Small 2603",
@@ -460,7 +539,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "magistral-medium-latest": {
           "name": "Magistral Medium 1.2",
@@ -469,7 +556,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "magistral-small-latest": {
           "name": "Magistral Small 1.2",
@@ -478,7 +573,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "codestral-latest": {
           "name": "Codestral 25.08",
@@ -503,7 +606,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "ministral-8b-2512": {
           "name": "Ministral 3 8B 2512",
@@ -512,7 +623,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "ministral-14b-latest": {
           "name": "Ministral 3 14B",
@@ -521,7 +640,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "ministral-14b-2512": {
           "name": "Ministral 3 14B 2512",
@@ -530,7 +657,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "ministral-3b-latest": {
           "name": "Ministral 3 3B",
@@ -539,7 +674,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "ministral-3b-2512": {
           "name": "Ministral 3 3B 2512",
@@ -548,7 +691,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "mistral-vibe-cli-fast": {
           "name": "Mistral Vibe CLI Fast",
@@ -605,7 +756,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "labs-leanstral-1-5-1": {
           "name": "Leanstral 1.5.1 (Labs)",
@@ -614,7 +773,15 @@
             "output": 8192
           },
           "tool_call": true,
-          "modalities": {"input": ["text","image"], "output": ["text"]}
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
         },
         "voxtral-small-2507": {
           "name": "Voxtral Small 2507",
@@ -729,7 +896,6 @@
           },
           "tool_call": true
         },
-
         "gemma-4-31b-it": {
           "name": "Gemma 4 31B",
           "limit": {
@@ -952,6 +1118,42 @@
           }
         }
       }
+    },
+    "litellm": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM",
+      "options": {
+        "baseURL": "http://localhost:4000/v1"
+      },
+      "models": {
+        "claude-3-5-sonnet": {
+          "name": "Claude 3.5 Sonnet",
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "gemini-2-5-pro": {
+          "name": "Gemini 2.5 Pro",
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "deepseek-r1": {
+          "name": "DeepSeek R1"
+        }
+      }
     }
   },
   "enabled_providers": [
@@ -1162,7 +1364,8 @@
     }
   },
   "experimental": {
-    "batch_tool": true
+    "batch_tool": true,
+    "openTelemetry": true
   },
   "mcp": {
     "context7": {
@@ -1182,7 +1385,7 @@
     "firecrawl": {
       "enabled": true,
       "type": "remote",
-      "url": "https://mcp.firecrawl.dev/fc-412aba2a43ba47daabae244cb8a72af9/v2/mcp"
+      "url": "https://mcp.firecrawl.dev/{env:FIRECRAWL_API_KEY}/v2/mcp"
     },
     "snapmcp": {
       "enabled": true,
@@ -1209,7 +1412,7 @@
         "/home/reeinharrrd/.local/bin/metronous",
         "mcp"
       ],
-      "_note": "telemetría + benchmarks semanales + calibración de modelos"
+      "_note": "telemetr\u00eda + benchmarks semanales + calibraci\u00f3n de modelos"
     },
     "github": {
       "enabled": true,
@@ -1234,7 +1437,7 @@
         "--output-dir",
         "/tmp/opencode/playwright"
       ],
-      "_note": "browser global aislado (headless/isolated/sin service workers); navegación web habilitada para research y visual QA"
+      "_note": "browser global aislado (headless/isolated/sin service workers); navegaci\u00f3n web habilitada para research y visual QA"
     },
     "filesystem": {
       "enabled": true,
@@ -1262,7 +1465,9 @@
     "./plugins/superpowers.js",
     "./plugins/metronous.ts",
     "opencode-vibeguard@0.1.0",
-    "./plugins/opencode-antigravity-auth/dist/index.js"
+    "./plugins/opencode-antigravity-auth/dist/index.js",
+    "@langfuse/opencode-observability-plugin@latest",
+    "envsitter-guard@latest"
   ],
   "instructions": [
     "PERSONAL.md",
@@ -1288,158 +1493,159 @@
     "grep": "allow",
     "list": "allow",
     "bash": {
-      "*": "allow",
-      "rm -rf*": "deny",
-      "git reset --hard*": "deny",
-      "git clean*": "deny",
-      "git push --force*": "deny",
-      "git push*": "ask",
-      "sudo*": "ask",
-      "wp db reset*": "deny",
-      "wp db import*": "ask",
-      "wp plugin delete*": "ask",
-      "wp theme delete*": "ask",
-      "source*opencode.env*": "ask",
-      "cat*opencode.env*": "ask",
-      "printenv*": "ask",
-      "env*": "ask"
+      "default": "ask",
+      "allow": [
+        "mise",
+        "git",
+        "stow",
+        "npm",
+        "cargo",
+        "python3",
+        "node",
+        "gh",
+        "docker",
+        "systemctl",
+        "journalctl"
+      ]
     },
     "task": "allow",
     "todowrite": "allow",
     "question": "allow",
-    "webfetch": "allow",
+    "webfetch": {
+      "default": "ask"
+    },
     "websearch": "allow",
     "lsp": "allow",
     "skill": "allow"
   },
-        "agent": {
-          "build": {
-              "mode": "primary",
-              "model": "opencode-zen/nemotron-3-ultra-free",
-              "description": "Agente ejecutor de compilación, suites de tests y flujos de build multi-etapa en consola."
-          },
-          "smart": {
-              "mode": "primary",
-              "model": "opencode-zen/nemotron-3-ultra-free",
-              "description": "Agente orquestador interactivo principal para codificación, resolución de problemas y coordinación."
-          },
-          "fast": {
-              "mode": "primary",
-              "model": "google/gemini-3.5-flash-lite",
-              "description": "Agente ligero para tareas triviales, corrección de tipografías y modificaciones de un solo archivo."
-          },
-          "oracle": {
-              "mode": "primary",
-              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-              "description": "Consultor de razonamiento profundo para decisiones de arquitectura, debugging complejo y tradeoffs (read-only)."
-          },
-          "plan": {
-              "mode": "primary",
-              "model": "opencode-zen/nemotron-3-ultra-free",
-              "description": "Especialista en arquitectura y diseño que descompone requisitos en planes de implementación atómicos."
-          },
-          "code-reviewer": {
-              "mode": "primary",
-              "model": "mistral/mistral-medium-latest",
-              "description": "Revisor de código para análisis de diffs, bugs de lógica, seguridad, estilo y adherencia a convenciones."
-          },
-          "security-reviewer": {
-              "mode": "primary",
-              "model": "mistral/mistral-medium-latest",
-              "description": "Especialista en investigación de seguridad, análisis de superficie de ataque, autenticación y validación de exploits."
-          },
-          "explore": {
-              "mode": "primary",
-              "model": "google/gemini-3.5-flash-lite",
-              "description": "Explorador rápido de codebase para búsqueda contextual y navegación de símbolos y dependencias."
-          },
-          "scout": {
-              "mode": "primary",
-              "model": "google/gemini-3.5-flash-lite",
-              "description": "Explorador ligero para mapeo rápido de estructuras de directorios, puntos de entrada y dependencias."
-          },
-          "docs-lookup": {
-              "mode": "primary",
-              "model": "google/gemini-3.8-flash",
-              "description": "Especialista en documentación de librerías y contratos de API mediante Context7."
-          },
-          "tdd-guide": {
-              "mode": "primary",
-              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-              "description": "Guía de desarrollo guiado por pruebas que enforcea el ciclo red-green-refactor."
-          },
-          "qa-enforcer": {
-              "mode": "primary",
-              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-              "description": "Verificador de quality gates, linters, diagnostics de LSP y cobertura de pruebas antes de cerrar tareas."
-          },
-          "subagent-orchestrator": {
-              "mode": "primary",
-              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-              "description": "Coordinador para descomponer y lanzar subagentes paralelos en segundo plano."
-          },
-          "vision": {
-              "mode": "primary",
-              "model": "google/gemini-3.8-flash",
-              "description": "Inspector visual y multimodal para QA de interfaces, captura de pantallas y verificación de layouts."
-          },
-"multimodal-looker": {
-               "mode": "primary",
-               "model": "google/gemini-3.8-flash",
-               "description": "Extractor de información visual a partir de diagramas, imágenes y mockups."
-           },
-           "prometheus": {
-               "mode": "primary",
-               "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-               "description": "Prometheus - Plan Builder: agente coordinador de modo plan para .omo/*.md only. Usa delegate-task para tareas read-only."
-           },
-           "atlas": {
-               "mode": "primary",
-               "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-               "description": "Atlas (Plan Executor): agente read-only para ejecución de planes autorizados (team_mode)."
-           },
-           "librarian": {
-              "mode": "primary",
-              "model": "google/gemini-3.8-flash",
-              "description": "Investigador de referencias externas en documentación oficial, repositorios open-source y Context7."
-          },
-          "metis": {
-              "mode": "primary",
-              "model": "mistral/mistral-medium-latest",
-              "description": "Consultor de pre-planeación que detecta ambigüedades, suposiciones ocultas y posibles fallos."
-          },
-          "momus": {
-              "mode": "primary",
-              "model": "mistral/mistral-medium-latest",
-              "description": "Crítico adversarial de planes que audita completitud, claridad y verificabilidad antes de implementar."
-          },
-          "sisyphus-junior": {
-              "mode": "primary",
-              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-              "description": "Ejecutor enfocado de tareas atómicas directas sin subdelegación."
-          },
-          "consult": {
-              "mode": "primary",
-              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-              "description": "Read-only consultant de arquitectura y debugging duro (reemplazo seleccionable de oracle).",
-              "temperature": 0.1
-          },
-          "plan-critic": {
-              "mode": "primary",
-              "model": "mistral/mistral-medium-latest",
-              "description": "Crítico de planes (equivalente seleccionable de metis/momus)."
-          },
-          "senior-researcher": {
-              "mode": "primary",
-              "model": "google/gemini-3.8-flash",
-              "description": "Investigación de librerías y contexto (equivalente seleccionable de librarian)."
-          },
-          "general": {
-              "mode": "primary",
-              "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
-              "description": "Agente de trabajo general resiliente para delegaciones en segundo plano."
-          }
-      },
+  "agent": {
+    "build": {
+      "mode": "primary",
+      "model": "opencode-zen/nemotron-3-ultra-free",
+      "description": "Agente ejecutor de compilaci\u00f3n, suites de tests y flujos de build multi-etapa en consola."
+    },
+    "smart": {
+      "mode": "primary",
+      "model": "opencode-zen/nemotron-3-ultra-free",
+      "description": "Agente orquestador interactivo principal para codificaci\u00f3n, resoluci\u00f3n de problemas y coordinaci\u00f3n."
+    },
+    "fast": {
+      "mode": "primary",
+      "model": "google/gemini-3.5-flash-lite",
+      "description": "Agente ligero para tareas triviales, correcci\u00f3n de tipograf\u00edas y modificaciones de un solo archivo."
+    },
+    "oracle": {
+      "mode": "primary",
+      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+      "description": "Consultor de razonamiento profundo para decisiones de arquitectura, debugging complejo y tradeoffs (read-only)."
+    },
+    "plan": {
+      "mode": "primary",
+      "model": "opencode-zen/nemotron-3-ultra-free",
+      "description": "Especialista en arquitectura y dise\u00f1o que descompone requisitos en planes de implementaci\u00f3n at\u00f3micos."
+    },
+    "code-reviewer": {
+      "mode": "primary",
+      "model": "mistral/mistral-medium-latest",
+      "description": "Revisor de c\u00f3digo para an\u00e1lisis de diffs, bugs de l\u00f3gica, seguridad, estilo y adherencia a convenciones."
+    },
+    "security-reviewer": {
+      "mode": "primary",
+      "model": "mistral/mistral-medium-latest",
+      "description": "Especialista en investigaci\u00f3n de seguridad, an\u00e1lisis de superficie de ataque, autenticaci\u00f3n y validaci\u00f3n de exploits."
+    },
+    "explore": {
+      "mode": "primary",
+      "model": "google/gemini-3.5-flash-lite",
+      "description": "Explorador r\u00e1pido de codebase para b\u00fasqueda contextual y navegaci\u00f3n de s\u00edmbolos y dependencias."
+    },
+    "scout": {
+      "mode": "primary",
+      "model": "google/gemini-3.5-flash-lite",
+      "description": "Explorador ligero para mapeo r\u00e1pido de estructuras de directorios, puntos de entrada y dependencias."
+    },
+    "docs-lookup": {
+      "mode": "primary",
+      "model": "google/gemini-3.8-flash",
+      "description": "Especialista en documentaci\u00f3n de librer\u00edas y contratos de API mediante Context7."
+    },
+    "tdd-guide": {
+      "mode": "primary",
+      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+      "description": "Gu\u00eda de desarrollo guiado por pruebas que enforcea el ciclo red-green-refactor."
+    },
+    "qa-enforcer": {
+      "mode": "primary",
+      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+      "description": "Verificador de quality gates, linters, diagnostics de LSP y cobertura de pruebas antes de cerrar tareas."
+    },
+    "subagent-orchestrator": {
+      "mode": "primary",
+      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+      "description": "Coordinador para descomponer y lanzar subagentes paralelos en segundo plano."
+    },
+    "vision": {
+      "mode": "primary",
+      "model": "google/gemini-3.8-flash",
+      "description": "Inspector visual y multimodal para QA de interfaces, captura de pantallas y verificaci\u00f3n de layouts."
+    },
+    "multimodal-looker": {
+      "mode": "primary",
+      "model": "google/gemini-3.8-flash",
+      "description": "Extractor de informaci\u00f3n visual a partir de diagramas, im\u00e1genes y mockups."
+    },
+    "prometheus": {
+      "mode": "primary",
+      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+      "description": "Prometheus - Plan Builder: agente coordinador de modo plan para .omo/*.md only. Usa delegate-task para tareas read-only."
+    },
+    "atlas": {
+      "mode": "primary",
+      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+      "description": "Atlas (Plan Executor): agente read-only para ejecuci\u00f3n de planes autorizados (team_mode)."
+    },
+    "librarian": {
+      "mode": "primary",
+      "model": "google/gemini-3.8-flash",
+      "description": "Investigador de referencias externas en documentaci\u00f3n oficial, repositorios open-source y Context7."
+    },
+    "metis": {
+      "mode": "primary",
+      "model": "mistral/mistral-medium-latest",
+      "description": "Consultor de pre-planeaci\u00f3n que detecta ambig\u00fcedades, suposiciones ocultas y posibles fallos."
+    },
+    "momus": {
+      "mode": "primary",
+      "model": "mistral/mistral-medium-latest",
+      "description": "Cr\u00edtico adversarial de planes que audita completitud, claridad y verificabilidad antes de implementar."
+    },
+    "sisyphus-junior": {
+      "mode": "primary",
+      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+      "description": "Ejecutor enfocado de tareas at\u00f3micas directas sin subdelegaci\u00f3n."
+    },
+    "consult": {
+      "mode": "primary",
+      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+      "description": "Read-only consultant de arquitectura y debugging duro (reemplazo seleccionable de oracle).",
+      "temperature": 0.1
+    },
+    "plan-critic": {
+      "mode": "primary",
+      "model": "mistral/mistral-medium-latest",
+      "description": "Cr\u00edtico de planes (equivalente seleccionable de metis/momus)."
+    },
+    "senior-researcher": {
+      "mode": "primary",
+      "model": "google/gemini-3.8-flash",
+      "description": "Investigaci\u00f3n de librer\u00edas y contexto (equivalente seleccionable de librarian)."
+    },
+    "general": {
+      "mode": "primary",
+      "model": "nvidia/deepseek-ai/deepseek-v4-flash-0731",
+      "description": "Agente de trabajo general resiliente para delegaciones en segundo plano."
+    }
+  },
   "references": {
     "dotfiles": "~/projects/personal/dotfiles"
   }

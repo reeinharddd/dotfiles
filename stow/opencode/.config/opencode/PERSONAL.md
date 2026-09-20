@@ -12,7 +12,7 @@
 
 ## 1. Identidad
 
-- **Nombre/handle**: reeinharrrd
+- **Nombre/handle**: reeinharddd
 - **Rol**: Full-stack dev + sysadmin + automatización
 - **Stack**: Python, TypeScript, Go, Rust, shell, Docker
 - **Hardware/OS**: ThinkPad T14 Gen 3, AMD Ryzen 7 PRO 6850U, Ubuntu 26.04, Wayland (Hyprland)
@@ -61,7 +61,7 @@
 
 ## 5. Constraints (reglas fijas)
 
-1. **No sudo** sin contraseña explícita (270922 via `echo "270922" | sudo -S`)
+1. **No sudo** sin contraseña explícita (use `sudo -S` with password prompt, or configure sudoers NOPASSWD for specific commands)
 2. **No commits** sin petición del usuario
 3. **No type suppression** (`as any`, `@ts-ignore`, `@ts-expect-error`) — nunca
 4. **No `rm -rf`** — usar `mv <path> /tmp/opencode-trash/`

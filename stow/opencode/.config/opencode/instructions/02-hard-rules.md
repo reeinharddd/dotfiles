@@ -18,7 +18,7 @@
 - Engram save after every bug fix / decision / discovery
 
 ## Security Rules
-- Password `270922` — only for `sudo` when user explicitly asks
+- Password via `sudo -S` prompt or sudoers NOPASSWD for specific commands — only for `sudo` when user explicitly asks
 - No `rm -rf` — use `mv <path> /tmp/opencode-trash/`
 - No commits without user request
 - Mise for new CLI tools (no apt, cargo, pipx for dev tools)
