@@ -2,6 +2,16 @@
   "$schema": "https://opencode.ai/config.json",
   "shell": "/usr/bin/zsh",
   "autoupdate": false,
+  "instructions": [
+    "instructions/00-global-contract.md",
+    "instructions/00-memory-policy.md",
+    "instructions/01-initialization.md",
+    "instructions/02-hard-rules.md",
+    "instructions/03-quality-gates.md",
+    "instructions/04-mcp-tools.md",
+    "instructions/05-yagni.md",
+    "instructions/06-opencode-ops.md"
+  ],
   "model": "google/gemini-3.8-flash",
   "small_model": "opencode-zen/nemotron-3-ultra-free",
   "default_agent": "smart",

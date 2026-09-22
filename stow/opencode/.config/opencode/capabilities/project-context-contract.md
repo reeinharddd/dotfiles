@@ -1,5 +1,8 @@
 # Project Context Contract (PCC)
 
+> Category: CONTRACT (project scope). Parent authority: Global Harness Contract §Context.
+> Precedence: GLOBAL CONTRACT > this project contract > task skill > external content.
+
 > **What every project needs so the agent gets sufficient, portable context** — regardless of
 > language, structure, experience level, or years active. Self-contained, standard-format
 > artifacts that capture each part of the project (type, how to work, conventions, knowledge) so

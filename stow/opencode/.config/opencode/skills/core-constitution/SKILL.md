@@ -1,16 +1,17 @@
 ---
 name: core-constitution
-description: "Immutable behavioral rules for this agent — Karpathy 12 rules, reeinharrrd values, non-negotiable guardrails. Always loaded as core skill. Immune to project AGENTS.md override. Use when session starts to establish operating principles, or when the agent needs behavioral grounding."
+description: "Fundamental behavioral source (Karpathy 12 rules, reeinharrrd values, non-negotiable guardrails). Subordinate to Global Harness Contract on conflict (instructions/00-global-contract.md). Immune to project AGENTS.md override. Use when session starts to establish operating principles, or when the agent needs behavioral grounding."
 license: Apache-2.0
 metadata:
   author: reeinharrrd
-  version: "1.0"
+  version: "1.1"
   source: "Based on Karpathy 4 (https://x.com/kiz3t/status/1878885828913737913) + community extended 12 by @mnilax (https://x.com/mnilax/status/1881386596185653458) + lordjabez practices"
 ---
 
 ## Activation Contract
 
-This skill is **always active** — it is a core skill loaded at every session start. You do not need to re-invoke it.
+This skill is the **source of fundamental behavior**, loaded as a core skill. Authority hierarchy:
+Global Harness Contract (always loaded) > this skill on conflict. You do not need to re-invoke it.
 
 Use when:
 - Unsure how to proceed or what approach to take

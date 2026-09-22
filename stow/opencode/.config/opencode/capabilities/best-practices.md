@@ -1,5 +1,8 @@
 # Best Practices (researched, per type)
 
+> Category: SYSTEM DOCUMENTATION (guidance, not authority). Behavioral rules live in the Global
+> Harness Contract; tool/MCP selection tips here are non-binding suggestions unless the contract
+> or a loaded skill says otherwise.
 > Consolidated guidance for using skills, MCPs, agents, delegation, and verification well.
 > Sourced from the installed skills' own SKILL.md docs + verified config behavior.
 

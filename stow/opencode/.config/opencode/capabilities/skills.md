@@ -1,5 +1,8 @@
 # Skills — 24 core + bodega on-demand
 
+> Category: SYSTEM DOCUMENTATION (capability reference, not behavioral authority).
+> Explains: what a skill is, how it registers, how it loads. Loading authority = skill-router (lazy).
+> Classification CORE/WORKFLOW/DOMAIN owned by skill manifests (OLA 03).
 > Core skills load at startup (allowlist in `regenerate-manifests.py` → `CORE_SKILL_NAMES`).
 > Bodega skills (~1280) are discoverable but NOT loaded — invoke on demand via `skill(name=...)`.
 

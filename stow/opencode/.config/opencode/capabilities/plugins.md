@@ -1,5 +1,8 @@
 # Plugins (14) — real function + activation
 
+> Category: SYSTEM DOCUMENTATION (capability reference, not behavioral authority).
+> Explains: what each plugin does, how it activates, single-responsibility check. Classification
+> CORE/SUPPORT/OPTIONAL/EXPERIMENTAL/REDUNDANT owned by harness-registry (OLA 08).
 > Active plugin array lives in `opencode.jsonc` `plugin[]` (14 entries). Source of truth for
 > what loads at startup. This doc describes each one's role.
 > `node_modules/` (626M, 13 pkgs) is **REQUIRED** by opencode + these plugins — never purge.

@@ -1,5 +1,7 @@
 # Harness Operations — runtime data, storage, retention
 
+> Category: SYSTEM DOCUMENTATION (ops reference). Delegation/orchestration table appended at end
+> is informational — OMO is sole orchestration authority (OLA 05).
 > How the harness consumes disk, where runtime data lives, and the retention policy.
 > Companion to `plugins.md` (plugins) and `mcps.md` (MCP servers).
 
@@ -43,3 +45,25 @@
   NOT mise. Current: v1.18.29 (2026-09-08, was 1.18.22).
 - After any opencode update: run `scripts/opencode-harness-check.sh` to validate plugins load.
 - npm deps: `npm install --legacy-peer-deps` (DCP peer-wants @opentui/core 0.4.x, root pins 0.5.1).
+
+## Orchestration decisions (informational — OMO authority)
+
+First match wins. Inventories: `capabilities/`, `just --list`.
+
+| Trigger | Mechanism | Rule |
+|---|---|---|
+| 1-3 files, known | direct tools | no delegation |
+| Unfamiliar / multi-angle | `explore` (bg) | never re-do delegated search |
+| External lib/API/docs | `librarian` (context7) | before web search |
+| Multi-file, visual, security, research | `task(category)` + skills | domain-matched, never generic |
+| Multi-system, stuck >15min, 2+ fails | `oracle`/`metis` | read-only; collect before implementing |
+| >5 repetitive | `ralph-loop`/`ulw-loop` | explicit user request only |
+| 2+ independent | parallel bg tasks | batch non-dependent |
+| Parallel, SAME repo | 1 worktree/session | NEVER 2 sessions same files |
+| Several sessions, same folder | allowed | coordinate via engram+STATE.md |
+| Capability not in registry | `capability-scanner` | skill/MCP/create in order |
+| Recurring job | systemd timer | `just doc`; one-offs → `pueue` |
+| Long blocking | `pueue add` | keep responsive |
+| Cascade model not found | switch to known-good | never retry broken |
+| Bugfix/decision/discovery | `mem_save` | topic_key for evolving |
+| Session start/post-compact | `mem_context` + STATE.md | mandatory |

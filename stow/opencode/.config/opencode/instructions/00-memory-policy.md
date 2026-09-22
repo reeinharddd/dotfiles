@@ -1,6 +1,6 @@
 # 00-memory-policy.md — Engram Usage (condensed)
 
-> ALWAYS LOADED — applies EVERY session, project, agent.
+> Category: MEMORY | Authority: Global Harness Contract §Memory. ALWAYS LOADED — applies EVERY session, project, agent.
 
 ## Rule: Save to Engram IMMEDIATELY after any non-trivial action
 

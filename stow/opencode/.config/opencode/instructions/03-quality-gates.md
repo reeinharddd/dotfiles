@@ -1,6 +1,6 @@
 # 03-quality-gates.md — Quality Gates (condensed)
 
-> ALWAYS LOADED — verification before asserting done.
+> Category: QUALITY | Authority: Global Harness Contract §Completion. ALWAYS LOADED — verification before asserting done.
 
 ## Gates (ALL must pass)
 1. **LSP Diagnostics**: `lsp_diagnostics` clean on changed files

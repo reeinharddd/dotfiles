@@ -1,6 +1,6 @@
 # 05-yagni.md — YAGNI (condensed)
 
-> ALWAYS LOADED — You Ain't Gonna Need It.
+> Category: QUALITY | Authority: core-constitution §2 / Global Harness Contract §Completion. ALWAYS LOADED — You Ain't Gonna Need It.
 
 ## Principles
 - **No premature abstraction** — solve the problem at hand

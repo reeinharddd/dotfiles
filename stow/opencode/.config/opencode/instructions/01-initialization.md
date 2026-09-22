@@ -1,6 +1,6 @@
 # 01-initialization.md — Session Init Protocol (condensed)
 
-> ALWAYS LOADED — runs at EVERY session start.
+> Category: LIFECYCLE | Authority: Global Harness Contract §Context/§Memory. ALWAYS LOADED — runs at EVERY session start.
 
 ## First Message Protocol
 1. `engram mem_context` — recover context (NOT optional)

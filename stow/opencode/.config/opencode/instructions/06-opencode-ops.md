@@ -1,6 +1,6 @@
 # 06-opencode-ops.md — OpenCode Operations (condensed)
 
-> ALWAYS LOADED — OpenCode-specific rules.
+> Category: OPENCODE OPERATIONS | Authority: Global Harness Contract (behavior) + OMO (routing tables below are informational — OMO is sole routing authority, Routing Guard validates; models may lag reality, verify before relying). ALWAYS LOADED — OpenCode-specific rules.
 
 ## Delegation
 - 1-3 reads → inline; 4+ → subagent (`task` + category)

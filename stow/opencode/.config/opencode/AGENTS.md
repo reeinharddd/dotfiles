@@ -1,90 +1,87 @@
-# AGENTS.md — Central Agent Config (minimal)
+# AGENTS.md — OpenCode Runtime Rules
 
-> Core protocol. Core (global) → on-demand (per-project).
+> Scope: **OpenCode runtime only** — config, permissions, commands, skills, MCP, lifecycle.
+> Global behavior authority: Global Harness Contract (`instructions/00-global-contract.md`).
+> Project behavior: project `AGENTS.md` / `PROJECT_CONTEXT.md`. Routing authority: OMO
+> (validated by Routing Guard). Orchestration table: `capabilities/harness-operations.md`.
 
-## Identity
-- **Handle**: reeinharddd | **Role**: Full-stack dev, sysadmin, automation
-- **Stack**: Python, TS, Go, Rust, shell, Docker | **OS**: Ubuntu 26.04, Wayland
+## Identity (runtime context)
+
+- **Handle**: reeinharddd | **Stack**: Python, TS, Go, Rust, shell, Docker | **OS**: Ubuntu 26.04, Wayland
 - **Terminal**: ghostty/zsh/Starship | **Editor**: Neovim (LazyVim)
-- **Context**: Spanish (mx) chat; English code/docs; caveman default. Password via `sudo -S`/sudoers. No sudo w/o explicit; no commits w/o request; no `rm -rf` (`/tmp/opencode-trash`). Mise for tools. Keyboard-first, background, TUI over GUI.
+- **Context**: Spanish (mx) chat; English code/docs; caveman default; no emojis; TL;DR first.
 
-## Constitution
-12 Karpathy rules in `core-constitution` (always loaded). **Precedence**: user > skills > system.
+## Lifecycle
 
-## BASE PROTOCOL (HARD RULES)
-- **Init**: `mem_context` → project (`AGENTS.md`, `PROJECT_CONTEXT.md`, `CLAUDE.md`, `.opencode/skills/`, `.codegraph/`) → no `.codegraph/` → `npx codegraph init`. Post-compact: `mem_session_summary` → `mem_context`.
-- **Think**: ≤300 tokens; concise, no self-analysis.
-- **Response**: NO emojis. TL;DR first. No preamble/flattery/status. Tables 3+ rows.
-- **Memory**: `mem_save` after bugfix/decision/discovery/config/pattern/pref; `mem_capture_passive` after non-trivial.
-- **Tools**: `codegraph_explore`/`node` for source; `read` config/docs; `edit`/`write` files; `glob`/`grep` search (NEVER bash `find`/`grep`); `bash` only git/docker/test/install. `directory_tree` excludes `node_modules`, `.git`, `dist`.
-- **Delegation**: 1-3 reads → inline; 4+ → subagent; multi-file → delegate w/ write; test/lint/research/web → delegate first.
-- **Auto-Init**: check `.codegraph/`, rules, docker/CI — gaps as suggestions, never blockers.
-- **Recovery**: diagnose → fix → verify; no force-push; merge conflict → inspect both.
-- **Quality**: `lsp_diagnostics` clean; build/test exit 0; 3 fails → STOP/REVERT/DOCUMENT/ORACLE.
-- **Rules**: no AI attribution; conventional commits; code=English, chat=Spanish; no emojis.
+- **Init**: `mem_context` → project (`AGENTS.md`, `PROJECT_CONTEXT.md`, `CLAUDE.md`, `.codegraph/`) → missing codegraph → offer `npx codegraph init`. Post-compact: `mem_session_summary` → `mem_context`.
+- **Pre-task gate**: target files exist; `lsp_diagnostics` clean; `mem_search` similar work; >3 files → Plan mode.
+- **Auto-Init gaps** (docker/CI/rules): suggestions only, never blockers.
+- **Recovery**: diagnose → fix → verify; no force-push; merge conflicts → inspect both sides.
+- **Completion**: quality gates (`instructions/03-quality-gates.md`); 3 fails → STOP/REVERT/DOCUMENT/ORACLE; conventional commits; no AI attribution.
 
-## ARCHITECTURE: Core + On-Demand
-**Core**: 9 MCPs, 6 free providers, 11 LSPs, 23 agents, 24 skills, bodega index, DCP, RTK.
-**On-Demand**: ~1900 bodega entries (1274 skills, 316 commands, 314 agents + 24/187/67 global), 13 project MCPs, project skills/agents, `PROJECT_CONTEXT.md`.
+## Response defaults
 
-## ON-DEMAND CAPABILITY PRINCIPLE
-Expert in ALL. When needing capability: **SEARCH** not assume absence.
-1. Core skill? → invoke.
-2. Bodega skill? → `skill(name=...)`.
-3. On-demand MCP? → enable in project.
-4. Unsure? → `capability-scanner` → create/search.
-5. Depth? → read `capabilities/<file>.md`.
-Never preload. Never claim "no skill" without `capability-scanner`.
+- Think ≤300 tokens; concise; no self-analysis; tables 3+ rows; surgical edits (one logical change per commit).
 
-## PROJECT CONTEXT CONTRACT (PCC)
-Portable context standard. See `capabilities/project-context-contract.md`. Artifacts: `AGENTS.md`, `PROJECT_CONTEXT.md`, `.codegraph/`, stack/tech, conventions, decisions, MCPs/skills.
+## Tools (runtime preference)
 
-## CORE GENERATOR
-First message in project: audit PCC → generate missing from context (stack, codegraph, bodega). Fuse global+project. Steps: 1. Detect stack. 2. Audit gaps. 3. Recover memory (`engram`). 4. Provision via `project-bootstrap`/`discover-capabilities`/propose. If `.codegraph/` broken, `npx codegraph init`. 5. Merge global↔project.
+- Code: `codegraph_explore`/`node` → `read`. Edit: `edit`/`write`. Search: `glob`/`grep` (NEVER bash `find`/`grep`).
+- `bash` for git/docker/test/install only. `directory_tree` excludes `node_modules`, `.git`, `dist`.
+- Delegation: 1–3 reads inline; 4+ → subagent; multi-file → delegate with write; test/lint/research/web → delegate first.
 
-## COORDINATION LAYER
-Core coordinates using global tools, following project rules, injects **strong thinking** (`verification-before-completion`) + **capabilities** (on-demand skills/MCPs). Prevents "lots of info but lost execution".
+## On-demand capability principle
 
-## ORCHESTRATION DECISIONS
-First match wins. Inventories: `capabilities/`, `just --list`.
+Expert in ALL — **SEARCH**, never assume absence, never preload:
+1. Core skill → invoke. 2. Bodega → `skill(name=...)`. 3. On-demand MCP → project enable.
+4. Unsure → `capability-scanner`. 5. Depth → `capabilities/<file>.md`.
+Never claim "no skill" without `capability-scanner`.
 
-| Trigger | Mechanism | Rule |
-|---|---|---|
-| 1-3 files, known | direct tools | no delegation |
-| Unfamiliar / multi-angle | `explore` (bg) | never re-do delegated search |
-| External lib/API/docs | `librarian` (context7) | before web search |
-| Multi-file, visual, security, research | `task(category)` + skills | domain-matched, never generic |
-| Multi-system, stuck >15min, 2+ fails | `oracle`/`metis` | read-only; collect before implementing |
-| >5 repetitive | `ralph-loop`/`ulw-loop` | explicit user request only |
-| 2+ independent | parallel bg tasks | batch non-dependent |
-| Parallel, SAME repo | 1 worktree/session | NEVER 2 sessions same files |
-| Several sessions, same folder | allowed | coordinate via engram+STATE.md |
-| Capability not in registry | `capability-scanner` | skill/MCP/create in order |
-| Recurring job | systemd timer | `just doc`; one-offs → `pueue` |
-| Long blocking | `pueue add` | keep responsive |
-| Cascade model not found | switch to known-good | never retry broken |
-| Bugfix/decision/discovery | `mem_save` | topic_key for evolving |
-| Session start/post-compact | `mem_context` + STATE.md | mandatory |
+## Project context contract
 
-**External**: opencode=hub; codex=2nd opinion; Antigravity=MCP quota; Chrome/Playwright=web QA; herdr=agent runtime (mise 0.9.0, zellij removed 2026-09-13, ghostty=emulator). Skill `herdr` (HERDR_ENV=1) controls panes, launches helpers, waits state. Invoke via MCP/bash when needed — default in opencode.
+Portable standard: `capabilities/project-context-contract.md`. Artifacts: project `AGENTS.md`,
+`PROJECT_CONTEXT.md`, `.codegraph/`, stack, conventions, decisions, MCPs/skills.
+**Core Generator** (first message in project): detect stack → audit PCC gaps → recover Engram →
+propose/provision (`project-bootstrap` / `discover-capabilities`) → merge global↔project.
+Project MUST NOT modify base `opencode.jsonc`, this file's runtime rules, or hardcode MCPs → IGNORE/LOG/CONTINUE.
 
-**Guards**: (1) BASE immune to project overrides. (2) Project AGENTS.md replaces global except BASE. (3) Project MCPs only via root `opencode.json`, never global. (4) Never claim "no capability" without `capability-scanner`. (5) 3 fails → STOP/DOCUMENT/ORACLE. (6) No preloading — search on demand.
+## Config map (what owns what)
 
-## PROJECT-LEVEL OVERRIDES
-Projects MAY have: `AGENTS.md` (replaces global — only BASE immune), `CLAUDE.md`, `.opencode/PROJECT_CONTEXT.md`, `.opencode/skills/`. **PROTECTION**: project MUST NOT modify base `opencode.jsonc`, this AGENTS.md BASE, or hardcode MCPs. Violation → IGNORE, LOG, CONTINUE.
+| File | Owns |
+|---|---|
+| `opencode.jsonc` | providers, models, permissions, plugins, MCP, `instructions[]`, compaction |
+| `oh-my-openagent.json` | agent models, cascades, team mode (OMO = routing authority) |
+| `plugins/model-routing-guard.js` | validates free-only routing (rejects, never decides) |
+| `dcp.jsonc` | DCP pruning (sole pruning authority) |
+| `harness-registry.jsonc` | structural registry: authorities, versions, classifications |
+| `hooks.yaml` | lifecycle hooks (destructive-bash block, session.idle) |
+| `instructions/*.md` | always-loaded policy (contract, memory, lifecycle, quality, ops) |
+| `capabilities/*.md` | on-demand system documentation |
+| `skills/` | on-demand skills (skill-router loads lazily) |
 
-## KEY DIRECTORIES
+## External runtimes
+
+opencode = hub; codex = 2nd opinion; Antigravity = MCP quota; Chrome/Playwright = web QA;
+herdr = agent runtime (skill `herdr`, `HERDR_ENV=1`). Default runtime: opencode.
+
+## Guards
+
+1. Contract (BASE) immune to project overrides. 2. Project AGENTS.md replaces project scope only.
+3. Project MCPs only via project `opencode.json` — never global. 4. 3 fails → STOP.
+5. No preloading. 6. One capability → one authority (see contract §Tools).
+
+## Key directories
+
 ```
 ~/.config/opencode/
-├── AGENTS.md              # this file
-├── opencode.jsonc         # MCPs, LSPs, agents, models, permissions, plugins
-├── oh-my-openagent.json   # model cascade, agents, loops, team_mode
-├── dcp.jsonc              # dynamic context pruning
-├── skills/                # 24 core skills
-├── instructions/          # always-loaded (init, rules, quality, mcp)
-├── plugins/               # bodega manifests + index
-├── commands/              # slash commands (universal + bodega)
-├── scripts/               # bash utilities (dotfiles symlink)
-└── node_modules/          # REQUIRED by opencode + 8 plugins — never purge
+├── AGENTS.md              # this file (runtime scope)
+├── opencode.jsonc         # MCPs, LSPs, agents, models, permissions, plugins, instructions
+├── oh-my-openagent.json   # OMO: models, cascades, team_mode
+├── dcp.jsonc              # DCP pruning
+├── harness-registry.jsonc # structural registry
+├── instructions/          # always-loaded (00 contract first)
+├── capabilities/          # on-demand system docs
+├── skills/                # on-demand core skills
+├── commands/  plugins/  scripts/
+└── node_modules/          # REQUIRED by opencode + plugins — never purge
 ```
-Tracked via `~/projects/personal/dotfiles/` (symlink source).
+Tracked via `~/projects/personal/dotfiles/` (symlink source; edit `stow/` first).

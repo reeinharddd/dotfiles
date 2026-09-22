@@ -1,6 +1,6 @@
 # 02-hard-rules.md — Hard Rules (condensed)
 
-> ALWAYS LOADED — non-negotiable guardrails.
+> Category: GLOBAL POLICY | Authority: Global Harness Contract (duplicate guardrails allowed here for load order). ALWAYS LOADED — non-negotiable guardrails.
 
 ## Rules
 1. **No sudo** without explicit password (use `sudo -S` prompt or sudoers NOPASSWD for specific commands)

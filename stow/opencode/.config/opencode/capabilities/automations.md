@@ -1,5 +1,9 @@
 # Automations & Core Mechanisms
 
+> Category: SYSTEM DOCUMENTATION (capability reference, not behavioral authority).
+> Explains: what each automation is and when it triggers. Trigger policy = Global Harness Contract
+> §Context (load on demand); execution owners: OMO (loops/orchestration), DCP (pruning), OpenCode
+> (compaction/hooks).
 > When to use each (not the exhaustive how). The Core Generator + Coordination Layer are the
 > first core→project automations; loops/background/scheduler/worktree/DCP/codegraph are the
 > execution tooling the core coordinates through.

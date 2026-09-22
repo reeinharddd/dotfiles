@@ -1,6 +1,6 @@
 # 04-mcp-tools.md — MCP Tools Routing (condensed)
 
-> ALWAYS LOADED — MCP tool routing map.
+> Category: TOOLS | Authority: capabilities/mcps.md (inventory) + Global Harness Contract §Tools (one capability one authority). ALWAYS LOADED — MCP tool routing map. Classification: ALWAYS=engram,context7 · ON-DEMAND=github,playwright,filesystem,etc · SPECIALIZED=sequential-thinking,metronous (see OLA 07).
 
 ## Core MCPs (always on)
 | MCP | Type | Purpose |

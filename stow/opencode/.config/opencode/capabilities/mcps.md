@@ -1,5 +1,7 @@
 # MCPs — 9 core + 13 on-demand
 
+> Category: SYSTEM DOCUMENTATION (capability reference, not behavioral authority).
+> Explains: what an MCP is here, how it registers, how it activates, policy. Behavioral routing lives in the Global Harness Contract §Tools; activation classification (ALWAYS/ON-DEMAND/SPECIALIZED/DISABLED) is owned by harness-registry + opencode.jsonc `mcp{}` (OLA 07).
 > Source: `opencode.jsonc` `mcp{}` block. Core = `enabled: true` (always on). On-demand =
 > `enabled per project` (listado en AGENTS.md / MCP-INVENTORY). All core MCPs verified working
 > via real handshakes.
