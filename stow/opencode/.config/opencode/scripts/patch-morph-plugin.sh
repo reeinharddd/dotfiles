@@ -32,7 +32,6 @@ fs.writeFileSync(p,s);' "$f" "$OLD" "$NEW"
 patch_dir "$ROOT/node_modules/@morphllm/opencode-morph-plugin"
 # cache de opencode (todas las variantes)
 for d in "$HOME/.cache/opencode/packages/@morphllm/opencode-morph-plugin" \
-         "$HOME/.cache/opencode/packages/@morphllm/opencode-morph-plugin@latest" \
          "$HOME/.cache/opencode/packages/@morphllm/opencode-morph-plugin@2.0.16"; do
     patch_dir "$d/node_modules/@morphllm/opencode-morph-plugin"
 done

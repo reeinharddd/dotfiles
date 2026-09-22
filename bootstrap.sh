@@ -155,9 +155,17 @@ setup_dotfiles() {
     npm run build 2>&1 | sed 's/^/  /' || warn "Plugin build failed"
     cd "$OLDPWD"
   fi
-  ok "OpenCode plugins built"
+   ok "OpenCode plugins built"
 
-  log "Decrypting sops secrets..."
+   log "Validating harness registry..."
+   if [ -f "$DOTFILES_DIR/stow/opencode/.config/opencode/scripts/validate-harness-registry.py" ]; then
+     cd "$DOTFILES_DIR/stow/opencode/.config/opencode"
+     python3 scripts/validate-harness-registry.py 2>&1 | sed 's/^/  /'
+     cd "$OLDPWD"
+   fi
+   ok "Harness registry validated"
+
+   log "Decrypting sops secrets..."
   if command -v sops &>/dev/null && [ -f "$DOTFILES_DIR/.env.sops" ]; then
     sops -d "$DOTFILES_DIR/.env.sops" > "$HOME/.env" 2>/dev/null && ok "Decrypted .env from sops" || warn "Failed to decrypt .env.sops (need age key in ~/.config/sops/age/keys.txt)"
   fi
