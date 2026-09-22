@@ -19,8 +19,9 @@ REGISTRY_PY="$CONFIG_ROOT/scripts/validate-harness-registry.py"
 EVAL_DIR="$CONFIG_ROOT/scripts/eval-harness"
 OPENCODE_JSONC="$CONFIG_ROOT/opencode.jsonc"
 _S='s'; _K='k'; _D='-'; SK="${_S}${_K}${_D}"
+# Files that intentionally document/match leak patterns (scanners, docs) — pattern text only.
+# case(1) alternatives must be literal in the case statement; vars do NOT split on |.
 LEAK_PATTERNS="${SK}-[a-zA-Z0-9]{20,}|AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9_-]{20,}|BEGIN.*PRIVATE KEY|pass\\w*\\s*="
-TRACKED_EXCLUDE='node_modules|/logs/|/storage/|baseline'
 
 QUIET=false
 for arg in "$@"; do
@@ -72,9 +73,13 @@ TOTAL=$((TOTAL+1))
 LEAK_HITS=0
 while IFS= read -r -d '' f; do
   rel="${f#/home/reeinharrrd/projects/personal/dotfiles/}"
-  case "$rel" in $TRACKED_EXCLUDE*) continue ;; esac
+  case "$rel" in
+    *scripts/audit-harness.sh|*scripts/opencode-security-audit.py|*scripts/opencode-verify.py|*vibeguard.config.json|*capabilities/permissions.md|*implementation-v1/*|*node_modules/*|*/log/*|*/storage/*|*baseline/*)
+      continue ;;
+  esac
   if rg -q "$LEAK_PATTERNS" "$f" 2>/dev/null; then
     LEAK_HITS=$((LEAK_HITS+1))
+    $QUIET || echo "    leak-hit: $rel"
   fi
 done < <(cd /home/reeinharrrd/projects/personal/dotfiles && git ls-files -z -- stow/opencode/.config/opencode/ 2>/dev/null)
 if [ "$LEAK_HITS" -eq 0 ]; then
