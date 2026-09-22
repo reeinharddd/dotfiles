@@ -1,21 +1,25 @@
 ---
 name: system-context
-description: "Trigger: system context, system info, hardware, software, configuración del sistema. Carga el contexto completo del equipo (OS, hardware, herramientas, config, preferencias) para que el agente entienda el entorno sin configuración extra."
+description: "ON-DEMAND only — full machine context (OS, hardware, tools, config). Triggers: 'what do I have installed?', 'how is my Linux configured?', 'what version of X do I have?', 'why is Docker failing?', 'qué tengo instalado?'. Does NOT run at session start merely because OpenCode booted."
 license: Apache-2.0
 metadata:
   author: reeinharrrd
-  version: "1.0"
+  version: "1.1"
 ---
 
 ## Activation Contract
 
-Use this skill when:
-- Session starts and agent needs full system awareness
-- User asks "what system am I on?", "what tools do I have?", "qué tengo instalado?"
-- Need runtimes, paths, aliases, or user preferences
-- Any task requiring knowledge of the local environment
+**On-demand only.** Explicit triggers:
 
-Do NOT use for one-off version checks — run the command directly instead.
+- User asks "what system am I on?", "what tools do I have?", "qué tengo instalado?", "cómo está configurado mi Linux?", "qué versión de X tengo?"
+- Task fails in a way that needs environment facts (e.g. "por qué falla Docker?", PATH/toolchain issues)
+- Need runtimes, paths, aliases, or machine-wide preferences not derivable from one command
+
+Do NOT use when:
+- Session merely started (no system question) — skip
+- One-off version check — run the command directly
+- Project stack questions → `project-auto-detect`
+- Project rules → project AGENTS.md / PROJECT_CONTEXT.md
 
 ## Hard Rules
 

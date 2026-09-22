@@ -1,41 +1,51 @@
 ---
 name: state-tracking
-description: Mantiene STATE.md (estado del proyecto en curso) para continuidad cross-session. Inyecta foco, fase, blockers, next y git status; checkpoint al terminar tareas y sesiones.
+description: Mantiene .opencode/STATE.md — solo estado actual del trabajo (task, completed, in progress, blocked, next, temporary context). No es memoria histórica: decisiones duraderas → engram. Reemplaza secciones, nunca append infinito.
 ---
 
 # State Tracking (STATE.md)
 
-Mantén `.opencode/STATE.md` como la fuente de estado del trabajo en curso. Es estado, no memoria: la memoria de largo plazo la lleva engram. STATE.md es lo que "estoy haciendo AHORA" y sobrevive a sesiones y compactions.
+Mantén `.opencode/STATE.md` como la fuente de **estado del trabajo en curso**. Es estado, no memoria:
+- Memoria persistente (decisiones, bugs, descubrimientos) → **engram**
+- Conocimiento estable del proyecto → **PROJECT_CONTEXT.md**
+- STATE = "qué estoy haciendo AHORA"; sobrevive a sesiones/compaction pero no crece para siempre
 
-## Formato (3 secciones)
+Plantilla: `~/.config/opencode/templates/STATE.template.md` (ver también PCC §STATE).
+
+## Formato (secciones a reemplazar)
 
 ```markdown
 # State
 
-## Current
-focus: <tarea actual en una línea>
-phase: <planning|building|verifying|done>
-task: <referencia al plan/task>
-blockers: <ninguno o lista corta>
-next: <próximo paso concreto>
-handoff: <quién continúa y dónde>
+## Current task:
+<una línea>
 
-## Decisions
-- [YYYY-MM-DD] <decisión o approach descartado, append-only>
+## Completed:
+<checkpoints de este esfuerzo>
 
-## Log
-- [auto] YYYY-MM-DD HH:MM — session ended, N tool calls, M files changed
+## In progress:
+<trabajo empezado>
+
+## Blocked:
+<blockers + por qué | none>
+
+## Next:
+<paso concreto siguiente>
+
+## Important temporary context:
+<path, puerto, branch necesarios hasta cerrar la tarea>
 ```
 
 ## Reglas
 
-1. Al iniciar una tarea, escribe la sección Current antes de tocar código (5 campos, una línea cada uno).
-2. Cada vez que terminas un paso verificable (test pasa, lint limpio, read-back OK), actualiza `next` y `phase`.
-3. Al terminar una sesión o antes de un compact, deja Current completo + un apunte en Log.
-4. `Decisions` es append-only: nunca reescribas una decisión, agrega una línea nueva.
-5. Si el proyecto no tiene `.opencode/STATE.md`, créalo al iniciar la primera tarea.
+1. Al iniciar una tarea, escribe Current task antes de tocar código.
+2. Cada paso verificable (test pasa, lint limpio) actualiza Completed / In progress / Next.
+3. Al terminar sesión o antes de compact, deja las 6 secciones completas.
+4. **Reemplaza** secciones; no hagas append-only de historial. Decisions vivas van a engram con topic_key.
+5. `Important temporary context` se limpia al terminar la tarea.
+6. Si el proyecto no tiene `.opencode/STATE.md`, créalo al iniciar la primera tarea (template arriba).
 
 ## Verificación
 
-- STATE.md actualizado al cierre de cada sesión (el hook session.idle lo anota automáticamente si existe).
-- La sección Current describe el estado presente, no lo que se hizo hace 3 horas.
+- STATE.md actualizado al cierre de cada sesión (hook session.idle checkpointa de forma idempotente si existe).
+- La sección Current task describe el presente, no lo que se hizo hace 3 horas.

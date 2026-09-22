@@ -1,10 +1,10 @@
 ---
 name: project-auto-detect
-description: "Trigger: project detection, new project, language detection, framework detection, stack discovery. Detects the active project's language, framework, tools, and test runner. Loads relevant skills and project-level AGENTS.md. Use at session start or when entering a new directory."
+description: "Trigger: project detection, new project, language detection, framework detection, stack discovery. Detects cwd → repository → project root → stack → project context → returns metadata ONLY. Does not select models, load skills, or decide memory. Use at session start or when entering a new directory."
 license: Apache-2.0
 metadata:
-  author: reeinharrrd
-  version: "1.1"
+  author: reeinhardrrd
+  version: "2.0"
 ---
 
 ## Activation Contract
@@ -16,8 +16,18 @@ Use this skill when:
 - User asks "what language/framework is this?"
 
 Do NOT use for:
-- System context (use system-context skill instead)
-- One-off file reads
+- System context → `system-context` (on-demand)
+- Loading skills → `skill-router` (on-demand)
+- Selecting models/agents → OMO (routing authority)
+- Memory decisions → Engram policy (`instructions/00-memory-policy.md`)
+
+## Exclusive responsibility
+
+```
+cwd → repository? → project root → stack → project context → return metadata
+```
+
+Nothing else. Detection is read-only and side-effect free regarding routing, skills, and memory.
 
 ## Detection Script
 
@@ -31,56 +41,50 @@ Run `scripts/detect.sh` from the project root to get structured JSON:
   "test_runner": "pytest",
   "package_manager": "uv",
   "build_tool": null,
-  "skills": ["python-pro", "fastapi-expert", "sql-pro"],
+  "skill_hints": ["python-pro", "fastapi-expert"],
   "has_agents": false,
   "has_docker": true,
   "has_ci": true
 }
 ```
 
+`skill_hints` are **names only** for later skill-router lookup — do not invoke them here.
+
 ## Resolution Steps
 
-### 1. Run Detection
+### 1. Detect root
+- If cwd has no repo marker (`package.json`, `Cargo.toml`, `pyproject.toml`, `go.mod`, `.git`, …) up to git root → return `{"project": false}`. Outside a project: stop; global contract only.
+
+### 2. Run Detection
 ```bash
 ./scripts/detect.sh
 ```
 
-### 2. Read Project AGENTS.md (if exists)
+### 3. Read Project rules if present
 ```bash
-cat AGENTS.md 2>/dev/null || cat CLAUDE.md 2>/dev/null || echo "no-project-rules"
+# AGENTS.md first, else CLAUDE.md — read, do not expand
 ```
 
-### 3. Load Project Skills (if `.opencode/skills/` exists)
-```bash
-ls .opencode/skills/ 2>/dev/null || echo "no-project-skills"
-```
+### 4. Check PCC artifacts (report presence only)
+- `PROJECT_CONTEXT.md`, `.opencode/STATE.md`, `.codegraph/`
+- Missing → note as suggestion (Core Generator / user may provision). Never overwrite silently.
 
-### 4. Match skills from catalog based on detection
-
-| Detection | Skills to load |
-|-----------|---------------|
-| rust + cargo | rust-engineer, cargo |
-| go + go.mod | golang-pro, go-testing |
-| python + fastapi | fastapi-expert, python-pro, sql-pro |
-| python + django | django-expert, python-pro |
-| node + nextjs | nextjs-developer, typescript-pro, react-expert |
-| node + vue | vue-expert, typescript-pro |
-| node + nest | nestjs-expert, typescript-pro |
-| docker | devops-engineer |
-| k8s | kubernetes-specialist, devops-engineer |
-| terraform | terraform-engineer |
-
-### 5. Report to user
-- `[Proyecto: <name>] [Stack: <lang> + <frameworks>] [Skills: <n> loaded]`
+### 5. Report metadata
+- `[Proyecto: <name>] [Stack: <lang> + <frameworks>]` + artifact presence.
+- Do NOT load skills, do NOT pick models, do NOT write STATE.
 
 ## Output Contract
 
 Returns:
 - `detect.json` — full detection result
-- Resolved skill paths for delegation
-- Session context string for user output
+- PCC artifact presence flags
+- Session context string (one line)
+
+Skill activation, model routing, and memory remain owned by skill-router, OMO, and Engram respectively.
 
 ## Anti-Patterns
-- ❌ NO re-detect if already detected this session (cache result)
-- ❌ NO load every skill — only relevant ones
-- ❌ NO modify project files during detection
+- ❌ Re-detect if already detected this session (cache result)
+- ❌ Load skills during detection (hand off to skill-router)
+- ❌ Select models/agents during detection (OMO owns routing)
+- ❌ Modify project files during detection
+- ❌ Treat "no project" as an error — outside a project is a valid, minimal state
