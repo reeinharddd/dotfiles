@@ -1,41 +1,23 @@
 # 06-opencode-ops.md — OpenCode Operations (condensed)
 
-> Category: OPENCODE OPERATIONS | Authority: Global Harness Contract (behavior) + OMO (routing tables below are informational — OMO is sole routing authority, Routing Guard validates; models may lag reality, verify before relying). ALWAYS LOADED — OpenCode-specific rules.
+> Category: OPENCODE OPERATIONS | Authority: Global Harness Contract (behavior).
+> **Routing**: OMO (`oh-my-openagent.json`) is sole authority; `model-routing-guard` validates
+> free-only against `model-registry.free.yaml` (rejects, never decides). Do NOT maintain model
+> tables here — they go stale (see OLA 05). ALWAYS LOADED — OpenCode-specific rules.
 
 ## Delegation
 - 1-3 reads → inline; 4+ → subagent (`task` + category)
 - Multi-file → delegate with write; test/lint/research/web → delegate first
 - Background → `run_in_background=true`
 
-## Agents (oh-my-openagent)
-| Category | Primary | Fallbacks |
-|----------|---------|-----------|
-| fast | gemini-3.5-flash-lite | mistral/ministral-8b, nvidia/deepseek-v4-flash |
-| deep | gemini-3.8-flash | mistral/medium, nvidia/deepseek-v4-flash, openrouter/dots-3-note:free |
-| ultrabrain | mistral/medium | antigravity-claude-sonnet, gemini-3.8-flash, nvidia/deepseek-v4-flash |
-| vision | gemini-3.8-flash | antigravity-gemini-3.8-flash, openrouter/dots-3-note:free |
-| quick | nvidia/deepseek-v4-flash | mistral/ministral-8b, gemini-2.5-flash-lite |
-
-## Key Agents
-- **smart** (default): nemotron-3-ultra-free (zen)
-- **build**: nemotron-3-ultra-free (zen)
-- **general**: nvidia/deepseek-v4-flash
-- **oracle**: nvidia/deepseek-v4-flash
-- **code-reviewer**: mistral/medium
-- **explore**: gemini-3.5-flash-lite
-- **docs-lookup**: gemini-3.8-flash
-- **tdd-guide**: nvidia/deepseek-v4-flash
-- **qa-enforcer**: nvidia/deepseek-v4-flash
-- **vision**: gemini-3.8-flash
-- **librarian**: gemini-3.8-flash
-- **metis/momus**: mistral/medium
-
-## Model Routing (model-routing-guard v18)
-- Free-only: zen, nvidia, google, mistral, openrouter free
-- No zen in background (403 FreeTierError)
-- Vision → google/gemini-3.8-flash
-- Fallback chains: 3+ per agent, different providers
-- Routing guard owns decisions; LiteLLM only provider failover
+## Routing (single source: OMO)
+- Edit models/fallbacks only in `oh-my-openagent.json`
+- free=UNKNOWN → not routed; primary needs free:KNOWN; fallbacks KNOWN|QUOTA; max 3
+- Guard: `plugins/model-routing-guard.js` (validate only)
+- Registry: `model-registry.free.yaml`
+- No zen in background subagents (403 FreeTierError historically)
+- LiteLLM (`provider.litellm` → `localhost:4000`): **provider failover only**, not model choice;
+  diag: if 5xx/timeouts, check `litellm` process + baseURL before changing OMO
 
 ## Team Mode
 - Enabled, 4 parallel, 8 max, 120min wall-clock
@@ -43,20 +25,17 @@
 - Circuit breaker: 200 tool calls, 10 consecutive threshold
 
 ## Permissions (opencode.jsonc)
-- `bash`: `ask` + allowlist (mise, git, stow, npm, cargo, python3, node, gh, docker, systemctl, journalctl)
-- `webfetch`: `ask`
-- `read`: deny .env*, .ssh/*, sops/*, auth.json
-- `edit`: ask for opencode.jsonc, .github/workflows/*, deny .git/hooks/*
+- Profiles documented in OLA 10 (permission profiles); base: bash ask+allowlist, webfetch ask,
+  read deny .env*/.ssh/sops/auth.json, edit ask opencode.jsonc/workflows, deny .git/hooks
 
 ## Hooks
 - `tool.before.bash`: deny destructive (rm -rf, sudo rm, mkfs, dd, git reset --hard, git push --force)
-- `session.idle`: auto-save context + STATE.md checkpoint
+- `session.idle`: auto-save script + **idempotent** STATE.md `Last checkpoint:` line
 - `tool.execute.after` (child): notify-send on bash/edit/write
 
 ## Key Scripts
-- `stow-sync.sh --dry-run` — preview
-- `stow-sync.sh` — apply with backup
-- `bootstrap.sh --check` — verify prerequisites
+- `stow-sync.sh --dry-run` / `stow-sync.sh`
+- `bootstrap.sh --check`
 - `scripts/ctx-budget` — verify ≤15 KB
-- `scripts/verify-claims.sh` — threat model claims
+- `scripts/verify-claims.sh`
 - `just doc` — refresh INVENTORY.md

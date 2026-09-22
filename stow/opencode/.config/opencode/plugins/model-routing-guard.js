@@ -1,61 +1,116 @@
-/** guard v21 — Zen-free default por benchmark, free-only 2026-09-22.
- *  FIX CRÍTICO: NO inyectar `fallback_models` en config.agent de opencode.
- *  opencode 1.18.29 enruta campos desconocidos de agent → provider options → body API;
- *  NVIDIA responde 400 "Unsupported parameter(s): `fallback_models`" (validación estricta).
- *  Los fallbacks en cascada viven SOLO en oh-my-openagent.json + ~/.omo/omo.jsonc.
- *  v21 (2026-09-22): default Zen-free en TODOS los agentes por benchmarks:
- *  coding/planes/reviewers → mimo-v2.6-flash-free (SWE-Bench Thinking 78.6, TB2.1 87.6%);
- *  ejecución/subagentes → ling-3.0-flash-fin-free (347 tok/s, TTFT 1.6s);
- *  razonamiento → nemotron-3-ultra-free (SWE 71.9); rapidez → nemotron-3.5-lightning-free;
- *  visión → muse-spark-1.3-contributor-free (único Zen free multimodal).
- *  big-pickle/mimo-v2.5 solo como fallback (ya dieron 403 en subagentes).
- *  v14 (2026-09-17): general mode "all"→"primary" — mode=all hacía que el subagente
- *  general invocara zen free vía API path y fallara con AI_APICallError "free tier can
- *  only be used from within OpenCode". Todos los agentes quedan en primary.
- *  v15 (2026-09-18): mode=primary NO basta para delegaciones background — el worker
- *  background no lleva el contexto Console de la app y todo modelo zen-free falla con
- *  403 FreeTierError "OpenCode's free tier can only be used from within OpenCode"
- *  (el fallo se traga como "Delegation completed without text output.").
- *  v17-v18 (2026-09-18): ampliación no-zen a TODOS los agentes delegables/subagentes
- *  (metis, momus, sisyphus-junior, explore, scout, code-reviewer, security-reviewer,
- *  consult, plan-critic, senior-researcher, etc.) diversificando entre NVIDIA,
- *  Mistral, Google y OpenRouter para resiliencia total y fallbacks completos.
- *  v19 (2026-09-18): vision/multimodal-looker migran de opencode-zen/mimo-v2.5-free
- *  a google/gemini-3.8-flash (mimo: sin vision confiable + 403 FreeTier Console en
- *  subagentes — ver log 20:42 look_at). Zero zen en rutas visuales. */
-const CASCADE = {
-  "build":            "opencode-zen/mimo-v2.6-flash-free",
-  "smart":            "opencode-zen/mimo-v2.6-flash-free",
-  "general":          "opencode-zen/ling-3.0-flash-fin-free",
-  "plan":             "opencode-zen/mimo-v2.6-flash-free",
-  "oracle":           "opencode-zen/nemotron-3-ultra-free",
-  "tdd-guide":        "opencode-zen/mimo-v2.6-flash-free",
-  "qa-enforcer":      "opencode-zen/mimo-v2.6-flash-free",
-  "subagent-orchestrator": "opencode-zen/ling-3.0-flash-fin-free",
-  "code-reviewer":    "opencode-zen/mimo-v2.6-flash-free",
-  "security-reviewer": "opencode-zen/mimo-v2.6-flash-free",
-  "metis":            "opencode-zen/mimo-v2.6-flash-free",
-  "momus":            "opencode-zen/mimo-v2.6-flash-free",
-  "consult":          "opencode-zen/mimo-v2.6-flash-free",
-  "plan-critic":      "opencode-zen/mimo-v2.6-flash-free",
-  "senior-researcher": "opencode-zen/mimo-v2.6-flash-free",
-  "fast":             "opencode-zen/nemotron-3.5-lightning-free",
-  "sisyphus-junior":  "opencode-zen/ling-3.0-flash-fin-free",
-  "explore":          "opencode-zen/ling-3.0-flash-fin-free",
-  "scout":            "opencode-zen/ling-3.0-flash-fin-free",
-  "docs-lookup":      "opencode-zen/ling-3.0-flash-fin-free",
-  "librarian":        "opencode-zen/ling-3.0-flash-fin-free",
-  "vision":           "opencode-zen/muse-spark-1.3-contributor-free",
-  "multimodal-looker": "opencode-zen/muse-spark-1.3-contributor-free",
-  "prometheus":       "opencode-zen/mimo-v2.6-flash-free",
-  "atlas":            "opencode-zen/ling-3.0-flash-fin-free",
-};
-const MODE = {};
-export default async function modelRoutingGuard(){
-  return { config: async (c) => {
-    c.agent = c.agent || {};
-    for (const [n, model] of Object.entries(CASCADE)) {
-      c.agent[n] = { ...(c.agent[n] || {}), mode: MODE[n] ?? "primary", model };
+/** model-routing-guard v22 — VALIDATE ONLY (OLA 05).
+ *  OMO (oh-my-openagent.json) is the SOLE routing authority for agent → model + fallback chains.
+ *  This plugin never decides routes and never injects config.agent models.
+ *  It reads OMO from disk and rejects free=UNKNOWN / oversize chains against model-registry.free.yaml.
+ *
+ *  Policy:
+ *    primary  → free:KNOWN only
+ *    fallback → free:KNOWN | free:QUOTA, max 3, distinct providers when ≥2
+ *    free:UNKNOWN → not routed
+ *
+ *  LiteLLM = provider failover only (not model selection). See opencode.jsonc litellm block.
+ *
+ *  v21 history: injected CASCADE (decided) — removed in v22 per one-authority rule.
+ *  Do NOT inject fallback_models into config.agent (opencode 1.18.29 → 400 on provider API).
+ */
+import { readFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
+import { homedir } from "node:os";
+
+const MAX_FALLBACKS = 3;
+const OMO_PATH = join(homedir(), ".config/opencode/oh-my-openagent.json");
+const REGISTRY_PATH = join(homedir(), ".config/opencode/model-registry.free.yaml");
+
+function loadRegistry() {
+  if (!existsSync(REGISTRY_PATH)) return null;
+  try {
+    const text = readFileSync(REGISTRY_PATH, "utf8");
+    const models = {};
+    let inModels = false;
+    for (const raw of text.split("\n")) {
+      const line = raw.replace(/#.*$/, "").trimEnd();
+      if (!line) continue;
+      if (/^models:/.test(line)) {
+        inModels = true;
+        continue;
+      }
+      if (/^[a-z_]+:/.test(line) && !line.startsWith(" ")) {
+        inModels = false;
+        continue;
+      }
+      if (!inModels) continue;
+      const m = line.match(/^\s+([^\s:]+):\s*\{\s*free:\s*(\w+)\s*\}/);
+      if (m) models[m[1]] = m[2];
     }
-  }};
+    return Object.keys(models).length ? models : null;
+  } catch {
+    return null;
+  }
+}
+
+function loadOmoAgents() {
+  if (!existsSync(OMO_PATH)) return null;
+  try {
+    const j = JSON.parse(readFileSync(OMO_PATH, "utf8"));
+    return j?.agents || null;
+  } catch {
+    return null;
+  }
+}
+
+function providerOf(model) {
+  return String(model || "").split("/")[0] || "";
+}
+
+function validateAgent(name, agent, registry) {
+  const errors = [];
+  const primary = agent?.model;
+  if (registry) {
+    const pStat = primary ? registry[primary] : undefined;
+    if (!primary || pStat !== "KNOWN") {
+      errors.push(`${name}: primary "${primary}" free=${pStat || "UNKNOWN"} → reject (need KNOWN)`);
+    }
+    const fbs = agent.fallback_models || [];
+    for (const fb of fbs) {
+      const st = registry[fb];
+      if (st !== "KNOWN" && st !== "QUOTA") {
+        errors.push(`${name}: fallback "${fb}" free=${st || "UNKNOWN"} → reject (need KNOWN|QUOTA)`);
+      }
+    }
+  }
+  const fbs = agent.fallback_models || [];
+  if (fbs.length > MAX_FALLBACKS) {
+    errors.push(`${name}: ${fbs.length} fallbacks > max ${MAX_FALLBACKS}`);
+  }
+  const providers = new Set(fbs.map(providerOf));
+  if (fbs.length >= 2 && providers.size < Math.min(2, fbs.length)) {
+    errors.push(`${name}: fallbacks must use distinct providers`);
+  }
+  return errors;
+}
+
+export default async function modelRoutingGuard() {
+  return {
+    config: async () => {
+      const registry = loadRegistry();
+      const agents = loadOmoAgents();
+      if (!agents || !registry) {
+        console.error(
+          "[model-routing-guard] skip: missing OMO agents or free registry (cannot validate)",
+        );
+        return;
+      }
+      const all = [];
+      for (const [name, agent] of Object.entries(agents)) {
+        if (!agent || typeof agent !== "object") continue;
+        if (!agent.model) continue;
+        all.push(...validateAgent(name, agent, registry));
+      }
+      if (all.length) {
+        const msg = `[model-routing-guard] free-only violations:\n${all.join("\n")}`;
+        console.error(msg);
+        throw new Error(msg);
+      }
+    },
+  };
 }

@@ -1,11 +1,10 @@
 # Perfil Personal — Modelos gratuitos, telemetría completa
 # Uso: ai personal [args...]
 
-# Provider precedence (free-only, no zen in background)
+# Provider precedence — must match model-registry.free.yaml (free=KNOWN/QUOTA only)
 PROVIDER_PRIORITY=(
     "nvidia/deepseek-ai/deepseek-v4-flash-0731"    # General, plan, oracle, tdd, qa
     "google/gemini-3.8-flash"                       # Deep, vision, deepseek fallback
-    "mistral/mistral-medium-latest"                 # Code review, security, ultrabrain
     "google/gemini-3.5-flash-lite"                  # Fast, explore, scout
     "nvidia/nemotron-3-ultra-550b-a55b:free"       # Backup via openrouter
 )
