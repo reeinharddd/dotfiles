@@ -230,16 +230,17 @@ def is_core_skill(p):
     Everything else → bodega.
     """
     name = os.path.basename(p.rstrip("/"))
+    # Installed CORE tier (routing/lifecycle) — WORKFLOW/DOMAIN live in capabilities/skills.md
+    # (skill-router sole loading authority). Names without installed dirs may still exist in ~/tools.
     CORE_SKILL_NAMES = {
         "system-context", "core-constitution", "project-auto-detect",
-        "skill-router", "capability-scanner",
+        "skill-router", "capability-scanner", "state-tracking",
+        "handoff", "auto-extract", "auto-protect-wrap", "pre-compaction-save",
         "brainstorming", "writing-plans", "code-architect", "code-explorer",
         "feature-dev", "systematic-debugging", "test-driven-development",
-        "code-reviewer", "security-review", "verification-before-completion",
+        "code-reviewer", "verification-before-completion",
         "dispatching-parallel-agents", "executing-plans",
-        "finishing-a-development-branch", "handoff",
-        "error-handling", "benchmark",
-        "stop-slop", "auto-extract", "auto-protect-wrap", "pre-compaction-save",
+        "caveman", "transcribe", "watch-video",
     }
     return name in CORE_SKILL_NAMES
 

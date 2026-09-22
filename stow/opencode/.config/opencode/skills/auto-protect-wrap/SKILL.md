@@ -1,5 +1,6 @@
 ---
 name: auto-protect-wrap
+classification: CORE
 version: "1.0.0"
 description: "Auto-wraps high-value tool outputs in <protect> tags for DCP compression preservation"
 author: reeinharrrd

@@ -1,5 +1,6 @@
 ---
 name: state-tracking
+classification: CORE
 description: Mantiene .opencode/STATE.md — solo estado actual del trabajo (task, completed, in progress, blocked, next, temporary context). No es memoria histórica: decisiones duraderas → engram. Reemplaza secciones, nunca append infinito.
 ---
 

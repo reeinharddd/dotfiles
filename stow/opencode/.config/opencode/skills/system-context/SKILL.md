@@ -1,5 +1,6 @@
 ---
 name: system-context
+classification: CORE (activation: on-demand)
 description: "ON-DEMAND only — full machine context (OS, hardware, tools, config). Triggers: 'what do I have installed?', 'how is my Linux configured?', 'what version of X do I have?', 'why is Docker failing?', 'qué tengo instalado?'. Does NOT run at session start merely because OpenCode booted."
 license: Apache-2.0
 metadata:

@@ -1,5 +1,6 @@
 ---
 name: auto-extract
+classification: CORE
 version: "1.0.0"
 description: "Auto-distills large tool outputs using DCP extract tool"
 author: reeinharrrd

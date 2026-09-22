@@ -1,83 +1,85 @@
 ---
 name: skill-router
+classification: CORE
 description: >
-  Lazy router for domain skills. Use this when you need a skill outside the core 7 — it
-  will tell you whether to invoke `skill(name=...)` directly, check the project context,
-  or invoke `capability-scanner` to discover unregistered capabilities.
+  Sole authority for loading skills outside the always-on CORE tier. Classifies CORE /
+  WORKFLOW / DOMAIN, resolves project skills, falls back to capability-scanner.
   Trigger: "I need a skill for X", "which skill does Y", "load <name>", "find tool for Z".
 ---
 
-# Skill Router — Lazy Loader
+# Skill Router — sole loading authority
 
-> **Este es el ÚNICO skill core sobre skills**. NO enumera skills específicas.
-> Las skills específicas viven en `~/.config/opencode/domain-registry/REGISTRY.md` (lazy).
+> **Única autoridad para decidir qué skill se carga** (fuera del tier CORE inyectado).
+> No enumera bodega; inventario = `capabilities/skills.md` + manifests `plugins/bodega-*.json`.
 
-## Cuándo invocarme
+## Classification (owned here)
 
-- El usuario pide una funcionalidad y necesitas saber qué skill cargar
-- Una tarea matchea un trigger pero no estás seguro si la skill existe
-- Quieres cargar una skill específica por nombre
-- No encuentras la skill en ningún registro conocido
+| Class | Meaning | Load |
+|-------|---------|------|
+| **CORE** | Lifecycle / routing / harness behavior | Always available in session; invoke by name when trigger matches. `system-context` is CORE-tier but **on-demand activation**. |
+| **WORKFLOW** | Development process skills | Load when task matches description (lazy). |
+| **DOMAIN** | Utility / content skills | Load only on explicit need (lazy). |
+| **BODEGA** | ~1280 external, in manifests | Discover via scanner / manifests; never preload. |
 
-## Flujo de decisión
+Inventory table: `capabilities/skills.md` (documentation). Structural manifests: `harness-registry.jsonc` (OLA 12) + `plugins/bodega-*.json` (generated).
 
-### 1. ¿Es una skill core?
+## Flow
 
-Las 5 skills core están **siempre inyectadas**. Si la tarea matchea:
+### 1. CORE tier match?
 
-| Tarea | Skill core |
-|-------|------------|
-| Tarea | Skill core |
-|-------|------------|
-| Session start, principios de comportamiento | `core-constitution` |
-| Session start, info del sistema | `system-context` |
-| Detección de proyecto/stack | `project-auto-detect` |
-| Buscar skill/MCP no registrado | `capability-scanner` |
-| Enrutar a skill de dominio/proyecto | `skill-router` |
+| Task | CORE skill |
+|------|------------|
+| Session principles / behavior | `core-constitution` |
+| Project/stack detection | `project-auto-detect` |
+| Current work state | `state-tracking` |
+| Session handoff | `handoff` |
+| DCP extract / protect | `auto-extract`, `auto-protect-wrap` |
+| Pre-compaction checkpoint | `pre-compaction-save` |
+| Machine context (explicit ask only) | `system-context` |
+| Unregistered capability discovery | `capability-scanner` |
+| Routing itself | `skill-router` (you are here) |
 
-→ **No me invoques a mí**, invoca la skill directamente.
+→ Invoke the target directly; do not re-route through this skill.
 
-### 2. ¿Es una skill del proyecto actual?
+### 2. Project skill?
 
-→ Lee `<project-root>/.opencode/PROJECT_CONTEXT.md` (sección "Project Skills")
-→ Si está ahí → invoca `skill(name="<skill>")` directamente
+→ Read `<project-root>/PROJECT_CONTEXT.md` § Project Skills (root, not `.opencode/`).
+→ If listed → `skill(name="<skill>")`.
 
-### 3. ¿Es una skill de dominio pero no del proyecto?
+### 3. WORKFLOW / DOMAIN in inventory?
 
-→ Lee `~/.config/opencode/REGISTRY.md`
-→ Busca por trigger en la tabla
-→ Si matchea → invoca `skill(name="<skill>")`
+→ Check `capabilities/skills.md` classification tables (lazy read).
+→ Match → `skill(name="<skill>")`.
 
-### 4. ¿No encontraste nada en registry ni project?
+### 4. Nothing in CORE / project / inventory?
 
-→ **Invoca `capability-scanner`** para descubrir capabilities no registradas
-→ Ejecuta `~/.config/opencode/scripts/capability-scanner.sh $PWD`
-→ El scanner devuelve skills/MCPs que existen en el sistema pero no están registrados
-→ Si está → invoca `skill(name="...")` o habilita MCP
+→ Run `capability-scanner`:
+```bash
+~/.config/opencode/scripts/capability-scanner.sh "$PWD"
+```
+→ If discovered → `skill(name="...")` or enable project MCP.
+→ Also consult `plugins/bodega-ondemand-skills.json` (names only).
 
-### 5. ¿Sigue sin haber match?
+### 5. Still no match?
 
-→ **Pregúntale a reeinharrrd** qué skill aplicar
-→ O sugiere crear nueva skill con `skill-creator`
-→ O busca en npm con `npm search <keywords>`
+→ Ask reeinharrrd, or propose creating a skill (`skill-creator` in bodega), or `npm search`.
 
-## Regla de oro
+## Golden rule
 
-**Nunca invoques skills que no existen.** Cada `skill(name=...)` inválido causa error.
-Antes de cargar, verifica que está en core, registry, project, o discovered.
+**Never invoke a skill that does not exist.** Invalid `skill(name=...)` errors.
+Verify against: CORE list → project → inventory → scanner output.
 
-## Anti-patrones
+## Anti-patterns
 
-❌ Cargar `react-expert` "por si acaso" en un proyecto Go
-❌ Inyectar `geo-*` skills en trabajo que no es SEO
-❌ Asumir que una skill existe sin verificar
-❌ Decir "no encuentro skill" sin antes ejecutar `capability-scanner`
+- ❌ Preload WORKFLOW/DOMAIN “just in case”
+- ❌ Claim “no skill for X” without `capability-scanner`
+- ❌ Duplicate authority: another doc telling you to load skills bypassing this router
+- ❌ Treat `system-context` as auto-load on session start (explicit triggers only)
+- ❌ Point at dead paths (`REGISTRY.md`, `domain-registry/`) — use inventory + scanner
 
-## Output esperado
+## Output contract
 
-Cuando me invoques, responde con:
-1. ¿Core, proyecto, dominio, o descubierto?
-2. Nombre exacto de la skill a cargar
-3. Comando: `skill(name="<skill>")`
-
-Si no hay match → sugiere `capability-scanner` o pide clarificación.
+When invoked, reply with:
+1. Class: CORE | WORKFLOW | DOMAIN | BODEGA | PROJECT
+2. Exact name
+3. `skill(name="<name>")` (or “no match → scanner / ask user”)

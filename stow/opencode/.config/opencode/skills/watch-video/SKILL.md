@@ -1,5 +1,6 @@
 ---
 name: watch-video
+classification: DOMAIN
 description: Make the agent "watch" any video URL - downloads video, extracts frames, gets transcript via watch-cli. Use when the user asks to see/watch/analyze/summarize a video from YouTube, X/Twitter, TikTok, Reddit, Vimeo or extract content/code/architecture from it.
 ---
 

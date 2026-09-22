@@ -1,5 +1,6 @@
 ---
 name: handoff
+classification: CORE
 description: "Compresses current session into a structured markdown document for continuing in a fresh session or passing to another agent."
 ---
 

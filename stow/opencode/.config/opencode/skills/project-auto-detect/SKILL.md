@@ -1,5 +1,6 @@
 ---
 name: project-auto-detect
+classification: CORE
 description: "Trigger: project detection, new project, language detection, framework detection, stack discovery. Detects cwd → repository → project root → stack → project context → returns metadata ONLY. Does not select models, load skills, or decide memory. Use at session start or when entering a new directory."
 license: Apache-2.0
 metadata:

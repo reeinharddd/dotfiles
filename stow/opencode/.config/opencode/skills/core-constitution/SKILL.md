@@ -1,5 +1,6 @@
 ---
 name: core-constitution
+classification: CORE
 description: "Fundamental behavioral source (Karpathy 12 rules, reeinharrrd values, non-negotiable guardrails). Subordinate to Global Harness Contract on conflict (instructions/00-global-contract.md). Immune to project AGENTS.md override. Use when session starts to establish operating principles, or when the agent needs behavioral grounding."
 license: Apache-2.0
 metadata:

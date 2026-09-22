@@ -1,5 +1,6 @@
 ---
 name: pre-compaction-save
+classification: CORE
 version: "1.0.0"
 description: "Auto-saves session summary to engram before context compaction"
 author: reeinharrrd

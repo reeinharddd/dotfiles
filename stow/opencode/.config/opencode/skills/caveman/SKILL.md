@@ -1,5 +1,6 @@
 ---
 name: caveman
+classification: DOMAIN
 description: "Cuts output tokens by ~65% by stripping narration while keeping every technical fact intact. Use when generating long outputs to reduce cost."
 ---
 

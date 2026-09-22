@@ -1,5 +1,6 @@
 ---
 name: transcribe
+classification: DOMAIN
 description: Transcribe audio/video to text or SRT using Mistral Voxtral API (no local models). Use when the user asks to transcribe, subtitle, caption, extract text from audio/video, or "que dice este video/audio".
 ---
 
