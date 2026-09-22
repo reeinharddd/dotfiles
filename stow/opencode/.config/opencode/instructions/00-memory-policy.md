@@ -1,6 +1,17 @@
-# 00-memory-policy.md — Engram Usage (condensed)
+# 00-memory-policy.md — Engram sole authority (condensed)
 
 > Category: MEMORY | Authority: Global Harness Contract §Memory. ALWAYS LOADED — applies EVERY session, project, agent.
+
+## Single authority
+
+| Store | Owns | Never |
+|-------|------|-------|
+| **Engram** (`mem_save` / `mem_search` / …) | Durable decisions, bugs, discoveries, patterns, preferences, session summaries | Project files, STATE history |
+| **STATE.md** (`.opencode/`) | Current work task only (6 sections, replace) | History, decisions log, knowledge base |
+| **PROJECT_CONTEXT.md** | Stable project knowledge | Last error, last commit, logs |
+| **PERSONAL.md** | Consolidated personal prefs (mirrored from Engram `personal` scope) | Project decisions |
+
+No second memory system. No growing STATE. No dumping durable facts only into chat.
 
 ## Rule: Save to Engram IMMEDIATELY after any non-trivial action
 
@@ -18,7 +29,7 @@
 **What**: [concise action]
 **Why**: [reason / problem]
 **Where**: [files/paths]
-**Learned**: [gotchas, edge cases, decisions — omit if none]
+**Learned**: [gotchas, edges, decisions — omit if none]
 ```
 
 ## Before Starting (pre-task gate)
