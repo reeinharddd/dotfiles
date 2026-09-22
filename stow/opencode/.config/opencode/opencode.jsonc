@@ -58,6 +58,34 @@
       "*.tsbuildinfo"
     ]
   },
+  // ── PERMISSION PROFILES (OLA 10) ──
+  // OpenCode PermissionConfig schema supports ONE active block (see §PermissionConfig in config.json).
+  // Profiles below are documented presets — only DEFAULT is active. STRICT/PERMISSIVE are
+  // copy-paste starting points. Switch by replacing the active block below.
+  //
+  // PROFILES:
+  // ──────────────────────────────────────────────────────────────────────────
+  // DEFAULT (ACTIVE): Safe baseline for daily work.
+  //   read:  allow all EXCEPT .env/.env.*/.ssh/sops/auth.json (deny)
+  //   edit:  allow all EXCEPT opencode.jsonc/workflows (ask), .git/hooks (deny)
+  //   bash:  ask all EXCEPT git status/diff/log/ls/rg (allow), git push/curl (ask),
+  //          rm/sudo (deny — absolute, never relax)
+  //   webfetch: ask | external_directory: ask
+  //
+  // STRICT (for secrets-adjacent / sensitive repos):
+  //   copy-paste DEFAULT block above, then tighten:
+  //   - edit: change "*opencode.jsonc" ask → deny (or narrow paths further)
+  //   - bash: add more deny patterns (e.g., "curl *": deny, "wget *": deny)
+  //   - external_directory: deny
+  //   - Consider adding "read": {"*.env": "deny", ...} explicitly
+  //
+  // PERMISSIVE (trusted local-only / greenfield):
+  //   copy-paste DEFAULT block above, then relax:
+  //   - edit: "*opencode.jsonc" ask → allow
+  //   - bash: "git push*" ask → allow, "curl*" ask → allow
+  //   - external_directory: allow
+  //   - NEVER relax rm/sudo deny — those are absolute (OLA 10 constraint)
+  // ──────────────────────────────────────────────────────────────────────────
   "permission": {
     "*": "ask",
     "read": {
