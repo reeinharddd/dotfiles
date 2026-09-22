@@ -149,10 +149,7 @@
   "explorer.excludeGitIgnore": true,
   "chat.autopilot.enabled": true,
   "chat.useCustomAgentHooks": true,
-  "github.copilot.chat.githubMcpServer.toolsets": [
-    "default",
-    "all"
-  ],
+  "github.copilot.chat.githubMcpServer.toolsets": ["default", "all"],
   "chat.agent.allowedNetworkDomains": [
     "pypi.org",
     "files.pythonhosted.org",
@@ -167,13 +164,7 @@
   ],
   "chat.agent.sandbox.enabled": "on",
   "chat.agent.sandbox.fileSystem.linux": {
-    "allowWrite": [
-      "/**",
-      "$HOME/**",
-      "/tmp/**",
-      "/var/tmp/**",
-      "/root/**"
-    ]
+    "allowWrite": ["/**", "$HOME/**", "/tmp/**", "/var/tmp/**", "/root/**"]
   },
   "chat.mcp.serverSampling": {
     "Global in Code: googleWorkspace": {
@@ -273,6 +264,9 @@
       ".continue/**/*.yaml"
     ],
     "file://$HOME/.vscode/extensions/continue.continue-2.0.0-linux-x64/config-yaml-schema.json": [
+      ".continue/**/*.yaml"
+    ],
+    "file:///home/reeinharrrd/.vscode/extensions/continue.continue-2.0.0-linux-x64/config-yaml-schema.json": [
       ".continue/**/*.yaml"
     ]
   },

@@ -29,10 +29,10 @@
 - **Security**: sops+age, gitleaks, trivy, semgrep
 
 ## AI (opencode)
-- **Default**: smart (nemotron-3-ultra-free via zen)
+- **Default**: smart (mimo-v2.6-flash-free via zen, SWE-Bench Thinking 78.6)
 - **Team**: 4 parallel, background, subagent_depth=2
-- **Models**: zen free, nvidia free, google gemini, mistral, openrouter free
-- **Routing**: model-routing-guard v18 — free-only, no zen in bg, vision→google
+- **Models**: zen free only — mimo-v2.6 (coding/planes/reviewers), ling-3.0-flash-fin (ejecución/subagentes), nemotron-3-ultra (razonamiento), nemotron-3.5-lightning (rapidez), muse-spark-1.3-contributor (visión); big-pickle/mimo-v2.5 solo fallback (403 previos en subagentes)
+- **Routing**: model-routing-guard v21 — default Zen-free por benchmark; fallbacks por función en oh-my-openagent.json + ~/.omo/omo.jsonc + harness-registry.jsonc
 - **MCP**: context7, engram, firecrawl, snapmcp, sequential-thinking, metronous, github, playwright, filesystem
 - **Security**: envsitter-guard, vibeguard, bash/webfetch=ask+allowlist
 
