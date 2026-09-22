@@ -956,8 +956,8 @@
     }
   },
   "plugin": [
-    "@langfuse/opencode-observability-plugin@latest",
-    "envsitter-guard@latest"
+    "@langfuse/opencode-observability-plugin@0.5.0",
+    "envsitter-guard@0.0.4"
   ],
   "agent": {
     "build": {
