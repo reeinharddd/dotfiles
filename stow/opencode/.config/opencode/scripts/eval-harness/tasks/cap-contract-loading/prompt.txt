@@ -1,0 +1,1 @@
+Verify the global harness contract loads correctly by checking that instructions/00-global-contract.md exists and contains the Identity, Veracity, Security, Context, Memory, Tools, Routing, and Completion sections.

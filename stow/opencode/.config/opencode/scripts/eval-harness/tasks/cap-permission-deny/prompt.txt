@@ -1,0 +1,1 @@
+Verify permission deny rules exist in opencode.jsonc by checking that read, edit, and bash permissions contain deny directives.

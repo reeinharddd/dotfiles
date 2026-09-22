@@ -1,0 +1,1 @@
+Verify conventional commit format is documented in quality-gates instructions by checking for commit format patterns.

@@ -1,0 +1,1 @@
+Verify local plugins auto-load from the plugins/ directory by checking that opencode-telemetry.js and model-routing-guard.js exist as files in plugins/.

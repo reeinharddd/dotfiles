@@ -1,0 +1,1 @@
+Verify hooks.yaml contains lifecycle hooks (tool.before.bash, session.idle, tool.execute.after) by checking the hooks configuration file.

@@ -1,0 +1,1 @@
+Verify skill routing uses skill-router as the sole skill-loading authority by checking capabilities/skills.md and the skill-router skill documentation.

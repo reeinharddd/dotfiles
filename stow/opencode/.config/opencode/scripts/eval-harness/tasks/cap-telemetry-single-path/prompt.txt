@@ -1,0 +1,1 @@
+Verify the telemetry single-path policy by confirming that plugins.md documents exactly one active telemetry path and opencode.jsonc has experimental.openTelemetry enabled.

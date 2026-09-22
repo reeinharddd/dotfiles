@@ -1,0 +1,1 @@
+Verify MCP on-demand policy by checking harness-registry.jsonc for on-demand MCP server classification.

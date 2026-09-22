@@ -1,0 +1,1 @@
+Verify STATE.md mechanism exists by checking that state-tracking skill and STATE.md references are present in the harness configuration.

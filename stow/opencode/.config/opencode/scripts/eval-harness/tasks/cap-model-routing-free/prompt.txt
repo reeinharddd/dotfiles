@@ -1,0 +1,1 @@
+Verify model routing enforces free-only policy by checking that model-routing-guard.js exists, opencode.jsonc routes free models, and oh-my-openagent.json has free model configuration.

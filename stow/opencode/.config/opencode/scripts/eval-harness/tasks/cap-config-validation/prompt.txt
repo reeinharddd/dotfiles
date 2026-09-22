@@ -1,0 +1,1 @@
+Verify opencode.jsonc is valid JSONC by parsing it with python3 and confirming key configuration sections exist.

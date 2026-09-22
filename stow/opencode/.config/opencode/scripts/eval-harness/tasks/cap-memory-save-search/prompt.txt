@@ -1,0 +1,1 @@
+Verify memory save/search functionality exists by checking engram MCP configuration and memory policy instructions.
