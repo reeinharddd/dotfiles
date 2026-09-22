@@ -44,6 +44,7 @@
 - opencode binary: official installer (`curl -fsSL https://opencode.ai/install | bash`),
   NOT mise. Current: v1.18.29 (2026-09-08, was 1.18.22).
 - After any opencode update: run `scripts/opencode-harness-check.sh` to validate plugins load.
+- Before commits: run `scripts/validate-harness-registry.py` to validate the structural contract (OLA 12).
 - npm deps: `npm install --legacy-peer-deps` (DCP peer-wants @opentui/core 0.4.x, root pins 0.5.1).
 
 ## Orchestration decisions (informational — OMO authority)

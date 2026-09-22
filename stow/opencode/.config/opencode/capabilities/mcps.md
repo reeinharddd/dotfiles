@@ -4,6 +4,9 @@
 > Activation classes: ALWAYS / SPECIALIZED / ON-DEMAND (see harness-registry `mcpPolicy`).
 > **Version authority**: `harness-registry.jsonc` `pinnedTools` → mirrored into
 > `opencode.jsonc` npx pins (OLA 07). Behavioral routing: Global Harness Contract §Tools.
+> **Structural validation**: `scripts/validate-harness-registry.py` (OLA 12) enforces
+> the registry as a structural contract — required keys, no mcpPolicy overlap,
+> version alignment, one-capability-one-authority. Run before commits.
 
 ## Core (enabled in `opencode.jsonc` mcp{} — 9)
 | MCP | Type | URL / Command | Class | Purpose |

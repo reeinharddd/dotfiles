@@ -78,7 +78,7 @@
     "versionAuthority": "harness-registry.pinnedTools → mirror to opencode.jsonc npx pins (OLA 07)"
   },
   "pinnedTools": {
-    "@playwright/mcp": "0.0.79",
+    "@playwright/mcp": "2024.12.0",
     "@modelcontextprotocol/server-sequential-thinking": "2024.12.0",
     "@modelcontextprotocol/server-github": "2024.12.0",
     "@modelcontextprotocol/server-filesystem": "2024.12.0",
