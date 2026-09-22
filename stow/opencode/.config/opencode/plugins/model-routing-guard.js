@@ -39,7 +39,10 @@ function loadRegistry() {
         continue;
       }
       if (!inModels) continue;
-      const m = line.match(/^\s+([^\s:]+):\s*\{\s*free:\s*(\w+)\s*\}/);
+      // Quoted keys first (model ids contain ':'), then bare keys without colon
+      const m =
+        line.match(/^\s+"([^"]+)":\s*\{\s*free:\s*(\w+)\s*\}/) ||
+        line.match(/^\s+([^\s:]+):\s*\{\s*free:\s*(\w+)\s*\}/);
       if (m) models[m[1]] = m[2];
     }
     return Object.keys(models).length ? models : null;
