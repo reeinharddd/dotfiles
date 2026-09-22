@@ -1,97 +1,76 @@
-# Plugins (14) — real function + activation
+# Plugins — classification (OLA 08)
 
 > Category: SYSTEM DOCUMENTATION (capability reference, not behavioral authority).
-> Explains: what each plugin does, how it activates, single-responsibility check. Classification
-> CORE/SUPPORT/OPTIONAL/EXPERIMENTAL/REDUNDANT owned by harness-registry (OLA 08).
-> Active plugin array lives in `opencode.jsonc` `plugin[]` (14 entries). Source of truth for
-> what loads at startup. This doc describes each one's role.
-> `node_modules/` (626M, 13 pkgs) is **REQUIRED** by opencode + these plugins — never purge.
+> **Telemetry single path**: one sink only — see Telemetry row below. Do not enable a second.
 
-## 1. oh-my-openagent `4.19.4`
-- **Role**: Core harness — "Batteries-Included OpenCode Plugin with Multi-Model Orchestration,
-  Parallel Background Agents, and Crafted LSP/AST Tools."
-- **Provides**: model cascade + agents (oracle, librarian, team mode), codegraph component,
-  caveman mode, rules engine, skills loader. Backbone of most automation.
-- **Author**: YeonGyu-Kim. License SUL-1.0.
+## Loading mechanism (OpenCode)
 
-## 2. model-routing-guard.js `v18` (own, stow)
-- **Role**: Enrutador de resiliencia multi-proveedor free. Asigna modelos principales por agente
-  y previene errores 403 FreeTierError en delegaciones background forzando proveedores externos
-  (NVIDIA deepseek-v4-flash-0731, Mistral medium-latest, Google gemini-3.8/3.5-lite) para workers,
-  manteniendo OpenCode Zen para agentes interactivos de consola (smart, build, plan, vision).
+| Source | How registered | Where |
+|--------|----------------|-------|
+| **Local files** | Auto-loaded at startup from plugin directory | `~/.config/opencode/plugins/*.{js,ts}` — no `plugin[]` entry needed |
+| **npm packages** | Must be listed in config `plugin[]` array | `opencode.jsonc` `plugin[]` (pin version, no `@latest`) |
+| **OMO (both halves)** | TUI half + server half must both register | `tui.json` `plugin[]` **and** `opencode.jsonc` `plugin[]` |
 
-## 3. opencode-rtk.js `v5` (own, stow)
-- **Role**: Guard de read-path para bash. Bloquea llamadas directas a cat/ls/rg/grep/head/tail/sed/awk/find
-  vía throw para obligar a usar las tools nativas y económicas (read, grep, glob), protegiendo
-  el contexto de acumulaciones masivas. Registra estadísticas en `.rtk-stats.jsonl`.
+Load order: global config → project config → global `plugins/` dir → project `.opencode/plugins/`.
 
-## 4. bodega-index.js `1.0.0` (own, stow)
-- **Role**: The on-demand mechanism. Reads the 6 `bodega-*.json` manifests, dedups by name
-  (core first) and realpath, injects into `config.skills.paths` / `config.agent` /
-  `config.command`. Skills/agents/commands are registered as discoverable, NOT loaded at
-  startup — invoked on demand.
+Verified via `opencode debug config` (resolved `plugin[]` includes `file://` entries for every local plugin).
 
-## 5. @morphllm/opencode-morph-plugin `2.0.16`
-- **Role**: Morph SDK — WarpGrep codebase search y utilidades de búsqueda en repos públicos.
-- **Nota**: `morph_edit` se encuentra inactivo (HTTP 402); la edición estándar usa `edit`,
-  creación usa `write` y symlinks/archivos dispersos usan python3 in-place o edición en stow.
+## Classes
 
-## 6. opencode-yaml-hooks `2026.3.29`
-- **Role**: Loads `hooks.yaml` — global destructive-bash safety blocks (rm -rf, sudo rm, mkfs,
-  dd, git reset --hard/clean/push --force, wp db reset) + session.idle auto-save.
+| Class | Meaning |
+|-------|---------|
+| **ROUTING** | Agent/model routing validation (never decides) |
+| **MEMORY/DCP** | Context pruning / extract / protect (DCP = pruning authority) |
+| **TELEMETRY** | Observability — **exactly one active path** |
+| **LIFECYCLE** | Hooks, sessions, notify |
+| **GUARD** | Safety / permission / config guards |
+| **EXTERNAL** | npm-installed provider integrations |
 
-## 7. opencode-notify `0.3.1`
-- **Role**: Native OS notifications with actionable buttons (Linux via dbus/notifier).
-- **Use**: alert when a long task / background agent finishes.
+## Inventory
 
-## 8. opencode-background-agents `0.1.1`
-- **Role**: Persistent background delegation. Subagents survive outside the session and
-  report later. Fire-and-forget for long research/build tasks.
+| Plugin | Source | Class | Notes |
+|--------|--------|-------|-------|
+| `model-routing-guard.js` | local | ROUTING | Validates free-only vs OMO; never injects models |
+| `regenerate-manifests.py` | local script | META | Generates bodega manifests (`--check`/`--dry-run`) |
+| `bodega-index.js` | local | META | Bodega discovery index |
+| `opencode-dcp` / `@tarquinen/opencode-dcp` | npm | MEMORY/DCP | DCP pruning sole authority (`dcp.jsonc`) |
+| `opencode-telemetry.js` | local | TELEMETRY | Prefer this path; disable others when enabled |
+| `metronous.ts` | local | TELEMETRY | **Alt path** — only if telemetry.js off (see Telemetry) |
+| `@langfuse/opencode-observability-plugin@0.5.0` | npm `plugin[]` | TELEMETRY | **Alt path** — pin; disable if telemetry.js on |
+| `envsitter-guard@0.0.4` | npm `plugin[]` | GUARD | `.env` safety |
+| `opencode-rtk.js` | local | LIFECYCLE | Output filtering proxy hooks |
+| `opencode-notify` | npm | LIFECYCLE | Notifications |
+| `opencode-yaml-hooks` | npm | LIFECYCLE | hooks.yaml runner |
+| `opencode-vibeguard` | npm | GUARD | Vibe/permission guard |
+| `opencode-background-agents` | npm | LIFECYCLE | Background task plumbing |
+| `oh-my-openagent@4.19.4` | npm `plugin[]` + `tui.json` | ROUTING | OMO sole routing authority; **both halves required** (server in `opencode.jsonc`, TUI in `tui.json`) |
+| `dcg` | local dir | MEMORY/DCP | DCP-related helper |
+| `caveman` | local dir | META | Token-strip helper (skill-backed) |
+| `opencode-power-pack.js` | local | META | Power-pack glue |
+| `superpowers.js` | local | META | Superpowers skill glue |
+| `herdr-agent-state.js` | local | LIFECYCLE | Herdr state (skill `herdr`) |
+| `opencode-antigravity-auth` | local | GUARD | Antigravity auth helper |
+| `@morphllm/opencode-morph-plugin` | npm | EXTERNAL | Morph provider |
+| `@opencode-ai/plugin`, `@opencode-ai/sdk` | npm | EXTERNAL | OpenCode SDK (required) |
+| `jsonc-parser` | npm | EXTERNAL | Used by guards/validators |
 
-## 9. opencode-dcp `3.1.14` (~/tools reference)
-- **Role**: Dynamic Context Pruning — `compress` tool, extract/protect hooks, range-mode
-  compression. Config in `dcp.jsonc`.
+## Telemetry (single path policy)
 
-## 10. caveman/plugin.js (own, stow)
-- **Role**: Caveman output mode — strips narration, keeps technical facts. Active via
-  `.caveman-active` marker file.
+**Exactly ONE enabled:**
 
-## 11. superpowers.js (~/tools reference)
-- **Role**: Superpowers skill framework — brainstorming, TDD, systematic-debugging, and the
-  skill-invocation discipline (loaded every session).
+| Rank | Path | Enable when |
+|------|------|-------------|
+| 1 (preferred) | `plugins/opencode-telemetry.js` + `experimental.openTelemetry` | Default local metrics |
+| 2 | `@langfuse/opencode-observability-plugin` in `plugin[]` | Langfuse instance available |
+| 3 | `metronous` MCP / `metronous.ts` | Weekly cost/bench ingest only |
 
-## 12. metronous.ts (own, stow)
-- **Role**: Observability — telemetry events, benchmarks (weekly lun 02:00), TUI. Daemon
-  `metronous.service` (systemd user).
+`oh-my-openagent.json` `"telemetry": false` stays false unless switching paths.
+`profile.personal` `METRONOUS_ENABLED` is ingest flag, not a second APM.
 
-## 13. opencode-vibeguard `0.1.0`
-- **Role**: Privacy redaction. Replaces secrets/PII with `__VG_...__` placeholders before
-  LLM calls, restores after. Config: `vibeguard.config.json`.
+## Anti-patterns
 
-## 14. opencode-antigravity-auth `v1.10.0+local` (~/tools reference)
-- **Role**: Google Antigravity OAuth — gemini/claude models via Google credentials,
-  multi-account rotation on quota exhaustion (500ms failover), native `antigravity_quota`
-  tool (5h + weekly windows), thinking variants, Google Search grounding.
-- **Local patch** (branch `local-v1.10.0`, commit `bffa4a0`): strips `x-goog-api-key` header
-  (Antigravity endpoints reject API keys). Update procedure: fetch upstream → rebase patch.
-- **Storage**: clone in `~/tools/opencode-antigravity-auth` + symlink in `plugins/`.
-
-## Routing Policy — antigravity models
-- The 8 antigravity model entries in `opencode.jsonc` (~lines 713-770) are **manual/overflow
-  use only** — deliberately excluded from the model-routing-guard cascade.
-- Rationale: (1) ToS grey-area — Anthropic blocked OpenCode from Claude; Antigravity OAuth is
-  the workaround; ban risk exists. (2) Quota scarcity — 2 accounts, weekly windows at
-  100%/97%. (3) Primary stack is all-free (zen cascade) — antigravity is secondary.
-- Rule: never add antigravity models to the guard cascade. Use them by explicit model
-  selection when a task needs gemini-3.x-pro / claude-4-6 quality and free tier can't deliver.
-- Alternative plugin if Opus errors appear: `shekohex/opencode-google-antigravity-auth`
-  (recommended by anomalyco maintainer, issue #6064). Plan B only — do not switch
-  preventively.
-
-## Notes
-- Plugins activate automatically when declared in `opencode.jsonc` `plugin[]`; `bodega-index`
-  runs as a `config` hook on every startup.
-- Removed 2026-09-08: `opencode-scheduler`, `opencode-websearch-cited`, `opencode-worktree`
-  (dead deps, 0 references), `opencode-power-pack` npm dep (real source = `~/tools/` clone +
-  symlinks; plugin file `plugins/opencode-power-pack.js` is a no-op guard — early-returns
-  because `skills/` exists).
+- ❌ Two telemetry plugins active at once
+- ❌ Copying a third-party plugin into stow without local modification rule
+- ❌ Editing npm plugin source in place (pin version instead)
+- ❌ `@latest` in `plugin[]` (use registry `pinnedTools`)
+- ❌ OMO registered in only one half (`tui.json` without `opencode.jsonc` → server tools/hooks dead)

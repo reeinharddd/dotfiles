@@ -956,6 +956,7 @@
     }
   },
   "plugin": [
+    "oh-my-openagent@4.19.4",
     "@langfuse/opencode-observability-plugin@0.5.0",
     "envsitter-guard@0.0.4"
   ],
