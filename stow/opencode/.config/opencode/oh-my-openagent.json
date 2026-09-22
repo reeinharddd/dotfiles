@@ -221,13 +221,13 @@
     "google/antigravity-claude-sonnet-4-6"
    ]
   },
-  "sisyphus-junior": {
+"sisyphus-junior": {
    "model": "opencode-zen/ling-3.0-flash-fin-free",
    "mode": "primary",
    "description": "Ejecutor enfocado de tareas atómicas directas sin subdelegación.",
    "fallback_models": [
     "google/gemini-2.5-flash-lite",
-    "google/gemini-3.5-flash-lite"
+    "nvidia/deepseek-ai/deepseek-v4-flash-0731"
    ]
   },
   "consult": {
