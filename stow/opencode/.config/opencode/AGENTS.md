@@ -51,7 +51,7 @@ Project MUST NOT modify base `opencode.jsonc`, this file's runtime rules, or har
 | `opencode.jsonc` | providers, models, permissions, plugins, MCP, `instructions[]`, compaction |
 | `oh-my-openagent.json` | agent models, cascades, team mode (OMO = routing authority) |
 | `plugins/model-routing-guard.js` | validates free-only routing (rejects, never decides) |
-| `dcp.jsonc` | DCP pruning (sole pruning authority) |
+| `dcp.jsonc` | DCP pruning (sole pruning authority; OMO pruning off; OpenCode = compaction only) |
 | `harness-registry.jsonc` | structural registry: authorities, versions, classifications |
 | `hooks.yaml` | lifecycle hooks (destructive-bash block, session.idle) |
 | `instructions/*.md` | always-loaded policy (contract, memory, lifecycle, quality, ops) |

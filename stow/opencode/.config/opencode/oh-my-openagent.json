@@ -398,7 +398,8 @@
  },
  "experimental": {
   "dynamic_context_pruning": {
-   "enabled": true,
+   "enabled": false,
+   "_comment": "OLA06: pruning authority = dcp.jsonc (DCP). OMO pruning disabled to avoid dual authority.",
    "notification": "minimal",
    "turn_protection": {
     "enabled": true,
