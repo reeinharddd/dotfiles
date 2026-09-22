@@ -48,8 +48,8 @@ Project MUST NOT modify base `opencode.jsonc`, this file's runtime rules, or har
 
 | File | Owns |
 |---|---|
-| `opencode.jsonc` | providers, models, permissions, plugins, MCP, `instructions[]`, compaction |
-| `oh-my-openagent.json` | agent models, cascades, team mode (OMO = routing authority) |
+| `opencode.jsonc` | providers, models, permissions, plugins, MCP, `instructions[]`, compaction, agent runtime definitions (OMO owns all routing) |
+| `oh-my-openagent.json` | agent models, cascades, team mode (OMO = sole routing authority) |
 | `plugins/model-routing-guard.js` | validates free-only routing (rejects, never decides) |
 | `dcp.jsonc` | DCP pruning (sole pruning authority; OMO pruning off; OpenCode = compaction only) |
 | `harness-registry.jsonc` | structural registry: authorities, versions, classifications |
@@ -74,7 +74,7 @@ herdr = agent runtime (skill `herdr`, `HERDR_ENV=1`). Default runtime: opencode.
 ```
 ~/.config/opencode/
 ├── AGENTS.md              # this file (runtime scope)
-├── opencode.jsonc         # MCPs, LSPs, agents, models, permissions, plugins, instructions
+├── opencode.jsonc         # MCPs, LSPs, models, permissions, plugins, instructions, agent runtime defs
 ├── oh-my-openagent.json   # OMO: models, cascades, team_mode
 ├── dcp.jsonc              # DCP pruning
 ├── harness-registry.jsonc # structural registry

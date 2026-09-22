@@ -960,7 +960,12 @@
     "@langfuse/opencode-observability-plugin@0.5.0",
     "envsitter-guard@0.0.4"
   ],
+  // ── AGENT TAXONOMY (OLA 09) — OMO is sole agent/model routing authority ──
+  // 00-global-contract §Tools: "Model/agent routing, fallback, orchestration → OMO"
+  // This block provides OpenCode runtime agent definitions; OMO owns all routing/fallback/orchestration.
+  // No model values here override OMO — see oh-my-openagent.json for authoritative models.
   "agent": {
+    // ═══════ CORE — always available, primary workflow agents ═══════
     "build": {
       "mode": "primary",
       "model": "opencode-zen/mimo-v2.6-flash-free",
@@ -981,10 +986,21 @@
       "model": "opencode-zen/mimo-v2.6-flash-free",
       "description": "Especialista en arquitectura que descompone requisitos en planes atómicos."
     },
-    "oracle": {
+    "fast": {
       "mode": "primary",
-      "model": "opencode-zen/nemotron-3-ultra-free",
-      "description": "Consultor de razonamiento profundo para arquitectura y debugging complejo (read-only)."
+      "model": "opencode-zen/nemotron-3.5-lightning-free",
+      "description": "Agente ligero para tareas triviales y un solo archivo."
+    },
+    // ── ON-DEMAND — skill-router/bodega domain experts ──
+    "code-reviewer": {
+      "mode": "primary",
+      "model": "opencode-zen/mimo-v2.6-flash-free",
+      "description": "Revisor de código: bugs, seguridad, calidad y convenciones."
+    },
+    "security-reviewer": {
+      "mode": "primary",
+      "model": "opencode-zen/mimo-v2.6-flash-free",
+      "description": "Especialista en seguridad: superficie de ataque, auth y exploits."
     },
     "tdd-guide": {
       "mode": "primary",
@@ -996,20 +1012,10 @@
       "model": "opencode-zen/mimo-v2.6-flash-free",
       "description": "Aseguramiento de calidad y verificación antes de completar."
     },
-    "subagent-orchestrator": {
+    "oracle": {
       "mode": "primary",
-      "model": "opencode-zen/ling-3.0-flash-fin-free",
-      "description": "Orquestador de subagentes paralelos para tareas independientes."
-    },
-    "code-reviewer": {
-      "mode": "primary",
-      "model": "opencode-zen/mimo-v2.6-flash-free",
-      "description": "Revisor de código: bugs, seguridad, calidad y convenciones."
-    },
-    "security-reviewer": {
-      "mode": "primary",
-      "model": "opencode-zen/mimo-v2.6-flash-free",
-      "description": "Especialista en seguridad: superficie de ataque, auth y exploits."
+      "model": "opencode-zen/nemotron-3-ultra-free",
+      "description": "Consultor de razonamiento profundo para arquitectura y debugging complejo (read-only)."
     },
     "metis": {
       "mode": "primary",
@@ -1036,15 +1042,10 @@
       "model": "opencode-zen/mimo-v2.6-flash-free",
       "description": "Investigación profunda con razonamiento (read-only)."
     },
-    "fast": {
-      "mode": "primary",
-      "model": "opencode-zen/nemotron-3.5-lightning-free",
-      "description": "Agente ligero para tareas triviales y un solo archivo."
-    },
-    "sisyphus-junior": {
+    "subagent-orchestrator": {
       "mode": "primary",
       "model": "opencode-zen/ling-3.0-flash-fin-free",
-      "description": "Ejecutor rápido de tareas delegadas en background."
+      "description": "Orquestador de subagentes paralelos para tareas independientes."
     },
     "explore": {
       "mode": "primary",
@@ -1065,6 +1066,12 @@
       "mode": "primary",
       "model": "opencode-zen/ling-3.0-flash-fin-free",
       "description": "Bibliotecario de contexto y referencias del proyecto."
+    },
+    // ── EXTERNAL — OMO-owned specialized agents (team_mode, .omo categories, vision) ──
+    "sisyphus-junior": {
+      "mode": "primary",
+      "model": "opencode-zen/ling-3.0-flash-fin-free",
+      "description": "Ejecutor rápido de tareas delegadas en background."
     },
     "vision": {
       "mode": "primary",
