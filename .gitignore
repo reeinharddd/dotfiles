@@ -38,3 +38,6 @@ stow/opencode/.config/opencode/opencode.json
 stow/hyprland/.config/hypr/matugen-colors.conf
 stow/mako/.config/mako/colors
 stow/waybar/.config/waybar/colors.css
+
+__pycache__/
+*.pyc
