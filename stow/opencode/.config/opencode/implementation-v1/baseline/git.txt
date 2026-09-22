@@ -1,0 +1,5 @@
+branch: harness/implementation-v1
+base_commit: ba0b3eb (pre-freeze)
+previous_head: 975a119
+ba0b3ebee3ebf888978c723db5a0aefe906fd179
+?? stow/opencode/.config/opencode/implementation-v1/
