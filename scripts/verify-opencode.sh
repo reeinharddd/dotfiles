@@ -99,7 +99,7 @@ if [ -d "$PROJECTS_DIR" ]; then
         warn "$project_name/opencode.json defines MCP servers — may conflict with base"
       fi
     fi
-  done < <(find "$PROJECTS_DIR" -maxdepth 3 -name "opencode.json" -o -name "AGENTS.md" -print0 2>/dev/null)
+  done < <(find "$PROJECTS_DIR" -maxdepth 3 \( -name "opencode.json" -o -name "AGENTS.md" \) -print0 2>/dev/null)
 else
   info "No projects directory found at $PROJECTS_DIR"
 fi
@@ -122,13 +122,13 @@ echo ""
 echo "--- Secrets leak check ---"
 LEAKS=0
 while IFS= read -r -d '' tracked_file; do
-  rel_path=$(echo "$tracked_file" | sed "s|$DOTFILES_DIR/||")
+  rel_path="${tracked_file#"$DOTFILES_DIR"/}"
   # Skip binary files
   case "$tracked_file" in
     *.png|*.jpg|*.jpeg|*.gif|*.svg|*.ico|*.woff|*.woff2) continue ;;
   esac
   # Check for potential API keys/tokens (heuristic)
-  if grep -Eq '(sk-[a-zA-Z0-9]{20,}|api[_-]?key["\s:=]+["\''][A-Za-z0-9]{16,}|token["\s:=]+["\''][A-Za-z0-9]{16,})' "$tracked_file" 2>/dev/null; then
+  if grep -Eq "(sk-[a-zA-Z0-9]{20,}|api[_-]?key[\"\\s:=]+[\"']?[A-Za-z0-9]{16,}|token[\"\\s:=]+[\"']?[A-Za-z0-9]{16,})" "$tracked_file" 2>/dev/null; then
     warn "Possible secret leak in $rel_path"
     LEAKS=$((LEAKS + 1))
   fi

@@ -8,7 +8,6 @@ set -euo pipefail
 MINUTES="${1:-25}"
 TASK="${2:-Focus session}"
 SECONDS=$((MINUTES * 60))
-WORK_DIR="${POMODORO_WORK_DIR:-$HOME/projects}"
 
 notify() {
   local title="$1"

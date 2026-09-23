@@ -32,4 +32,6 @@ for pkg_dir in "$STOW_DIR"/*/; do
   fi
 done
 
-[ "$DRY_RUN" = false ] && echo "Backup saved to: $BACKUP_DIR"
+if [ "$DRY_RUN" = false ]; then
+  echo "Backup saved to: $BACKUP_DIR"
+fi
