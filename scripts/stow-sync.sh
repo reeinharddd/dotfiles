@@ -26,7 +26,9 @@ for pkg_dir in "$STOW_DIR"/*/; do
   else
     # Backup existing files before restow
     find "$pkg_dir" -type f -printf "$HOME/%P\n" 2>/dev/null | while read -r f; do
-      [ -e "$f" ] && [ ! -L "$f" ] && cp -p "$f" "$BACKUP_DIR/" 2>/dev/null || true
+      if [ -e "$f" ] && [ ! -L "$f" ]; then
+        cp -p "$f" "$BACKUP_DIR/" 2>/dev/null || true
+      fi
     done
     stow -R -d "$STOW_DIR" -t "$HOME" "$pkg" 2>/dev/null || echo "  WARN: $pkg failed"
   fi
