@@ -17,7 +17,8 @@ if [ ! -d "$HOST_DIR" ]; then
     exit 1
 fi
 
-mkdir -p "$HOME/.local/share/dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
+BACKUP_DIR="$HOME/.local/share/dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
+mkdir -p "$BACKUP_DIR"
 
 for pkg_dir in "$HOST_DIR"/*/; do
     [ -d "$pkg_dir" ] || continue
@@ -27,7 +28,9 @@ for pkg_dir in "$HOST_DIR"/*/; do
         stow --simulate -R -d "$STOW_DIR/hosts/$HOST" -t "$HOME" "$pkg" || echo "  WARN: $pkg (simulate)"
     else
         find "$pkg_dir" -type f -printf "$HOME/%P\n" 2>/dev/null | while read -r f; do
-            [ -e "$f" ] && [ ! -L "$f" ] && cp -p "$f" "$HOME/.local/share/dotfiles-backup/$(date +%Y%m%d-%H%M%S)/" 2>/dev/null || true
+            if [ -e "$f" ] && [ ! -L "$f" ]; then
+                cp -p "$f" "$BACKUP_DIR/" 2>/dev/null || true
+            fi
         done
         stow -R -d "$STOW_DIR/hosts/$HOST" -t "$HOME" "$pkg" 2>/dev/null || echo "  WARN: $pkg failed"
     fi

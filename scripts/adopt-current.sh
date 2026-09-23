@@ -33,8 +33,8 @@ adopt() {
   fi
 
   if [ -f "$dst" ] || [ -d "$dst" ]; then
-    src_hash="$(cat "$dst" 2>/dev/null | md5sum)"
-    dst_hash="$(cat "$src" 2>/dev/null | md5sum)"
+    src_hash="$( { cat "$dst" 2>/dev/null || true; } | md5sum)"
+    dst_hash="$( { cat "$src" 2>/dev/null || true; } | md5sum)"
     if [ "$src_hash" = "$dst_hash" ]; then
       echo "  OK    unchanged: $label"
       return
