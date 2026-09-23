@@ -8,7 +8,7 @@ set -euo pipefail
 
 # Configuracion
 REPO="${RESTIC_REPO:-/var/backups/restic}"
-RESTORE_DIR="${RESTIC_RESTORE_DIR:-/tmp/restore}"
+# Restore manual: restic restore latest --target "${RESTIC_RESTORE_DIR:-/tmp/restore}"
 PASSWORD_FILE="${RESTIC_PASSWORD_FILE:-$HOME/.config/restic/passphrase}"
 EXCLUDE_FILE="$HOME/.config/restic/exclude"
 
@@ -34,14 +34,14 @@ restic backup \
     --exclude-caches \
     --exclude-file="$EXCLUDE_FILE" \
     --one-file-system \
-    $HOME/Documents \
-    $HOME/projects \
-    $HOME/.config \
-    $HOME/dotfiles \
-    $HOME/.local/bin \
-    $HOME/.zsh_history \
-    $HOME/.ssh \
-    $HOME/.gnupg
+    "$HOME"/Documents \
+    "$HOME"/projects \
+    "$HOME"/.config \
+    "$HOME"/dotfiles \
+    "$HOME"/.local/bin \
+    "$HOME"/.zsh_history \
+    "$HOME"/.ssh \
+    "$HOME"/.gnupg
 
 echo "==> Backup terminado: $(date)"
 

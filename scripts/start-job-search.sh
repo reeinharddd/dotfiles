@@ -8,6 +8,7 @@ echo "=============================="
 if [ -f "$HOME/.env" ]; then
     echo "📥 Loading ~/.env..."
     set -a
+    # shellcheck disable=SC1091  # optional user file, not in repo
     source "$HOME/.env"
     set +a
     echo "✅ Environment loaded"

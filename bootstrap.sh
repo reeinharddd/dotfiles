@@ -142,6 +142,8 @@ setup_dotfiles() {
     ok "Dotfiles cloned"
   fi
 
+  git -C "$DOTFILES_DIR" config core.hooksPath .githooks
+
   log "Symlinking configs via stow..."
   cd "$DOTFILES_DIR"
   ./scripts/stow-sync.sh
